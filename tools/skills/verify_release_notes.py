@@ -61,7 +61,12 @@ def main() -> int:
     args = ap.parse_args()
 
     if not args.upstream.is_file():
-        print(f"upstream reference missing: {args.upstream}", file=sys.stderr)
+        print(
+            f"unverified: upstream reference not found at {args.upstream}\n"
+            "  -> pass --upstream PATH pointing at upstream's RELEASE-NOTES.md "
+            "(github.com/wbh604/UZI-Skill) to check the history is intact",
+            file=sys.stderr,
+        )
         return 2
     if not args.migrated.is_file():
         print(f"migrated file missing: {args.migrated}", file=sys.stderr)
