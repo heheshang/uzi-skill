@@ -241,6 +241,32 @@ UZI_PLAYWRIGHT_FORCE=1 uzi <ticker> --depth deep --stage1   # FORCE=1 覆盖"数
 `--stage2` 在生成 HTML 前跑机械自查；有 critical 会阻止出报告，warning 会记录后继续。
 仅调试时可用 `UZI_SKIP_REVIEW=1` 强制跳过。
 
+**17 条检查**（运行时可复现：`.cache/{ticker}/_review_issues.json` 的 `checks_run` 列出实际
+跑过的名字；每条 issue 带 `severity` / `category` / `dim` / `evidence` / `suggested_fix`）：
+
+| # | 检查 | 看什么 | 抓什么问题 |
+|---|---|---|---|
+| 1 | `check_industry_mapping_sanity` | `0_basic.industry` vs `7_industry.cninfo_metrics.industry_name_match` | 申万→证监会行业映射错配（"工业金属"落到"农副食品"这类） |
+| 2 | `check_all_dims_exist` | 档位要求的维度是否都在 | fetcher 从未运行或崩溃 |
+| 3 | `check_empty_dims` | 各维度 data 是否为空 | 维度全空 |
+| 4 | `check_hk_kline_populated` | 港股 `2_kline` | 港股 K 线未采集 |
+| 5 | `check_hk_financials_populated` | 港股 `1_financials` | 港股财报未采集 |
+| 6 | `check_panel_non_empty` | `panel.json.investors` | 评委面板为空 / skip 率 > 50% |
+| 7 | `check_coverage_threshold` | 22 维覆盖率 | < 60%（lite 档降级为 warning） |
+| 8 | `check_placeholder_strings` | 全维度文本 | 残留 `n/a` / `TBD` / `—` 等占位符 |
+| 9 | `check_valuation_sanity` | `10_valuation` | 估值字段异常（负数 PE、缺分位） |
+| 10 | `check_industry_data_coverage` | `7_industry` 指标覆盖 | 行业数据不足 |
+| 11 | `check_metals_materials_populated` | `8_materials` | 金属/原材料类未采集 |
+| 12 | `check_agent_analysis_exists` | `agent_analysis.json` | 缺失（lite/CLI 直跑降级 warning；deep 档是**拒绝**） |
+| 13 | `check_factcheck_redflags` | 编造风险信号 | 评语与 `raw_data` 冲突（如药明康德↔Apple 那类） |
+| 14 | `check_consensus_formula_sanity` | `panel.consensus_formula` | 共识公式中间量不自洽 |
+| 15 | `check_panel_hollow_verdicts` | `hollow_pct` | 无实质依据的看多占比过高 |
+| 16 | `check_panel_insights_rendered` | 报告模板注入点 + `syn.panel_insights` | 模板缺 `panel_insights` 注入点 / 该段空 |
+| 17 | `check_debate_bull_bear_populated` | `syn.debate.bull` / `.bear` | 多空代表缺失或选了同一人 |
+
+> 自查**只读缓存与 `assets/`**（模板、头像），不读 Rust 源码 —— 所有检查项都能在无源码环境下
+> 复现。某条 critical 阻塞出报告时，按 issue 的 `suggested_fix` 处理后重跑 `uzi <ticker> --stage2`。
+
 ### HARD-GATE-DATAGAPS · 数据缺口 agent 必须接管
 
 Stage 1 检测到缺口会写 `.cache/{ticker}/_data_gaps.json`。对其中每个字段你都要尝试补齐

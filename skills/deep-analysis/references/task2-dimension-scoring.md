@@ -2,7 +2,7 @@
 
 读取 `raw_data.json`，对每个维度按规则打 1-10 分，写入 `dimensions.json`。
 
-> 打分实现见 `uzi_pipeline::score`；维度 schema 与加权平均公式见 `uzi_core::dim`。
+> 打分与维度 schema 都在二进制内。源码落点（仅维护者对照，运行时不读）：`uzi_pipeline::score` / `uzi_core::dim`。
 
 ## 通用打分公式
 

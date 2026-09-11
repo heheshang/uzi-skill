@@ -27,42 +27,13 @@ use crate::special_cards::{
 };
 use anyhow::anyhow;
 use serde_json::{Map, Value};
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 /// Report assets shipped with this repo, at `<repo>/assets`.
 ///
-/// Resolution order: `UZI_ASSETS_DIR` → `UZI_REPO_ROOT/assets` → walk up from the
-/// current directory → the crate's own compile-time location. The last fallback
-/// means a binary built from this workspace always finds its assets regardless of
-/// the caller's working directory.
-pub fn assets_dir() -> PathBuf {
-    if let Ok(p) = std::env::var("UZI_ASSETS_DIR") {
-        if !p.is_empty() {
-            return PathBuf::from(p);
-        }
-    }
-    if let Ok(p) = std::env::var("UZI_REPO_ROOT") {
-        if !p.is_empty() {
-            return PathBuf::from(p).join("assets");
-        }
-    }
-    let mut dir = std::env::current_dir().unwrap_or_default();
-    loop {
-        let cand = dir.join("assets");
-        if cand.join("report-template.html").is_file() {
-            return cand;
-        }
-        if !dir.pop() {
-            break;
-        }
-    }
-    // crate dir is <repo>/crates/uzi-report -> <repo>/assets
-    Path::new(env!("CARGO_MANIFEST_DIR"))
-        .parent()
-        .and_then(Path::parent)
-        .map(|repo| repo.join("assets"))
-        .unwrap_or_else(|| PathBuf::from("assets"))
-}
+/// Canonical resolver lives in [`uzi_core::assets`] — the self-review gate needs
+/// the same answer and must not depend on this crate.
+pub use uzi_core::assets::assets_dir;
 
 fn safe(v: &Value, default: &str) -> String {
     if v.is_null() {
@@ -665,7 +636,7 @@ pub fn assemble(ticker: &str) -> anyhow::Result<String> {
         if crit > 0 {
             println!("{}", uzi_review::self_review::format_human(&review));
             anyhow::bail!(
-                "⛔ BLOCKED by self-review: {} 有 {} 个 critical 问题待修。\n→ 读 .cache/{}/_review_issues.json\n→ 对每条 critical issue 执行 suggested_fix（agent 补数据 / 重跑 stage2 / 写 agent_analysis）\n→ 全部修完后重跑 assemble_report。\n→ 如需强制跳过（仅调试）：export UZI_SKIP_REVIEW=1",
+                "⛔ BLOCKED by self-review: {} 有 {} 个 critical 问题待修。\n→ 读 .cache/{}/_review_issues.json\n→ 对每条 critical issue 执行 suggested_fix（agent 补数据 / 写 agent_analysis）\n→ 全部修完后重跑 uzi <ticker> --stage2。\n→ 如需强制跳过（仅调试）：export UZI_SKIP_REVIEW=1",
                 ticker,
                 crit,
                 ticker
@@ -1001,7 +972,7 @@ pub fn assemble(ticker: &str) -> anyhow::Result<String> {
     template = template.replace("<!-- INJECT_TOP3_BULLS -->", &render_top3_bulls(&investors));
     template = template.replace("<!-- INJECT_TOP3_BEARS -->", &render_top3_bears(&investors));
     template = template.replace(
-        "<!-- INJECT_PANEL_INSIGHTS -->",
+        uzi_core::assets::PANEL_INSIGHTS_MARKER,
         &render_panel_insights(&syn, &panel),
     );
 

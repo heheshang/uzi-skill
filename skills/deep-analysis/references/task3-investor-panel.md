@@ -81,7 +81,7 @@ trap      => ["18_trap"],
 2. 对每位投资者：
    a. 取出该 persona 的字段白名单
    b. 从 `dimensions.json` + `raw_data.json` 提取相关字段
-   c. 用该 persona 的方法论 + 语言样本生成 Signal（语言风格见 `uzi_investors::personas`；
+   c. 用该 persona 的方法论 + 语言样本生成 Signal（语言风格见源码 `uzi_investors::personas`（运行时不读）；
       flagship persona 若存在 `skills/deep-analysis/personas/{id}.yaml`，`uzi_investors::persona_yaml` 优先于规则引擎）
    d. 强制 JSON 输出
 3. 汇总到 `panel.json`：

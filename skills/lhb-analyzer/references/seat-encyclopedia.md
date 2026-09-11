@@ -190,7 +190,7 @@ if let Some(obj) = matched.as_object() {
    - `章盟主` 在白名单（`MEGA_CAP_ALLOWLIST`）内，**不受**该上界约束（可参与超大盘）
 5. 其余非 `min_` / `max_` 规则（如 `trend: "up"`、`is_sector_leader: true`）逐项与 `ticker_features` 相等比对
 
-**v3.4.5 覆盖规则**：即使算出"不在射程"，只要 `16_lhb.data.matched_youzi` 里命中了该席位，仍**强制参与评分** —— 真实成交记录优先于静态射程假设（见 `uzi_investors::evaluator` 的 F 组射程前置检查）。
+**v3.4.5 覆盖规则**：即使算出"不在射程"，只要 `16_lhb.data.matched_youzi` 里命中了该席位，仍**强制参与评分** —— 真实成交记录优先于静态射程假设（源码落点 `uzi_investors::evaluator` 的 F 组射程前置检查，运行时不读）。
 
 ---
 

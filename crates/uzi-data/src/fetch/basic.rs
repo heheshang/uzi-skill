@@ -19,12 +19,12 @@ fn non_stock_guidance(sec_type: &str) -> Option<(&'static str, &'static str, &'s
         "etf" => Some((
             "ETF",
             "插件的 51 评委跑 ROE / 护城河 / 管理层 / 分红 等个股财务指标，ETF 没这些字段",
-            "分析该 ETF 的**前 3-5 大持仓股**（ak.fund_portfolio_hold_em 可查），对每只成分股单独跑 /analyze-stock",
+            "分析该 ETF 的**前 3-5 大持仓股**（基金持仓页 / 东财 F10 可查），对每只成分股单独跑 uzi <代码>",
         )),
         "mutual_fund" => Some((
             "开放式基金",
             "开放式基金没有企业基本面字段（v3.4.3 起识别 · 之前可能误判为可转债）",
-            "已自动改为循环分析该基金的前 10 大重仓股 · run.py 会二次确认",
+            "已自动改为循环分析该基金的前 10 大重仓股 · uzi 会二次确认",
         )),
         "lof" => Some((
             "LOF 基金",

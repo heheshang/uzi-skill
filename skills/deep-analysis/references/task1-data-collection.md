@@ -20,7 +20,7 @@ export STOCK_NO_CACHE=1   # bash
 set STOCK_NO_CACHE=1      # cmd
 $env:STOCK_NO_CACHE='1'   # powershell
 ```
-确保第一次拉的 basic 是真实时数据。后续 fetcher 会按各自的 TTL 自动判断是否复用缓存（TTL 常量见 `uzi_core::cache`）。
+确保第一次拉的 basic 是真实时数据。后续 fetcher 会按各自的 TTL 自动判断是否复用缓存（TTL 见源码 `uzi_core::cache`（运行时不读；缓存 TTL 由二进制内建））。
 
 ### Step A · 先跑一个基础 fetcher（必须串行）
 ```bash

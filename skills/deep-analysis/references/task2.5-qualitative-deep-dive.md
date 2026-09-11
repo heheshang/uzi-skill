@@ -252,12 +252,21 @@ DCF 和 SOTP 分歧 → 买入机会或假突破？
 > **强制走浏览器**：`UZI_PLAYWRIGHT_FORCE=1 uzi <ticker> --depth deep --stage1`
 > （`--depth deep` 默认开启浏览器兜底；medium 档需 `UZI_PLAYWRIGHT_ENABLE=1`；`UZI_PLAYWRIGHT_FORCE=1` 让每个白名单维度都重试一次，而非只救空维度。`uzi --browser-check` 可确认系统 Chromium 可经 CDP 驱动，零额外安装。）
 
-> **完整源清单见 `uzi_data::registry`**。Agent 可在 sub-agent 里直接查询注册表：
-> ```text
-> http_sources_for("4_peers", "A")          # tier-1 HTTP 源（health 已排序）
-> playwright_sources_for("4_peers", "A")    # tier-2 浏览器源（雪球/问财/同花顺 F10）
-> ```
-> 用注册表的好处：每个源带 `health` 标记 ("known_good"/"flaky"/"blocked_often"/"needs_browser")，agent 自己挑。
+> **完整源清单**：本文档下方每个维度的 URL 模板就是可用的兜底入口，直接照抄进 sub-agent prompt。
+> 注册表本身是**编译进二进制的内部结构**（源码落点 `uzi_data::registry`，运行时不读、也没有
+> 运行时查询接口 —— 不要去找 `http_sources_for()` 这类函数）。要知道**本次**某个维度用了哪个源、
+> 哪些源失败了，读运行时产物：
+>
+> | 想知道 | 运行时来源 |
+> |---|---|
+> | 某维度最终用了哪个源 | `.cache/{ticker}/raw_data.json` → `dimensions.<dim>.source` |
+> | 是否走了兜底 | 同上的 `fallback` 字段（`true` = 非主源） |
+> | 哪些字段没拿到 | `.cache/{ticker}/_data_gaps.json` |
+> | 哪些维度质量低 | `.cache/{ticker}/_review_issues.json`（`category == "data"`） |
+> | 本机网络能通哪些域 | `.cache/_global/network_profile.json` 的 `recommendation` |
+>
+> 源的健康度标记（`known_good` / `flaky` / `blocked_often` / `needs_browser`）由 registry 在
+> **选源时**使用，agent 不需要自己挑 —— 但可以按标记的含义决定要不要再走一次浏览器兜底。
 
 ### Dim 3 · 宏观（v2.5 扩充）
 ```

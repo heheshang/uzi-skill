@@ -34,7 +34,7 @@
 **港股**: 东财港股 spot（push2 clist `m:116` 前缀）+ 腾讯 `qt.gtimg.cn/q=hk00700`（`tencent_hk_quote`）
 **美股**: Yahoo chart v8（`query1.finance.yahoo.com/v8/finance/chart/{sym}`）的 `meta` 段
 
-基础字段的串联与补洞见 `uzi_data::fetch::basic`（push2 → 腾讯 qt → 新浪 hq → 内置行业映射）。
+基础字段的串联与移植出处（源码，运行时不读）：`uzi_data::fetch::basic`（push2 → 腾讯 qt → 新浪 hq → 内置行业映射）。
 
 ---
 
@@ -56,7 +56,7 @@ viz 需要的字段 → 来源：
 | `financial_health.fcf_margin` | 自算: `经营现金流 / 净利润 * 100`（现金流字段取自 F10 现金流表；接口缺失则该项判空） | |
 | `financial_health.roic` | 东财 F10 `总资产净利率(%)` | 近似 |
 
-实现见 `uzi_data::fetch::financials`（主数据走 `uzi_data::sources` 的 `fetch_financials`）。
+移植出处（源码，运行时不读）：`uzi_data::fetch::financials`（主数据走 `uzi_data::sources` 的 `fetch_financials`）。
 **港股 fallback**: 东财港股 F10 摘要
 **美股 fallback**: Yahoo `ws/fundamentals-timeseries/v1/finance/timeseries/`（`query2.finance.yahoo.com`）
 
@@ -79,7 +79,7 @@ viz 需要的字段 → 来源：
 | `kline_stats.max_drawdown` | 自算: `(trough - peak) / peak` 近 1 年 | — | — |
 | `kline_stats.ytd_return` | 自算: `(last - ytd_open) / ytd_open` | — | — |
 
-**6 路 fallback 链** 见 `uzi_data::fetch::kline`：
+**6 路 fallback 链** 移植出处（源码，运行时不读）：`uzi_data::fetch::kline`：
 1. 东财 `push2his.eastmoney.com/api/qt/stock/kline/get`
 2. 新浪 `money.finance.sina.com.cn`（getKLineData）
 3. BaoStock 官方接口 `http://baostock.com/`（无 key）
@@ -103,7 +103,7 @@ Agent web search only，不走行情接口。prompt 模板在 `uzi_data::fetch::
 | `peer_comparison` 自己 vs 均值 | peer_table 聚合算均值 | — |
 
 每条 peer 需要 `pe / pb / roe / revenue_growth` → 对每个 peer 再查一次 push2 单股 + 东财 F10 指标。
-实现见 `uzi_data::fetch::peers`（`push2.eastmoney.com/api/qt/clist/get` 板块成分）。
+移植出处（源码，运行时不读）：`uzi_data::fetch::peers`（`push2.eastmoney.com/api/qt/clist/get` 板块成分）。
 
 ---
 
@@ -117,7 +117,7 @@ Agent web search only，不走行情接口。prompt 模板在 `uzi_data::fetch::
 | `client_concentration` 客户集中度 | cninfo 年报附注（网页 / PDF 解析）"前五大客户" | web search |
 | `supplier_concentration` 供应商集中度 | cninfo 年报附注 "前五大供应商" | web search |
 
-实现见 `uzi_data::fetch::chain`。
+移植出处（源码，运行时不读）：`uzi_data::fetch::chain`。
 
 ---
 
@@ -130,7 +130,7 @@ Agent web search only，不走行情接口。prompt 模板在 `uzi_data::fetch::
 | `target_avg` / `target_max` / `target_min` | 同上，聚合 `目标价` 字段 |
 | `recent_reports` 近 10 研报 | 同上 head(10) |
 
-实现见 `uzi_data::fetch::research`（主源 `uzi_data::sources` 的 `fetch_research_reports`）；
+移植出处（源码，运行时不读）：`uzi_data::fetch::research`（主源 `uzi_data::sources` 的 `fetch_research_reports`）；
 cninfo 业绩预测接口为签名 POST、无 GET 等价实现，取不到时按上游降级为空列表。
 
 ---
@@ -145,7 +145,7 @@ cninfo 业绩预测接口为签名 POST、无 GET 等价实现，取不到时按
 | `lifecycle` 生命周期 | Agent 判断（导入/成长/成熟/衰退）|
 | `matched_boards` 概念板块关联 | 东财 push2 概念板块全表按名称包含过滤（取不到降级 web search）|
 
-内置行业锚点 + 可信搜索 + cninfo 行业 PE 的优先级链见 `uzi_data::fetch::industry`。
+内置行业锚点 + 可信搜索 + cninfo 行业 PE 的移植出处（源码，运行时不读）：`uzi_data::fetch::industry`。
 
 ---
 
@@ -158,13 +158,13 @@ cninfo 业绩预测接口为签名 POST、无 GET 等价实现，取不到时按
 | `cost_share` 成本占比 | 年报附注 | web search |
 | `import_dep` 进口依赖 | web search | — |
 
-实现见 `uzi_data::fetch::materials`（`futures_main_sina` 同源 + `INDUSTRY_MATERIALS` 映射）。
+移植出处（源码，运行时不读）：`uzi_data::fetch::materials`（`futures_main_sina` 同源 + `INDUSTRY_MATERIALS` 映射）。
 
 ---
 
 ## 9 · 期货关联 (Dim 9) · qualitative only
 
-web search 识别关联合约 → 新浪期货日线（`InnerFuturesNewService.getDailyKLine`）取价。实现见 `uzi_data::fetch::futures`。
+web search 识别关联合约 → 新浪期货日线（`InnerFuturesNewService.getDailyKLine`）取价。移植出处（源码，运行时不读）：`uzi_data::fetch::futures`。
 
 ---
 
@@ -197,7 +197,7 @@ web search 识别关联合约 → 新浪期货日线（`InnerFuturesNewService.g
 | `executive_list` 管理层 | cninfo 高管名录 |
 | `exec_compensation` 薪酬 | 年报 |
 
-实现见 `uzi_data::fetch::governance`。
+移植出处（源码，运行时不读）：`uzi_data::fetch::governance`。
 
 ---
 
@@ -220,13 +220,13 @@ web search 识别关联合约 → 新浪期货日线（`InnerFuturesNewService.g
 | `institutional_history.qfii` QFII 持仓 | 同上，type 过滤"QFII" |
 | `institutional_history.shehui` 社保持仓 | 同上，type 过滤"社保" / 年金 |
 
-实现见 `uzi_data::fetch::capital_flow`。
+移植出处（源码，运行时不读）：`uzi_data::fetch::capital_flow`。
 
 ---
 
 ## 13 · 政策 (Dim 13) · qualitative only
 
-Agent web search + 政府域原文（`www.gov.cn` / `www.csrc.gov.cn` / `www.miit.gov.cn` / `www.ndrc.gov.cn` / `www.samr.gov.cn`）+ Agent 判断。抓取链路见 `uzi_data::fetch::policy`。
+Agent web search + 政府域原文（`www.gov.cn` / `www.csrc.gov.cn` / `www.miit.gov.cn` / `www.ndrc.gov.cn` / `www.samr.gov.cn`）+ Agent 判断。移植出处（源码，运行时不读）：`uzi_data::fetch::policy`。
 
 ---
 
@@ -239,7 +239,7 @@ Agent web search + 政府域原文（`www.gov.cn` / `www.csrc.gov.cn` / `www.mii
 | `patent_count` 专利数 | web search "{name} 专利数量" / 国家知识产权局（CDP 浏览器）|
 | `intangible` / `switching` / `network` / `scale` | Agent 从业务描述 + 同行对比 评估 (1-10) |
 
-实现见 `uzi_data::fetch::moat`（web search 关键词打分）。
+移植出处（源码，运行时不读）：`uzi_data::fetch::moat`（web search 关键词打分）。
 
 ---
 
@@ -253,7 +253,7 @@ Agent web search + 政府域原文（`www.gov.cn` / `www.csrc.gov.cn` / `www.mii
 | `earnings_preview` 业绩预告 | 东财 datacenter 业绩预告（按日期过滤）|
 | `warnings` 利空 | push2 风险名单 + web search |
 
-实现见 `uzi_data::fetch::events`（`cninfo` + `uzi_data::news`）。
+移植出处（源码，运行时不读）：`uzi_data::fetch::events`（`cninfo` + `uzi_data::news`）。
 
 ---
 
@@ -267,7 +267,7 @@ Agent web search + 政府域原文（`www.gov.cn` / `www.csrc.gov.cn` / `www.mii
 | `inst_vs_youzi.youzi_net` 游资净买 | 自算 |
 | `sector_lhb` 同板块 | 东财龙虎榜统计（近一月）|
 
-实现见 `uzi_data::fetch::lhb`。
+移植出处（源码，运行时不读）：`uzi_data::fetch::lhb`。
 
 ---
 
@@ -281,13 +281,13 @@ Agent web search + 政府域原文（`www.gov.cn` / `www.csrc.gov.cn` / `www.mii
 | `positive_pct` 正面占比 | web search + 关键词情感分析 |
 | `thermometer_value` 温度计 | 自算 0-100 归一化 |
 
-实现见 `uzi_data::fetch::sentiment`。
+移植出处（源码，运行时不读）：`uzi_data::fetch::sentiment`。
 
 ---
 
 ## 18 · 杀猪盘检测 (Dim 18) · qualitative
 
-8 信号扫描全部靠 web search，详见 `skills/trap-detector/references/eight-signals.md`。实现见 `uzi_data::fetch::trap_signals`。
+8 信号扫描全部靠 web search，详见 `skills/trap-detector/references/eight-signals.md`。移植出处（源码，运行时不读）：`uzi_data::fetch::trap_signals`。
 
 ---
 
@@ -300,7 +300,7 @@ Agent web search + 政府域原文（`www.gov.cn` / `www.csrc.gov.cn` / `www.mii
 | `tgb_list` 淘股吧讨论 | `https://www.taoguba.com.cn/Article/list/all?keyword={code}` HTML 抓取 |
 | `ths_list` 同花顺模拟 | `https://moni.10jqka.com.cn/holder/?stock={code}` 抓取 |
 
-实现见 `uzi_data::fetch::contests`。
+移植出处（源码，运行时不读）：`uzi_data::fetch::contests`。
 
 ---
 
@@ -326,7 +326,7 @@ Agent web search + 政府域原文（`www.gov.cn` / `www.csrc.gov.cn` / `www.mii
 | `peer_rank_pct` 同类排名 | 天天基金同类排名接口 + 基金经理列表 |
 | `fund_url` 基金详情链接 | `https://fund.eastmoney.com/{fund_code}.html` |
 
-实现见 `uzi_data::fetch::fund_holders`。
+移植出处（源码，运行时不读）：`uzi_data::fetch::fund_holders`。
 
 **Fallback**:
 - B: 天天基金 `fundf10.eastmoney.com/FundArchivesDatas.aspx`（持仓明细）+ 基金日度信息 / 评级组合
@@ -343,7 +343,7 @@ Agent web search + 政府域原文（`www.gov.cn` / `www.csrc.gov.cn` / `www.mii
 | `similarity` 相似度 % | 自算: 相关系数 * 100 |
 | `reason` 理由 | Agent 从业务描述 生成 1 句 |
 
-实现见 `uzi_data::fetch::similar_stocks`。
+移植出处（源码，运行时不读）：`uzi_data::fetch::similar_stocks`。
 
 ---
 
@@ -364,7 +364,7 @@ Agent web search + 政府域原文（`www.gov.cn` / `www.csrc.gov.cn` / `www.mii
 - +1σ: 25%
 - +2σ: 5%
 
-实现见 `uzi_features::friendly`。
+移植出处（源码，运行时不读）：`uzi_features::friendly`。
 
 ---
 
@@ -377,6 +377,42 @@ Agent **从 synthesis 自动生成 5 条**，模板：
 3. **业绩不达**: "下次业绩预告低于 +{当前增速下限}% → 预期管理失守"
 4. **资金撤离**: "{识别到的顶级游资} 席位大额卖出 > 2 亿 → 顶级游资撤离信号"
 5. **估值泡沫**: "PE 站上 5 年 {current + 15}% 分位 → 泡沫区获利了结"
+
+---
+
+## 🌐 浏览器兜底（CDP）· 运行时契约
+
+Stage 1 末尾会对**部分维度**跑一次浏览器兜底（用系统已装的 Chromium 系，经 CDP 驱动，
+零额外安装；`uzi --browser-check` 确认可用）。
+
+**哪些维度有兜底策略**（其余维度抓不到就只能降级）：
+
+```
+4_peers · 8_materials · 15_events · 17_sentiment · 3_macro
+7_industry · 14_moat · 13_policy · 18_trap · 19_contests
+```
+
+**每个维度需要什么网络能力**（预检判定该能力不通时，该维度直接跳过兜底、不浪费一次抓取）：
+
+| 维度 | 需要 |
+|---|---|
+| `4_peers` · `8_materials` · `15_events` · `17_sentiment` · `3_macro` · `14_moat` · `13_policy` · `19_contests` | 国内可达 |
+| `7_industry` · `18_trap` | 国内可达 **+** 搜索可达 |
+
+**三重门控**（三者全过才真的抓）：
+
+1. **档位**：`lite` 永不启用；`medium` 需 `UZI_PLAYWRIGHT_ENABLE=1`；`deep` 默认启用
+2. **质量**：该维度数据为空、被标 `fallback`、或可用公开字段 < 50%（`QUALITY_THRESHOLD`）
+3. **网络**：上表的网络能力在预检里是通的
+
+`UZI_PLAYWRIGHT_FORCE=1` 只**跳过第 2 条**（质量门控），对白名单维度强制重跑一次 ——
+档位与网络门控仍然生效。
+
+> ⚠️ 这就是"某维度 data 非空却全是 `—`"时不会自动兜底的原因：`—` 也是非空值，质量门控可能
+> 判它"够用"。此时由 agent 显式 `UZI_PLAYWRIGHT_FORCE=1 uzi <ticker> --depth deep --stage1`。
+
+兜底结果会合进 `raw_data.json` 的对应维度，并带 `fallback` 标记；抓不到的仍走
+`_data_gaps.json`，不编造。
 
 ---
 
@@ -401,7 +437,7 @@ Agent **从 synthesis 自动生成 5 条**，模板：
 2. **`fallback=True` 标记**：用 web search 兜底时必须标记，报告前端显示 "[网络搜索]" 徽章而非 "[官方接口]"
 3. **缺失不编造**：找不到数据时字段置 `null` 或缺席，viz 自动跳过渲染该 sub-panel
 4. **零外部依赖**：数据源与缓存全部编译进 `uzi` 二进制，没有运行时安装步骤
-5. **接口失败重试 3 次后才走 fallback 链**：见 `uzi_data::sources` / `uzi_data::providers` 的 retry + failover
+5. **接口失败重试 3 次后才走 fallback 链**：移植出处（源码，运行时不读）：`uzi_data::sources` / `uzi_data::providers` 的 retry + failover
 
 ---
 

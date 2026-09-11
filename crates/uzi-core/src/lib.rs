@@ -12,6 +12,7 @@
 //! | `lib/name_matcher.py` | [`name_matcher`] |
 //! | CPython `random` | [`pyrandom`] |
 
+pub mod assets;
 pub mod cache;
 pub mod dim;
 pub mod features;

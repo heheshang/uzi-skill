@@ -21,7 +21,7 @@ pub fn render(
     let html_path = report_dir.join("full-report.html");
     if !html_path.exists() {
         return Err(anyhow!(
-            "{} not found. Run assemble_report.py first.",
+            "{} not found. Run `uzi <ticker> --stage2` first.",
             html_path.display()
         ));
     }

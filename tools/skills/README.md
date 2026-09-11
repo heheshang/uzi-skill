@@ -11,7 +11,7 @@ python3 tools/skills/verify_docs.py              # check (exit 1 on findings)
 python3 tools/skills/verify_docs.py --inventory   # list every Python-ish mention
 ```
 
-Checks six things across `SKILL.md`, `skills/**/*.md`, and `commands/*.md`:
+Checks seven things across `SKILL.md`, `skills/**/*.md`, and `commands/*.md`:
 
 1. **Every `uzi_<crate>::<path>` token resolves** — the longest module prefix must
    exist under `crates/`, and any trailing segment must be a real symbol in the
@@ -38,6 +38,11 @@ Checks six things across `SKILL.md`, `skills/**/*.md`, and `commands/*.md`:
    phrase sent readers hunting for the Rust source instead of running `uzi`;
    capabilities the CLI genuinely does not expose are described as "CLI 未暴露…"
    plus the source-side call.
+7. **Source pointers declare themselves** — inside the run surface, an imperative
+   `实现见 uzi_data::fetch::kline` reads as "go read this module". Naming the
+   module is fine (it is provenance), but the line must say so ("移植出处 /
+   源码 / 运行时不读"), or a reader with no checkout cannot tell an explanation
+   from an instruction.
 
 `--inventory` prints every `lib/*.py` / `akshare` / `.py` mention per file for
 human review — useful after a bulk rewrite, since a legitimate contrast

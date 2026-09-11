@@ -147,6 +147,20 @@ SOURCE_DISCLAIMERS = (
 # Rust source instead. Capabilities the CLI genuinely does not expose are
 # described as `CLI 未暴露…` plus the source-side call.
 NO_CLI_CLAIM_RE = re.compile(r"无\s*CLI\s*入口")
+# An imperative pointer at a Rust module: `实现见 uzi_data::fetch::kline`. That
+# reads as "go read this" and is the shape that sent a source-less agent grepping
+# `crates/`. Naming the module is fine — it is provenance — but the line must say
+# so, otherwise the reader cannot tell an explanation from an instruction.
+SOURCE_POINTER_RE = re.compile(
+    r"(?:实现见|补洞见|链见|常量见|优先级链见|见|参考|详见)\s*`?"
+    r"(uzi_[a-z_]+(?:::[a-z_0-9]+)+)"
+)
+SOURCE_POINTER_MARKERS = (
+    "移植出处", "源码", "运行时不读", "仅维护", "不从源码", "不需要源码", "无需源码",
+)
+# A pointer is judged together with its surrounding prose (a table row or a
+# fenced block can separate them by a line or two).
+SOURCE_POINTER_WINDOW = 2
 
 
 def rust_index() -> tuple[set[str], str]:
@@ -329,6 +343,24 @@ def main() -> int:
                     f"{rel}:{line_no}: stale `无 CLI 入口` claim — {line.strip()[:90]}"
                 )
 
+        # 7 · an imperative pointer at a Rust module must declare itself as
+        # provenance, or the reader treats it as the thing to go read.
+        if doc in run_surface:
+            for line_no, line in enumerate(lines, 1):
+                m = SOURCE_POINTER_RE.search(line)
+                if not m:
+                    continue
+                lo = max(0, line_no - 1 - SOURCE_POINTER_WINDOW)
+                hi = min(len(lines), line_no + SOURCE_POINTER_WINDOW)
+                if any(
+                    mk in "\n".join(lines[lo:hi]) for mk in SOURCE_POINTER_MARKERS
+                ):
+                    continue
+                findings.append(
+                    f"{rel}:{line_no}: {m.group(1)} cited as an instruction with no "
+                    f"provenance marker — {line.strip()[:80]}"
+                )
+
     print(f"checked {len(targets)} docs · {total_tokens} rust path mentions ({len(checked)} unique)")
     if findings:
         print(f"\n{len(findings)} finding(s):\n")
@@ -338,7 +370,8 @@ def main() -> int:
     print(
         "✓ all rust paths resolve · all links resolve · "
         "all CLI flags known · no executable python · "
-        "run paths need no build · no stale `无 CLI 入口` claims"
+        "run paths need no build · no stale `无 CLI 入口` claims · "
+        "source pointers declare provenance"
     )
     return 0
 

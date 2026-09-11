@@ -185,8 +185,8 @@ pub fn diagnose_source(p: &Value) -> Vec<Value> {
         out.push(json!({
             "group": "domestic",
             "status": "🔴 不通",
-            "affected_fetchers": ["fetch_basic", "fetch_financials", "fetch_industry", "fetch_peers",
-                                  "fetch_events", "fetch_capital_flow", "fetch_lhb", "fetch_fund_holders"],
+            "affected_fetchers": ["0_basic", "1_financials", "7_industry", "4_peers",
+                                  "15_events", "12_capital_flow", "16_lhb", "6_fund_holders"],
             "affected_count": 8,
             "fix": "主要问题：push2.eastmoney.com / cninfo / xueqiu 全挂 · 绝大多数 fetcher 无法工作\n  1. 检查 VPN 是否指向国内 IP（海外 VPN 会被东财反向 GFW）\n  2. 尝试：unset HTTPS_PROXY HTTP_PROXY ALL_PROXY\n  3. 如用 Clash · 检查规则是否把 *.eastmoney.com / cninfo / xueqiu.com 走 direct",
         }));
@@ -203,7 +203,7 @@ pub fn diagnose_source(p: &Value) -> Vec<Value> {
         out.push(json!({
             "group": "overseas",
             "status": "🔴 不通",
-            "affected_fetchers": ["yfinance(_kline_us_chain)", "_yahoo_v8_chart", "CoinGecko / Binance / ECB"],
+            "affected_fetchers": ["2_kline（美股/港股链）", "4_peers（全球同行）", "19_contests"],
             "affected_count": 3,
             "fix": "Yahoo / CoinGecko 等海外源挂 · 美股 / 港股 / 加密数据会降级\n  1. 确认 VPN 能访问海外（浏览器访问 finance.yahoo.com 测试）\n  2. 中国大陆不需要海外源就能分析 A 股 · 此项可忽略\n  3. 若必须：开 Clash 全局模式 + export HTTPS_PROXY=http://127.0.0.1:7890",
         }));
@@ -212,8 +212,8 @@ pub fn diagnose_source(p: &Value) -> Vec<Value> {
         out.push(json!({
             "group": "search",
             "status": "🔴 不通",
-            "affected_fetchers": ["fetch_moat", "fetch_industry(dynamic)", "fetch_policy",
-                                  "fetch_sentiment(ddgs)", "fetch_trap_signals"],
+            "affected_fetchers": ["14_moat", "7_industry", "13_policy",
+                                  "17_sentiment", "18_trap"],
             "affected_count": 5,
             "fix": "DuckDuckGo / 百度搜索 全挂 · 5 个定性维度将降级\n  1. 百度搜索被挡：中国大陆一般能通 · 检查是否 DNS 污染\n  2. DDGS 被挡：走 VPN 或切百度搜索作为唯一源\n  3. 实在不通：设 UZI_SKIP_WS=1 跳过 web search 部分（报告 5 个定性维度标 gap）",
         }));

@@ -30,7 +30,7 @@
 
 ## 数据结构（吃 `--portfolio` 的 holdings）
 
-参考 `uzi_screen::portfolio` 的 holdings 行结构（ticker / weight / note），本函数再多吃两个字段：
+holdings 行结构沿用源码 `uzi_screen::portfolio` 的口径（运行时不读）（ticker / weight / note），本函数再多吃两个字段：
 
 ```text
 holdings = [

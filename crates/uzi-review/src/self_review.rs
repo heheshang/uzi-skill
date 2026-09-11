@@ -201,7 +201,7 @@ fn check_industry_mapping_sanity(ctx: &Value) -> Value {
                     pyfmt::repr(matched)
                 ),
                 format!(
-                    "检查 lib/industry_mapping.SW_TO_CSRC_INDUSTRY[{}] 是否指向含 {} 的证监会名；必要时清 cache 重跑",
+                    "行业映射疑似误配（申万 {} 被指到证监会 {}）；清 .cache/<ticker>/ 后重跑 uzi <ticker> --no-resume --stage1",
                     pyfmt::repr(&json!(sw)),
                     pyfmt::repr(&json!(right))
                 ),
@@ -234,7 +234,7 @@ fn check_all_dims_exist(ctx: &Value) -> Value {
             &format!("{}_", num),
             format!("应跑的维度 {} 完全缺失（fetcher 从未运行或崩溃）", num),
             format!("dims 里没有 key 以 {}_ 开头", num),
-            "重跑 run.py <ticker> --no-resume 或手动 fetch_X".to_string(),
+            "重跑 uzi <ticker> --no-resume --stage1（该维度应跑的 fetcher 全部缺失）".to_string(),
         ));
     }
     issues_vec(out)
@@ -385,7 +385,7 @@ fn check_panel_non_empty(ctx: &Value) -> Value {
             "panel",
             "panel.json 无 investors".to_string(),
             String::new(),
-            "重跑 generate_panel()".to_string(),
+            "重跑 uzi <ticker> --no-resume --stage1（评委面板由 stage1 重新生成）".to_string(),
         ));
         return issues_vec(out);
     }
@@ -846,22 +846,37 @@ fn check_panel_hollow_verdicts(ctx: &Value) -> Value {
 
 fn check_panel_insights_rendered(_ctx: &Value) -> Value {
     let mut out: Vec<Value> = Vec::new();
-    let ar = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../uzi-report/src/assemble_report.rs");
-    if ar.exists() {
-        if let Ok(src) = std::fs::read_to_string(&ar) {
-            // The Rust port may keep the upstream snake_case symbol; accept the
-            // field-name spelling too so a renamed helper is not a false alarm.
-            if !(src.contains("render_panel_insights") || src.contains("panel_insights")) {
+    // v2.9.1 regression guard — checked against the **shipped template**, not the
+    // source tree. The previous version read
+    // `<CARGO_MANIFEST_DIR>/../uzi-report/src/assemble_report.rs`, a file that no
+    // longer exists: the check no-opped on every machine (so a real regression
+    // would sail through) and baked the builder's checkout path into the binary.
+    let template = uzi_core::assets::report_template();
+    match std::fs::read_to_string(&template) {
+        Ok(html) => {
+            if !html.contains(uzi_core::assets::PANEL_INSIGHTS_MARKER) {
                 out.push(issue(
                     "critical",
                     "self-check",
                     "report",
-                    "v2.9.1 regression: assemble_report 缺 render_panel_insights".to_string(),
-                    "grep 失败".to_string(),
-                    "恢复 render_panel_insights 函数 + INJECT_PANEL_INSIGHTS 替换".to_string(),
+                    "v2.9.1 regression: 报告模板缺 panel_insights 注入点".to_string(),
+                    format!(
+                        "{} 里没有 {}",
+                        template.display(),
+                        uzi_core::assets::PANEL_INSIGHTS_MARKER
+                    ),
+                    "恢复模板里的注入点 —— assemble 用它替换成 render_panel_insights 的输出".to_string(),
                 ));
             }
         }
+        Err(e) => out.push(issue(
+            "critical",
+            "self-check",
+            "report",
+            "报告模板读不到：assets/report-template.html 缺失或不可读".to_string(),
+            format!("{}: {}", template.display(), e),
+            "从仓库根目录运行 uzi，或 export UZI_ASSETS_DIR=<repo>/assets".to_string(),
+        )),
     }
     issues_vec(out)
 }

@@ -35,8 +35,8 @@ fn float_like(v: &Value) -> Option<f64> {
 ///
 /// `uzi_core::cache::cache_root()` is cwd-relative like upstream's `.cache`.
 /// Because this crate can be driven from any working directory (cargo test runs
-/// each crate from its own directory), fall back to the workspace-root `.cache`
-/// when the cwd-relative one is absent — the cache never leaves the repo.
+/// each crate from its own directory), fall back to the repo-root `.cache` when
+/// the cwd-relative one is absent — the cache never leaves the repo.
 fn quant_cache_root() -> std::path::PathBuf {
     if std::env::var("UZI_CACHE_ROOT")
         .map(|v| !v.is_empty())
@@ -48,9 +48,11 @@ fn quant_cache_root() -> std::path::PathBuf {
     if root.exists() {
         return root;
     }
-    let alt = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-        .join("../..")
-        .join(".cache");
+    // Resolved from the executable, not `env!("CARGO_MANIFEST_DIR")`: the latter
+    // bakes the builder's absolute checkout path into the binary.
+    let alt = uzi_core::assets::repo_root()
+        .map(|repo| repo.join(".cache"))
+        .unwrap_or_else(|| root.clone());
     if alt.exists() {
         alt
     } else {
