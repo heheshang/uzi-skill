@@ -72,6 +72,11 @@ fn s(v: &Value) -> String {
     uzi_core::py::py_display(v)
 }
 
+/// True for payloads stamped by the crypto data layer (`asset_class = "crypto"`).
+fn is_crypto_data(data: &Value) -> bool {
+    data.get("asset_class").and_then(|v| v.as_str()) == Some("crypto")
+}
+
 /// Build a one-paragraph commentary from `raw_data` fields for one dimension.
 pub fn auto_summarize_dim(dim_key: &str, label: &str, dim: &Value, score: f64) -> String {
     if !dim.is_object() {
@@ -83,6 +88,100 @@ pub fn auto_summarize_dim(dim_key: &str, label: &str, dim: &Value, score: f64) -
     }
 
     match dim_key {
+        // ── Crypto venue · crypto-native fields ──
+        "0_basic" if is_crypto_data(&data) => format!(
+            "{}：{}（{}），{} 赛道。价格 {}，市值 {}，市值排名 #{}，24h 成交额 {}。",
+            label,
+            s(&pick(&data, &["name"], "—")),
+            s(&pick(&data, &["code"], "—")),
+            s(&pick(&data, &["industry"], "—")),
+            s(&pick(&data, &["price"], "—")),
+            s(&pick(&data, &["market_cap"], "—")),
+            s(&pick(&data, &["market_cap_rank"], "—")),
+            s(&pick(&data, &["volume_24h"], "—")),
+        ),
+        "1_financials" if is_crypto_data(&data) => format!(
+            "{}：流通率 {}%，FDV/市值 {}，供应模型 {}。得分 {}/10。",
+            label,
+            s(&pick(&data, &["circulating_ratio_pct"], "—")),
+            s(&pick(&data, &["fdv_to_mcap"], "—")),
+            s(&pick(&data, &["supply_model"], "—")),
+            format_score(score),
+        ),
+        "3_macro" if is_crypto_data(&data) => format!(
+            "{}：加密总市值 24h {}%，BTC 占比 {}%，ETH 占比 {}%，恐慌贪婪 {}。得分 {}/10。",
+            label,
+            s(&pick(&data, &["mcap_change_24h_pct"], "—")),
+            s(&pick(&data, &["btc_dominance_pct"], "—")),
+            s(&pick(&data, &["eth_dominance_pct"], "—")),
+            s(&pick(&data, &["fear_greed"], "—")),
+            format_score(score),
+        ),
+        "4_peers" if is_crypto_data(&data) => {
+            let peer_table = data
+                .get("peer_table")
+                .and_then(|v| v.as_array())
+                .cloned()
+                .unwrap_or_default();
+            let names: Vec<Value> = peer_table
+                .iter()
+                .filter(|p| p.is_object() && p.get("is_self").and_then(|v| v.as_bool()) != Some(true))
+                .take(5)
+                .map(|p| p.get("name").cloned().unwrap_or(Value::Null))
+                .collect();
+            let peers_str = join_list(&Value::Array(names), 5, "、");
+            format!(
+                "{}：市值排名 #{}，{}。得分 {}/10。",
+                label,
+                s(&pick(&data, &["rank"], "—")),
+                match peers_str {
+                    Some(p) => format!("主要同行：{}", p),
+                    None => "无同业样本".to_string(),
+                },
+                format_score(score),
+            )
+        }
+        "7_industry" if is_crypto_data(&data) => format!(
+            "{}：赛道 {}，市值占比 {}%，板块市值 {}。",
+            label,
+            s(&pick(&data, &["industry"], "—")),
+            s(&pick(&data, &["market_share_pct"], "—")),
+            s(&pick(&data, &["sector_market_cap"], "—")),
+        ),
+        "10_valuation" if is_crypto_data(&data) => format!(
+            "{}：NVT {}，日换手 {}，区间位置 {}%，距 ATH {}%。得分 {}/10。",
+            label,
+            s(&pick(&data, &["nvt_ratio"], "—")),
+            s(&pick(&data, &["turnover_ratio"], "—")),
+            s(&pick(&data, &["price_range_position_pct"], "—")),
+            s(&pick(&data, &["ath_drawdown_pct"], "—")),
+            format_score(score),
+        ),
+        "17_sentiment" if is_crypto_data(&data) => format!(
+            "{}：恐慌贪婪指数 {}（{}），看多占比 {}%，热搜第 {} 位。",
+            label,
+            s(&pick(&data, &["thermometer_value"], "—")),
+            s(&pick(&data, &["sentiment_label"], "—")),
+            s(&pick(&data, &["positive_pct"], "—")),
+            s(&pick(&data, &["trending_rank"], "—")),
+        ),
+        "18_trap" if is_crypto_data(&data) => {
+            let signals = data
+                .get("pump_dump_signals")
+                .and_then(|v| v.as_array())
+                .cloned()
+                .unwrap_or_default();
+            format!(
+                "{}：风险分 {}/100 · {}。{}",
+                label,
+                s(&pick(&data, &["risk_score"], "—")),
+                s(&pick(&data, &["trap_level"], "—")),
+                match join_list(&Value::Array(signals), 3, "；") {
+                    Some(sig) => format!("信号：{}", sig),
+                    None => "未触发拉盘/流动性信号".to_string(),
+                }
+            )
+        }
         "0_basic" => format!(
             "{}：{}（{}），{} 行业。市值 {}，PE {}，PB {}。",
             label,

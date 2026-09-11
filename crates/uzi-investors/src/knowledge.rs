@@ -79,7 +79,14 @@ pub fn reality_check(investor_id: &str, market: &str, ticker: &str, name: &str, 
 
     if !market_match(investor_id, market) {
         result["should_evaluate"] = Value::Bool(false);
-        result["skip_reason"] = Value::String(format!("不看{}市场", market));
+        // Only the crypto venue gets a localised label; other markets keep the
+        // upstream `不看{market}市场` string verbatim.
+        let reason = if market.eq_ignore_ascii_case("C") {
+            "不看加密市场".to_string()
+        } else {
+            format!("不看{}市场", market)
+        };
+        result["skip_reason"] = Value::String(reason);
         return result;
     }
 

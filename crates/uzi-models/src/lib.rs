@@ -19,6 +19,7 @@
 use serde_json::Value;
 
 pub mod compute;
+pub mod crypto_models;
 pub mod deep_methods;
 pub mod fin_models;
 pub mod global_peers;

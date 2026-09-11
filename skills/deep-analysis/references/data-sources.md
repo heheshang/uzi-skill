@@ -38,6 +38,50 @@
 
 ---
 
+## C · 加密货币（`market = "C"`）
+
+**入口**：`uzi BTC-USD` / `uzi BTC` / `uzi BTCUSDT` / `uzi SOL-USD`。代码规范化为
+`BASE-QUOTE`（如 `BTC-USD`），`currency` = 计价币，`exchange` = `CRYPTO`。
+与 A/H/U 不同，加密货币**没有财报**：`1_financials` 变成代币经济、`10_valuation` 变成
+NVT/换手、`16_lhb` / `19_contests` 标记为不适用（权重 0）。逐维来源：
+
+| Dim | 主源 | 备源 / 兜底 |
+|---|---|---|
+| `0_basic` 行情·市值·供应 | CoinGecko `/coins/markets?ids={id}`（`coingecko_markets`） | OKX `/api/v5/market/ticker?instId={symbol}-USDT`；未知币种先走 CoinGecko `/search` 解析 id |
+| `1_financials` 代币经济 | CoinGecko `/coins/{id}` → `market_data`（FDV / 流通量 / 总量 / 硬顶） | 由 `market_cap` + `circulating_supply` 自算流通率与 FDV/市值 |
+| `2_kline` OHLCV + 指标 | OKX `/api/v5/market/candles?instId={symbol}-USDT&bar=1D`（`okx_spot_tickers` 同源） | Binance `/api/v3/klines` → CoinGecko `/coins/{id}/market_chart`（无 OHLC，降级为收盘价） |
+| `3_macro` 加密宏观 | CoinGecko `/global`（总市值 / 24h 变化 / BTC·ETH 占比） | alternative.me `/fng/`（恐慌贪婪指数） |
+| `4_peers` 市值同侪 | CoinGecko `/coins/markets?order=market_cap_desc&per_page=15` | — |
+| `5_chain` 生态/业务构成 | CoinGecko `/coins/{id}` → `categories` + `description` + `links` | — |
+| `6_research` 开发/社区 | CoinGecko `/coins/{id}` → `developer_data` + `community_data` | — |
+| `7_industry` 赛道地位 | CoinGecko `/coins/categories` + 市值占比自算 | — |
+| `8_materials` 生产成本 | CoinGecko `/coins/{id}` → `hashing_algorithm`（PoW 才有意义） | — |
+| `9_futures` 合约费率 | OKX `/api/v5/public/funding-rate` + `/public/open-interest`（`{symbol}-USDT-SWAP`） | — |
+| `10_valuation` 估值 | 自算：NVT = 市值 ÷ 24h 成交额、日换手、区间位置、距 ATH 回撤 | CoinGecko `ath_change_percentage` |
+| `11_governance` 治理/解锁 | CoinGecko 总量 vs 流通量 → 未流通比例 | CoinGecko 官方链接 |
+| `12_capital_flow` 资金面 | 自算 7 日均量变化 + 稳定币总市值（`ids=tether,usd-coin,dai,first-digital-usd`） | — |
+| `13_policy` 监管 | 金十 / 同花顺快讯（`uzi_data::news`）按加密 + 监管关键词过滤 | — |
+| `14_moat` 护城河 | 自算：市值份额 + 开发者提交/Stars + 社区粉丝 | CoinGecko `developer_data` / `community_data` |
+| `15_events` 事件 | 金十 / 同花顺快讯按币名 + 加密关键词过滤 | — |
+| `16_lhb` | **不适用**（加密无龙虎榜/席位） | — |
+| `17_sentiment` 情绪 | alternative.me `/fng/`（30 日历史）+ CoinGecko `/search/trending` | CoinGecko `sentiment_votes_up_percentage` |
+| `18_trap` 风险扫描 | 自算：24h/7d 涨幅、换手率、成交额深度、距 ATH 回撤、年化波动 | — |
+| `19_contests` | **不适用**（无 A 股实盘赛） | — |
+| `similar_stocks` | CoinGecko `/coins/markets?category={slug}`（同赛道前 5） | 市值前 15 兜底 |
+
+**估值模型（dim 20–22）**：不做 DCF / LBO / 三表（代币没有现金流与杠杆收购口径），
+改为 **NVT 网络价值折现**——`公允价值 = 24h 成交额 × 目标 NVT ÷ 流通量`，
+目标 NVT 取 40×（L1/L2 公链，经验区间 20–60×）/ 25×（其他）。稳定币与封装资产
+不适用，直接标 `不适用` 而不是编造目标价。首次覆盖评级 / 目标价 / IC Memo / Porter+BCG
+均由该模型派生。
+
+**缓存与降级**：所有请求走 `uzi_core::cache` 分级缓存（行情 5min，详情/全局 2h–24h）。
+CoinGecko 速率受限时先降级到 OKX（行情/K线/费率），再降级到 CoinGecko `/market_chart`。
+失败维度按 `uzi-review` 的加密检查表（`CRYPTO_CHECKS`）生成恢复任务，提示的源是
+CoinGecko / OKX / alternative.me，不会指向雪球或东财 F10。
+
+---
+
 ## 1 · 财报 (Dim 1)
 
 viz 需要的字段 → 来源：

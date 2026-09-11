@@ -1,11 +1,11 @@
 ---
 name: uzi
-description: A-share, Hong Kong, and US stock analysis skill for deep research, quick scans, investor panel review, hot-money/LHB analysis, trap detection, valuation, IC memos, and Bloomberg-style HTML reports. Rust implementation of UZI-Skill.
+description: A-share, Hong Kong, US stock, and crypto analysis skill for deep research, quick scans, investor panel review, hot-money/LHB analysis, trap detection, valuation, IC memos, and Bloomberg-style HTML reports. Rust implementation of UZI-Skill.
 version: 3.9.4
 author: FloatFu-true
 license: MIT
 metadata:
-  tags: [finance, stocks, a-share, hong-kong, us-stocks, dcf, valuation, investor-panel, youzi, lhb, trap-detection]
+  tags: [finance, stocks, a-share, hong-kong, us-stocks, crypto, bitcoin, dcf, valuation, investor-panel, youzi, lhb, trap-detection]
   related_skills: [deep-analysis, investor-panel, lhb-analyzer, trap-detector]
 ---
 
@@ -70,6 +70,7 @@ uzi --portfolio p.csv --method rebalance
 
 uzi 600519.SH                             # 一把跑完（快速模式，评委为规则引擎输出）
 uzi 贵州茅台 --no-browser                  # 中文名会自动解析
+uzi BTC-USD                               # 加密货币（也行: uzi BTC / uzi BTCUSDT / uzi SOL-USD）
 uzi 600519.SH --stage1                    # 停下等 agent 介入（deep 档必须走这条）
 uzi 600519.SH --stage2                    # 合并 agent_analysis.json 后出报告
 uzi 600519.SH --remote                    # 生成公网链接，手机可看

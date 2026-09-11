@@ -269,6 +269,12 @@ reasoning（2-3 句话）。
 
 你可以覆盖规则引擎的机械得分——你是在模拟这个人的判断。
 
+> **加密货币（`market = "C"`）**：F 组（A 股游资，24 人）会被 `market_scope` 自动 skip
+> （理由「不看加密市场」），其余 40+ 位照常出分。role-play 时把关注点换成加密口径：
+> 代币经济（流通率/FDV）、网络价值（NVT/成交额）、赛道地位与市值排名、开发者/社区活跃度、
+> 资金费率、解锁与通胀、恐慌贪婪指数、拉盘/流动性风险。**不要**引用 PE / ROE / 龙虎榜 /
+> 北向资金——加密没有这些字段。
+
 **3c. 把逐人判断写进 `agent_analysis.json` 的 `per_investor_override`**
 
 `panel.json` 是 `--stage1` 的规则引擎产物，**不必手改**；你的覆盖通过 `agent_analysis.json`
@@ -329,8 +335,8 @@ Stage 2 读取你更新后的 `panel.json` + `agent_analysis.json`，生成综�
 1. 综合评分 + 定调（值得重仓 / 可以蹲 / 观望 / 谨慎 / 回避）
 2. 66 评委投票分布
 3. **你自己分析的** Top 3 看多理由 + Top 3 看空理由
-4. DCF 内在价值 vs 当前价
-5. 杀猪盘等级
+4. 内在价值 vs 当前价（股票 = DCF；加密 = NVT 网络价值折现的公允价值）
+5. 杀猪盘等级（加密 = 拉盘/流动性风险分）
 6. 报告路径（或 `--remote` 公网链接）
 
 ## 快速模式
@@ -430,6 +436,12 @@ fallthrough —— agent **不需要**自己写代码调源。当你需要判断
 `skills/deep-analysis/references/data-sources.md`，再用 Step 3.0 的
 `UZI_PLAYWRIGHT_FORCE=1 uzi <ticker> --depth deep --stage1` 强制兜底。
 
+**加密货币（`market = "C"`）不走上表**：行情/市值/供应/开发者/情绪走 CoinGecko
+（`coingecko_markets` / `/coins/{id}` / `/global` / `/search/trending`），日线 OHLCV 与合约费率走
+OKX（`okx_spot_tickers`，国内可达；备源 Binance → CoinGecko `/market_chart`），情绪另加
+alternative.me 恐慌贪婪指数。全部免 key（可选 `UZI_COINGECKO_KEY` 走 Pro 端点）。
+逐维字段映射见 `skills/deep-analysis/references/data-sources.md` 的「C · 加密货币」。
+
 **港股增强**：
 - `crates/uzi-data/src/hk.rs` 覆盖港股采集（industry / PE / PB / 市值 / 排名 / 公司介绍）
 - peers 分支返回 rank-in-HK-universe（具体同行 list 走 AASTOCKS 浏览器兜底）
@@ -453,5 +465,10 @@ fallthrough —— agent **不需要**自己写代码调源。当你需要判断
 - A 股：`600519.SH` / `002273.SZ` / `贵州茅台`
 - 港股：`00700.HK`
 - 美股：`AAPL`
-- 零外部依赖；不需要 API key（但**建议设置 `MX_APIKEY`** 提高稳定性，特别是 Codex/海外环境）
+- 加密货币：`BTC-USD` / `SOL-USDT` / `BTCUSDT` / `BTC`（裸符号仅限注册表内的主流币；
+  `SOL`、`LINK`、`OP`、`ARB` 等与美国股票同名的必须写全对或加 `.CRYPTO`）——走 `market = "C"`，
+  22 维 / 66 评委 / HTML 报告照旧，但 `1_financials` 是代币经济、`10_valuation` 是 NVT、
+  dim 20–22 是 NVT 网络价值折现（不是 DCF/LBO），A 股游资评委自动 skip
+- 零外部依赖；不需要 API key（但**建议设置 `MX_APIKEY`** 提高稳定性，特别是 Codex/海外环境；
+  加密数据源（CoinGecko / OKX / alternative.me）免 key，可用 `UZI_COINGECKO_KEY` 走 Pro 端点）
 - 缓存默认复用 · 强制重抓加 `--no-resume`

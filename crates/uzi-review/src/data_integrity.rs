@@ -7,6 +7,50 @@ use std::path::Path;
 use std::sync::LazyLock;
 use uzi_core::py::{round, truthy};
 
+/// Crypto venue (`market == "C"`) coverage checks.
+///
+/// Crypto has no corporate fundamentals, so the equity list (ROE / PE / 行业增速)
+/// would always read as missing and tank coverage. These are the fields a crypto
+/// report actually depends on.
+pub const CRYPTO_CHECKS: &[(&str, &str, &str, bool)] = &[
+    ("0_basic", "name", "币种名称", true),
+    ("0_basic", "price", "当前价格", true),
+    ("0_basic", "market_cap", "总市值", false),
+    ("0_basic", "market_cap_rank", "市值排名", false),
+    ("0_basic", "volume_24h", "24h 成交额", false),
+    ("1_financials", "circulating_supply", "流通量", false),
+    ("1_financials", "fdv", "FDV", false),
+    ("2_kline", "stage", "K 线阶段", true),
+    ("2_kline", "ma_align", "均线多空", false),
+    ("2_kline", "macd", "MACD", false),
+    ("4_peers", "peer_table", "同业对比", false),
+    ("10_valuation", "nvt_ratio", "NVT", false),
+    ("10_valuation", "ath_drawdown_pct", "距 ATH 回撤", false),
+    ("17_sentiment", "fear_greed_history", "恐慌贪婪指数", false),
+    ("18_trap", "risk_score", "风险评分", false),
+];
+
+/// The check table for a venue. `market == "C"` gets [`CRYPTO_CHECKS`], every
+/// other venue gets [`CRITICAL_CHECKS`].
+pub fn checks_for(market: &str) -> &'static [(&'static str, &'static str, &'static str, bool)] {
+    if market.eq_ignore_ascii_case("C") {
+        CRYPTO_CHECKS
+    } else {
+        CRITICAL_CHECKS
+    }
+}
+
+/// Venue of a raw snapshot — `0_basic.data.market`, else `A`.
+pub fn market_of(raw: &Value) -> String {
+    raw.get("dimensions")
+        .and_then(|d| d.get("0_basic"))
+        .and_then(|d| d.get("data"))
+        .and_then(|d| d.get("market"))
+        .and_then(|m| m.as_str())
+        .unwrap_or("A")
+        .to_string()
+}
+
 /// (dim_key, dotted data path, label, critical)
 pub const CRITICAL_CHECKS: &[(&str, &str, &str, bool)] = &[
     // Dimension 0 · Basic
@@ -75,6 +119,44 @@ const RECOVERY_HINTS: &[((&str, &str), &[&str])] = &[
     (("14_moat", "scores"), &["agent: Porter 5 Forces + web search 护城河评分"]),
 ];
 
+/// Crypto per-field recovery hints — keyless public APIs, no MX/xueqiu.
+const CRYPTO_RECOVERY_HINTS: &[((&str, &str), &[&str])] = &[
+    (("0_basic", "name"), &["coingecko: /coins/{id}", "ws: '{name} 币种简介 市值'"]),
+    (("0_basic", "price"), &["coingecko: /coins/markets?ids={id}", "okx: /market/ticker?instId={code}"]),
+    (("0_basic", "market_cap"), &["coingecko: /coins/markets?vs_currency=usd&ids={id}"]),
+    (("0_basic", "market_cap_rank"), &["coingecko: /coins/markets (market_cap_rank)"]),
+    (("0_basic", "volume_24h"), &["coingecko: /coins/markets (total_volume)", "okx: /market/ticker"]),
+    (("1_financials", "circulating_supply"), &["coingecko: /coins/{id} market_data.circulating_supply"]),
+    (("1_financials", "fdv"), &["coingecko: /coins/{id} market_data.fully_diluted_valuation"]),
+    (("2_kline", "stage"), &["okx: /market/candles?instId={code}&bar=1D&limit=400"]),
+    (("2_kline", "ma_align"), &["infer: 从 OKX 日线 MA5/20/60 排列推断"]),
+    (("2_kline", "macd"), &["infer: 从 OKX 日线收盘价计算 MACD"]),
+    (("4_peers", "peer_table"), &["coingecko: /coins/markets?order=market_cap_desc&per_page=12"]),
+    (("10_valuation", "nvt_ratio"), &["infer: 市值 / 24h 成交额", "coingecko: /coins/markets"]),
+    (("10_valuation", "ath_drawdown_pct"), &["coingecko: /coins/markets (ath_change_percentage)"]),
+    (("17_sentiment", "fear_greed_history"), &["api: https://api.alternative.me/fng/?limit=30"]),
+    (("18_trap", "risk_score"), &["infer: 24h/7d 涨幅 + 换手率 + 流动性 + 距 ATH 回撤"]),
+];
+
+/// Crypto whole-dim recovery hints.
+const CRYPTO_ENRICHMENT_HINTS: &[(&str, &[&str])] = &[
+    ("3_macro", &["coingecko: /global (总市值/BTC 占比)", "api: https://api.alternative.me/fng/"]),
+    ("4_peers", &["coingecko: /coins/markets?order=market_cap_desc&per_page=50"]),
+    ("5_chain", &["coingecko: /coins/{id} (description + categories + links)"]),
+    ("6_research", &["coingecko: /coins/{id} developer_data + community_data"]),
+    ("7_industry", &["coingecko: /coins/categories"]),
+    ("8_materials", &["ws: '{name} 挖矿成本 哈希率 电力'"]),
+    ("9_futures", &["okx: /public/funding-rate?instId={code}-SWAP", "okx: /public/open-interest"]),
+    ("12_capital_flow", &["coingecko: /coins/markets (total_volume)", "api: 稳定币总市值（tether/usd-coin/dai）"]),
+    ("13_policy", &["ws: '{name} 监管 SEC 合规 2026'"]),
+    ("14_moat", &["coingecko: /coins/{id} developer_data", "ws: '{name} 开发者 生态 网络效应'"]),
+    ("15_events", &["news: 金十/同花顺 加密关键词流"]),
+    ("16_lhb", &["n/a: 加密市场无龙虎榜/席位数据"]),
+    ("17_sentiment", &["api: https://api.alternative.me/fng/", "coingecko: /search/trending"]),
+    ("18_trap", &["infer: 涨幅/换手/流动性/回撤综合评分"]),
+    ("19_contests", &["n/a: 加密资产无 A 股实盘赛数据"]),
+];
+
 /// Enrichment dim recovery hints (when a whole dim is empty).
 const ENRICHMENT_HINTS: &[(&str, &[&str])] = &[
     ("3_macro", &["ws: '中国 {industry} 宏观环境 利率 2026'"]),
@@ -131,13 +213,14 @@ pub fn is_missing(v: &Value) -> bool {
 
 pub fn validate(raw: &Value) -> Value {
     let dims = obj_or(raw.get("dimensions"));
+    let checks = checks_for(&market_of(raw));
 
     let mut missing_critical: Vec<Value> = Vec::new();
     let mut missing_optional: Vec<Value> = Vec::new();
     let mut total_checks: i64 = 0;
     let mut passed_checks: i64 = 0;
 
-    for (dim_key, path, label, critical) in CRITICAL_CHECKS {
+    for (dim_key, path, label, critical) in checks {
         total_checks += 1;
         let dim = obj_or(dims.get(dim_key));
         let data = obj_or(dim.get("data"));
@@ -329,6 +412,22 @@ pub fn generate_recovery_tasks(raw: &Value, integrity: &Value) -> Value {
     ctx.insert("eastmoney_code".into(), json!(eastmoney_code));
     ctx.insert("name".into(), name_v);
     ctx.insert("industry".into(), industry_v);
+    // Crypto placeholders: base symbol and its CoinGecko id, when known.
+    let is_crypto = market_of(raw).eq_ignore_ascii_case("C");
+    let symbol = code_raw
+        .split('-')
+        .next()
+        .unwrap_or("")
+        .trim()
+        .to_uppercase();
+    let cg_id = uzi_core::crypto::find(&symbol)
+        .map(|c| c.coingecko_id.to_string())
+        .unwrap_or_else(|| symbol.to_lowercase());
+    ctx.insert("symbol".into(), json!(symbol));
+    ctx.insert("id".into(), json!(cg_id));
+
+    let field_hints = if is_crypto { CRYPTO_RECOVERY_HINTS } else { RECOVERY_HINTS };
+    let dim_hints = if is_crypto { CRYPTO_ENRICHMENT_HINTS } else { ENRICHMENT_HINTS };
 
     let missing_critical = integrity
         .get("missing_critical")
@@ -352,7 +451,7 @@ pub fn generate_recovery_tasks(raw: &Value, integrity: &Value) -> Value {
             dim.as_str().unwrap_or("").to_string(),
             path.as_str().unwrap_or("").to_string(),
         );
-        let hints: Vec<String> = RECOVERY_HINTS
+        let hints: Vec<String> = field_hints
             .iter()
             .find(|((d, p), _)| *d == dim_s && *p == path_s)
             .map(|(_, acts)| acts.iter().map(|s| s.to_string()).collect())
@@ -382,7 +481,7 @@ pub fn generate_recovery_tasks(raw: &Value, integrity: &Value) -> Value {
         let dim = entry.get("dim").cloned().unwrap_or(Value::Null);
         let label = entry.get("label").cloned().unwrap_or(Value::Null);
         let dim_s = dim.as_str().unwrap_or("").to_string();
-        let hints: Vec<String> = ENRICHMENT_HINTS
+        let hints: Vec<String> = dim_hints
             .iter()
             .find(|(d, _)| *d == dim_s)
             .map(|(_, acts)| acts.iter().map(|s| s.to_string()).collect())

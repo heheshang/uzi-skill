@@ -1,11 +1,11 @@
 ---
 name: deep-analysis
-description: 个股深度分析的核心工作流（Rust 实现）。当用户要求"深度分析 / 全面分析 / 帮我看看 / 值不值得买 / DCF / 机构建模 / 首次覆盖 / 投委会备忘录"等涉及个股研究的请求时触发。覆盖 A 股、港股、美股，产出 22 维数据 + 66 位大佬量化评审 + 机构级估值建模（DCF/Comps/LBO/3-Stmt/Merger）+ 研究产物（首次覆盖/财报解读/催化剂日历/投资逻辑追踪/晨报/量化筛选/行业综述）+ 决策方法（IC Memo/DD/Porter/单位经济/VCP/再平衡）+ 杀猪盘检测，最终生成 Bloomberg 风格 HTML 报告 + 社交分享战报。关键词：股票、个股、深度分析、估值、DCF、comps、首次覆盖、IC memo、杀猪盘、龙虎榜。
+description: 个股深度分析的核心工作流（Rust 实现）。当用户要求"深度分析 / 全面分析 / 帮我看看 / 值不值得买 / DCF / 机构建模 / 首次覆盖 / 投委会备忘录"等涉及个股研究的请求时触发。覆盖 A 股、港股、美股、加密货币，产出 22 维数据 + 66 位大佬量化评审 + 机构级估值建模（DCF/Comps/LBO/3-Stmt/Merger；加密货币走 NVT 网络价值折现）+ 研究产物（首次覆盖/财报解读/催化剂日历/投资逻辑追踪/晨报/量化筛选/行业综述）+ 决策方法（IC Memo/DD/Porter/单位经济/VCP/再平衡）+ 杀猪盘检测，最终生成 Bloomberg 风格 HTML 报告 + 社交分享战报。关键词：股票、个股、深度分析、估值、DCF、comps、首次覆盖、IC memo、杀猪盘、龙虎榜、加密货币、比特币、BTC。
 version: 3.9.4
 author: FloatFu-true
 license: MIT
 metadata:
-  tags: [finance, stocks, a-share, hong-kong, us-stocks, dcf, valuation, equity-research, trap-detection]
+  tags: [finance, stocks, a-share, hong-kong, us-stocks, crypto, bitcoin, dcf, valuation, equity-research, trap-detection]
 ---
 
 # Stock Deep Analysis · 深度分析工作流
@@ -105,6 +105,34 @@ cargo build --release -p uzi-cli      # 产物: target/release/uzi
 
 `<ticker>` 接受代码或中文名（`600519.SH` / `AAPL` / `贵州茅台`）。中文名走
 「MX API → 精确子串 → 本地模糊匹配」三级解析；歧义时返回候选清单而非瞎猜。
+
+### 🪙 加密货币（`market = "C"`）
+
+同一套 22 维 + 66 评委 + HTML 报告，标的换成加密资产：
+
+```bash
+uzi BTC-USD            # 或 uzi BTC / uzi BTCUSDT / uzi SOL-USD（SOL/LINK/OP 等与美国股票同名的币种必须写全对）
+uzi ETH --depth deep   # 深度档照常：--stage1 → role-play → --stage2
+```
+
+- **代码形式**：`BASE-QUOTE`（`BTC-USD` / `SOL-USDT`）、拼接对（`BTCUSDT`）、
+  注册表内的裸符号（`BTC` / `ETH` / `DOGE`…）、显式后缀（`FOO.CRYPTO`，用于未注册币种）。
+  代码里 `market` = `C`、`exchange` = `CRYPTO`、`currency` = 计价币。
+- **和数据/报告有关的三件事**：
+  1. **没有财报**：`1_financials` 是代币经济（流通率 / FDV / 硬顶），`10_valuation` 是
+     NVT + 日换手 + 区间位置，`16_lhb` / `19_contests` 标注不适用（权重 0）；报告里不会
+     出现 PE / ROE / 龙虎榜的正常口径。
+  2. **估值模型换成 NVT 网络价值折现**：dim 20–22 仍存在（首次覆盖 / IC Memo / Porter+BCG），
+     但目标价来自 `24h 成交额 × 目标 NVT ÷ 流通量`，不是 DCF/LBO。稳定币等不适用资产直接标注，
+     不编造目标价。
+  3. **评委按市场过滤**：A 股游资（F 组 24 人）自动 skip（理由「不看加密市场」），
+     其余 40+ 位照常出分；共识公式不变。
+- **来源**：CoinGecko（行情/市值/供应/开发者/情绪）+ OKX（日线 OHLCV / 合约费率）+
+  alternative.me（恐慌贪婪）。全部免 key；完整 dim→源映射见
+  [`references/data-sources.md`](references/data-sources.md) 的「C · 加密货币」。
+- **深度档照常介入**：读 `panel.json` / `dimensions.json` 后写 `agent_analysis.json`
+  （`dim_commentary` 引用 NVT / 流通率 / 费率 / 情绪等真实数字），再 `--stage2`。
+
 
 ## ⛔ 硬性门控规则（违反即停止）
 

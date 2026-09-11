@@ -141,13 +141,25 @@ pub fn run_single(ticker: &str, name: &str) -> anyhow::Result<Value> {
                 Some(v) if !v.is_null() => Ok(v.clone()),
                 // The dimension exists but this method inside it did not run —
                 // distinct from "the pipeline never ran", and worth saying so.
-                _ => bail!(
-                    "{ti} 的 {dim}.{key} 不可用（{}未产出该方法）。重跑: uzi {ticker} --no-resume --stage1",
-                    dim_of(dim)
-                ),
+                _ => {
+                    if is_crypto(&raw) {
+                        bail!(
+                            "{ti} 是加密资产，{key} 不适用（加密估值走 NVT 网络价值折现，见 --method ic-memo / unit-economics / competitive）"
+                        );
+                    }
+                    bail!(
+                        "{ti} 的 {dim}.{key} 不可用（{}未产出该方法）。重跑: uzi {ticker} --no-resume --stage1",
+                        dim_of(dim)
+                    )
+                }
             }
         }
         Method::Tier1(which) => {
+            if is_crypto(&raw) {
+                bail!(
+                    "{ti} 是加密资产，{name} 是按企业财报/研发口径构建的股票方法，不适用；用 --method ic-memo / unit-economics / competitive 查看加密估值"
+                );
+            }
             let dims = raw.get("dimensions").cloned().unwrap_or_else(|| json!({}));
             let features = uzi_core::features::sanitize_features(&uzi_features::extract_features(
                 &raw, &dims,
@@ -170,6 +182,16 @@ pub fn run_single(ticker: &str, name: &str) -> anyhow::Result<Value> {
 fn uzi_cli_target(ticker: &str) -> anyhow::Result<String> {
     let ti = crate::stages::resolve_cached_target(ticker, &["raw_data"])?;
     Ok(ti.full)
+}
+
+/// True when a cached snapshot belongs to the crypto venue.
+fn is_crypto(raw: &Value) -> bool {
+    raw.get("dimensions")
+        .and_then(|d| d.get("0_basic"))
+        .and_then(|d| d.get("data"))
+        .and_then(|d| d.get("market"))
+        .and_then(|m| m.as_str())
+        == Some("C")
 }
 
 /// `uzi --portfolio <csv> --method <rebalance|returns>`.

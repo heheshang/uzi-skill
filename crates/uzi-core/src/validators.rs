@@ -76,7 +76,7 @@ pub fn normalize_data(data: &mut Value, keep_zero_fields: &[&str]) {
 }
 
 /// True when at least one real value is present; `0` and `false` count.
-fn has_meaningful_data(value: &Value) -> bool {
+pub fn has_meaningful_data(value: &Value) -> bool {
     if is_empty_value(value) {
         return false;
     }

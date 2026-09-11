@@ -1087,9 +1087,12 @@ pub fn extract_features(raw: &Value, dims: &Value) -> Value {
     let ticker = vget_or(raw, "ticker", &Value::from("")).clone();
     f.insert("ticker".into(), ticker.clone());
     let ticker_str = ticker.as_str().unwrap_or("");
+    let parsed_market = uzi_core::ticker::parse_ticker(ticker_str).market;
     f.insert(
         "market".into(),
-        Value::from(if ticker_str.ends_with(".SZ") || ticker_str.ends_with(".SH") {
+        Value::from(if parsed_market == uzi_core::ticker::CRYPTO_MARKET {
+            "C"
+        } else if ticker_str.ends_with(".SZ") || ticker_str.ends_with(".SH") {
             "A"
         } else if ticker_str.ends_with(".HK") {
             "HK"

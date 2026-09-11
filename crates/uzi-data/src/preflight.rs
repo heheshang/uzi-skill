@@ -310,6 +310,12 @@ fn targets() -> [Target; 6] {
 /// `_autofill_qualitative_via_mx(raw, ticker)` — mutates `raw["dimensions"]`
 /// in place and returns the mutated raw.
 pub fn autofill_qualitative_via_mx(raw: &mut Value, ticker: &str) -> Value {
+    // Crypto dims are populated from crypto-native sources; the MX / DDG queries
+    // below are A-share industry prompts and would inject equity noise.
+    if uzi_core::ticker::parse_ticker(ticker).market == uzi_core::ticker::CRYPTO_MARKET {
+        return raw.clone();
+    }
+
     let client = MXClient::default();
     let mx_ok = client.available;
 

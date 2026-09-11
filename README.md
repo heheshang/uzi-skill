@@ -928,6 +928,9 @@ A: 不需要。全部免费源（东方财富 / 腾讯 / 新浪 / 巨潮 / 雪�
 **Q: 港股美股能用吗？**
 A: 能。`/stock-deep-analyzer:analyze-stock 00700.HK` 或 `/stock-deep-analyzer:analyze-stock AAPL`，CLI 里就是 `uzi 00700.HK` / `uzi AAPL`。
 
+**Q: 加密货币能用吗？**
+A: 能，走同一个 `uzi`：`uzi BTC-USD`（也接受 `uzi BTC` / `uzi BTCUSDT` / `uzi SOL-USDT`；`SOL`、`LINK`、`OP`、`ARB` 等与美国股票代码撞名的币种要写全对）。数据来自 CoinGecko + OKX + alternative.me（全部免 key），22 维里 `1_financials` 变成代币经济、`10_valuation` 变成 NVT/换手、dim 20–22 用 **NVT 网络价值折现** 代替 DCF/LBO（稳定币这类不适用资产直接标注，不编目标价），A 股游资评委自动 skip。字段级来源见 [`skills/deep-analysis/references/data-sources.md`](skills/deep-analysis/references/data-sources.md) 的「C · 加密货币」。
+
 **Q: 数据准不准？**
 A: 实时数据走东方财富 push2 / 腾讯 qt / 新浪 hq，财报走东财 F10 / 巨潮 cninfo / Yahoo，和你在东方财富 App 上看到的一样。但 web search 质量不稳定（DuckDuckGo 中文搜索有时会返回无关结果），所以 Claude 会做二次审查。
 

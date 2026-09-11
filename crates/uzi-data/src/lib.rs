@@ -31,6 +31,7 @@
 pub mod base_fetcher;
 pub mod browser;
 pub mod collect;
+pub mod crypto;
 pub mod em;
 pub mod fetch;
 pub mod fetchers;

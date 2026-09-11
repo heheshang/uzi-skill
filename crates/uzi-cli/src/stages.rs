@@ -89,6 +89,11 @@ pub fn collect_and_audit(ticker: &str, max_workers: usize) -> Value {
 /// Degenerates to a no-op — with a printed reason — when the gate is closed or no
 /// Chromium is installed, so `raw` is never left half-mutated.
 fn browser_fallback(raw: &mut Value, full: &str) {
+    // Crypto has no CDP fallback path — every crypto dim comes from JSON APIs.
+    if uzi_core::ticker::parse_ticker(full).market == uzi_core::ticker::CRYPTO_MARKET {
+        return;
+    }
+
     let profile = match crate::profile::get_profile(None) {
         Ok(p) => p,
         Err(e) => {
@@ -151,6 +156,8 @@ pub fn modeling_and_scoring(ticker: &str, mut raw: Value) -> Value {
     //   d21 = raw["dimensions"]["21_research_workflow"]["data"]
     //   compute_dim_22(features, raw, d20, d21)
     println!("\n🏛  Task 1.5 · 机构级财务建模 (Dims 20-22)");
+    let is_crypto = uzi_core::ticker::parse_ticker(&full).market
+        == uzi_core::ticker::CRYPTO_MARKET;
     let features = uzi_core::features::sanitize_features(&uzi_features::extract_features(
         &raw,
         raw.get("dimensions").unwrap_or(&dims_in),
@@ -178,29 +185,51 @@ pub fn modeling_and_scoring(ticker: &str, mut raw: Value) -> Value {
         .and_then(|d| d.get("summary"))
         .cloned()
         .unwrap_or(json!({}));
-    println!(
-        "  DCF: ¥{} · 安全边际 {}% · {}",
-        disp(s20.get("dcf_intrinsic")),
-        disp(s20.get("dcf_safety_margin_pct")),
-        disp(s20.get("dcf_verdict"))
-    );
-    println!(
-        "  LBO: IRR {}% · {}",
-        disp(s20.get("lbo_irr_pct")),
-        disp(s20.get("lbo_verdict"))
-    );
-    println!(
-        "  首次覆盖: {} · TP ¥{} ({}%)",
-        disp(s21.get("rec_rating")),
-        disp(s21.get("target_price")),
-        disp(s21.get("upside_pct"))
-    );
-    println!("  IC Memo: {}", disp(s22.get("ic_recommendation")));
-    println!(
-        "  BCG: {} · 行业吸引力 {}%",
-        disp(s22.get("bcg_position")),
-        disp(s22.get("industry_attractiveness"))
-    );
+    if is_crypto {
+        let vm = d20_data.get("valuation_model").cloned().unwrap_or(json!({}));
+        println!(
+            "  NVT 估值: 公允价值 ${} · 安全边际 {}% · {}",
+            disp(vm.get("fair_price")),
+            disp(vm.get("safety_margin_pct")),
+            disp(vm.get("verdict"))
+        );
+        println!(
+            "  首次覆盖: {} · 目标价 ${} ({}%)",
+            disp(s21.get("rec_rating")),
+            disp(s21.get("target_price")),
+            disp(s21.get("upside_pct"))
+        );
+        println!("  IC Memo: {}", disp(s22.get("ic_recommendation")));
+        println!(
+            "  赛道定位: {} · 行业吸引力 {}%",
+            disp(s22.get("bcg_position")),
+            disp(s22.get("industry_attractiveness"))
+        );
+    } else {
+        println!(
+            "  DCF: ¥{} · 安全边际 {}% · {}",
+            disp(s20.get("dcf_intrinsic")),
+            disp(s20.get("dcf_safety_margin_pct")),
+            disp(s20.get("dcf_verdict"))
+        );
+        println!(
+            "  LBO: IRR {}% · {}",
+            disp(s20.get("lbo_irr_pct")),
+            disp(s20.get("lbo_verdict"))
+        );
+        println!(
+            "  首次覆盖: {} · TP ¥{} ({}%)",
+            disp(s21.get("rec_rating")),
+            disp(s21.get("target_price")),
+            disp(s21.get("upside_pct"))
+        );
+        println!("  IC Memo: {}", disp(s22.get("ic_recommendation")));
+        println!(
+            "  BCG: {} · 行业吸引力 {}%",
+            disp(s22.get("bcg_position")),
+            disp(s22.get("industry_attractiveness"))
+        );
+    }
 
     println!("\n📏 Task 2 · 22 维打分");
     let dims = uzi_pipeline::score::score_dimensions(&raw);

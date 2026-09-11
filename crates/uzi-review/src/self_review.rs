@@ -1,7 +1,7 @@
 //! Port of `lib/self_review.py` — mechanical self-check gate (~17 checks +
 //! runner + human formatter).
 
-use crate::data_integrity::{get_path as di_get, is_missing, CRITICAL_CHECKS};
+use crate::data_integrity::{checks_for, get_path as di_get, is_missing, market_of};
 use crate::pyfmt;
 use serde_json::{json, Map, Value};
 use std::collections::BTreeSet;
@@ -243,7 +243,11 @@ fn check_all_dims_exist(ctx: &Value) -> Value {
 fn check_empty_dims(ctx: &Value) -> Value {
     let mut out: Vec<Value> = Vec::new();
     let dims = obj_or(ctx.get("dims"));
-    let enabled = profile_enabled_nums().ok();
+    // Exact-key membership: a dim the active profile never enables (e.g.
+    // `6_fund_holders`, which no depth profile fetches) is *skipped*, not a
+    // crash. Comparing only the leading number wrongly matched it to the
+    // enabled `6_research` and reported a critical on every run.
+    let enabled = profile_fetcher_keys().ok();
 
     let mut entries: Vec<(&String, &Value)> = dims
         .as_object()
@@ -255,11 +259,12 @@ fn check_empty_dims(ctx: &Value) -> Value {
         if !v.is_object() {
             continue;
         }
-        if let Some(en) = &enabled {
-            if let Some(num) = key_num(k) {
-                if !en.contains(&num) {
-                    continue;
-                }
+        if let Some(keys) = &enabled {
+            // Computed modeling dims (20+) are not fetcher keys but are still
+            // expected to carry data when the profile ran them.
+            let is_computed = key_num(k).map(|n| n >= 20).unwrap_or(false);
+            if !keys.contains(&k.as_str()) && !is_computed {
+                continue;
             }
         }
         let data = v.get("data");
@@ -446,9 +451,10 @@ fn check_coverage_threshold(ctx: &Value) -> Value {
 
     if let Ok(keys) = profile_fetcher_keys() {
         let raw_dims = obj_or(raw.get("dimensions"));
+        let checks = checks_for(&market_of(raw));
         let mut filtered_total = 0i64;
         let mut filtered_passed = 0i64;
-        for (dim_key, path, _label, _crit) in CRITICAL_CHECKS {
+        for (dim_key, path, _label, _crit) in checks {
             if !keys.contains(dim_key) {
                 continue;
             }
@@ -541,6 +547,29 @@ fn check_valuation_sanity(ctx: &Value) -> Value {
     if !truthy(vm) {
         return issues_vec(out);
     }
+
+    // Crypto has no DCF/comps-equity blocks; the NVT model carries the fair value.
+    if vm.get("valuation_model").is_some() {
+        let model = obj_or(vm.get("valuation_model"));
+        let fair = model.get("fair_price").cloned().unwrap_or(Value::Null);
+        if !py_in_none_zero_dash(&fair) {
+            return issues_vec(out);
+        }
+        out.push(issue(
+            "warning",
+            "valuation",
+            "20_valuation_models",
+            "NVT 公允价值未计算（缺成交额/流通量，或为稳定币等不适用资产）".to_string(),
+            format!(
+                "fair_price={}, verdict={}",
+                pyfmt::str_exact(&fair),
+                pyfmt::str_exact(model.get("verdict").unwrap_or(&NULL))
+            ),
+            "检查 0_basic.volume_24h 与 1_financials.circulating_supply 是否齐全".to_string(),
+        ));
+        return issues_vec(out);
+    }
+
     let dcf = obj_or(vm.get("dcf"));
     let iv = dcf
         .get("intrinsic_per_share")
@@ -562,6 +591,25 @@ fn check_valuation_sanity(ctx: &Value) -> Value {
     }
 
     let comps = obj_or(vm.get("comps"));
+    if vm.get("valuation_model").is_some() {
+        // Crypto comps = market-cap peers; there is no implied share price.
+        if comps
+            .get("peer_count")
+            .and_then(|v| v.as_i64())
+            .unwrap_or(0)
+            == 0
+        {
+            out.push(issue(
+                "info",
+                "valuation",
+                "20_valuation_models",
+                "同业市值对比无样本".to_string(),
+                format!("peer_count={}", pyfmt::str_exact(comps.get("peer_count").unwrap_or(&NULL))),
+                "检查 4_peers 是否返回市值前列币种".to_string(),
+            ));
+        }
+        return issues_vec(out);
+    }
     let target_price = comps.get("implied_price").cloned().unwrap_or_else(|| {
         comps
             .get("target_price_implied")
@@ -972,7 +1020,13 @@ pub fn review_all(ticker: &str, _cache_root: Option<&str>) -> Value {
     let ag = uzi_core::cache::read_task_output(ticker, "agent_analysis").unwrap_or(Value::Null);
 
     let dims = obj_or(raw.get("dimensions")).clone();
-    let market = raw.get("market").cloned().unwrap_or(json!("A"));
+    // `raw.market` is absent on live snapshots; fall back to the venue stamped
+    // by the data layer (crypto) so market-scoped checks see the right venue.
+    let market = raw
+        .get("market")
+        .filter(|v| truthy(v))
+        .cloned()
+        .unwrap_or_else(|| json!(market_of(&raw)));
 
     let mut ctx = Map::new();
     ctx.insert("ticker".into(), json!(ticker));

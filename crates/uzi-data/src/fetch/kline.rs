@@ -480,9 +480,24 @@ pub fn main(ticker: &str) -> Result<Value, String> {
         .as_array()
         .cloned()
         .unwrap_or_default();
-    let indicators = compute_indicators(&klines);
     let chips = fetch_chip_distribution(&ti);
-    let viz_shape = extract_for_viz(&klines);
+    Ok(assemble_dim(
+        &ti.full,
+        &klines,
+        chips,
+        "akshare:stock_zh_a_hist + stock_cyq_em (+ 6 path fallback chain)",
+    ))
+}
+
+/// Build the `2_kline` legacy payload from raw OHLCV rows.
+///
+/// Shared by the equity path ([`main`]) and the crypto path
+/// (`uzi-data::crypto`), so both produce the identical indicator/viz shape the
+/// scorers and renderers consume. Raw rows use the A-share key names
+/// (`日期`/`开盘`/`收盘`/`最高`/`最低`/`成交量`).
+pub fn assemble_dim(ticker: &str, klines: &[Value], chips: Value, source: &str) -> Value {
+    let indicators = compute_indicators(klines);
+    let viz_shape = extract_for_viz(klines);
 
     let stage = indicators.get("stage").and_then(|v| v.as_i64()).unwrap_or(0);
     let stage_label = STAGE_LABEL.get(stage as usize).copied().unwrap_or("—");
@@ -522,10 +537,10 @@ pub fn main(ticker: &str) -> Result<Value, String> {
         }
     }
 
-    Ok(serde_json::json!({
-        "ticker": ti.full,
+    serde_json::json!({
+        "ticker": ticker,
         "data": Value::Object(data),
-        "source": "akshare:stock_zh_a_hist + stock_cyq_em (+ 6 path fallback chain)",
+        "source": source,
         "fallback": false,
-    }))
+    })
 }

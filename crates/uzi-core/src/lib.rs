@@ -14,6 +14,7 @@
 
 pub mod assets;
 pub mod cache;
+pub mod crypto;
 pub mod dim;
 pub mod features;
 pub mod json;

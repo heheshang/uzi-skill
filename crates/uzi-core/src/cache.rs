@@ -159,6 +159,18 @@ pub fn market_status(market: &str, now: Option<DateTime<Utc>>) -> MarketStatus {
     if market == "US" || market == "USA" {
         market = "U".to_string();
     }
+    // Crypto trades continuously — no sessions, no weekend close.
+    if market == "C" {
+        let local_now = now.unwrap_or_else(Utc::now);
+        return MarketStatus {
+            is_open: true,
+            label: "24/7 交易中".to_string(),
+            now: local_now.format("%Y-%m-%dT%H:%M:%S").to_string(),
+            market,
+            timezone: "UTC".to_string(),
+            calendar_verified: true,
+        };
+    }
     if !matches!(market.as_str(), "A" | "H" | "U") {
         market = "A".to_string();
     }

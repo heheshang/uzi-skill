@@ -64,6 +64,11 @@ pub fn render_dcf_block(dim20: &Value) -> String {
     let dim20 = escape_payload(dim20);
     let dcf = dim20.get("dcf").cloned().unwrap_or(Value::Null);
     if !uzi_core::py::truthy(&dcf) || dcf.get("intrinsic_per_share").is_none() {
+        // Crypto carries an NVT model instead of a DCF; saying "DCF 数据缺失"
+        // would read as a failed fetch rather than a deliberate venue choice.
+        if dim20.get("valuation_model").is_some() {
+            return r##"<div class="dcf-block"><p class="muted">加密资产不适用 DCF 现金流折现 · 估值锚为 NVT 网络价值折现（见维度 10 与首次覆盖）</p></div>"##.to_string();
+        }
         return MISSING_BLOCK.to_string();
     }
     if dcf.get("intrinsic_per_share").map(|v| v.is_null()).unwrap_or(false) {

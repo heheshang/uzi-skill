@@ -20,7 +20,7 @@ use std::collections::BTreeSet;
 
 use serde_json::{json, Map, Value};
 
-use uzi_core::dim::DimResult;
+use uzi_core::dim::{DimResult, Quality};
 use uzi_core::validators::{normalize_data, validate_result};
 
 use crate::base_fetcher::{now_secs, Fetcher};
@@ -115,6 +115,30 @@ pub fn run_fetcher_job(dim_key: &str, ticker: &str, raw_context: Option<&Value>)
             json!({}),
         );
     };
+
+    // ── Crypto venue · market "C" ──
+    // Same dim keys, crypto-native sources and payloads. Unhandled dims fall
+    // through to the generic path below.
+    let ti = uzi_core::ticker::parse_ticker(ticker);
+    if crate::crypto::is_crypto(&ti) {
+        if let Some(cd) = crate::crypto::dim(dim_key, &ti) {
+            let mut result = DimResult::new(dim_key, cd.source);
+            result.data = cd.data;
+            result.fetched_at = Some(now_secs());
+            // The equity `FetcherSpec` (ROE / PE / 营收 …) does not apply to a
+            // token: quality is "does this payload carry data at all", and the
+            // per-venue field coverage is tracked centrally by
+            // `uzi-review::data_integrity::CRYPTO_CHECKS`.
+            normalize_data(&mut result.data, &[]);
+            result.quality = if uzi_core::validators::has_meaningful_data(&result.data) {
+                Quality::Full
+            } else {
+                Quality::Missing
+            };
+            return (key, result.to_dict(), json!({}));
+        }
+    }
+
     let legacy_mod = fetcher.legacy_module().to_string();
     let is_mini_racer = MINI_RACER_LEGACY_MODULES.contains(&legacy_mod.as_str());
     let ticker_value = json!(ticker);

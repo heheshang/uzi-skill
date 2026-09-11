@@ -60,6 +60,9 @@ fn first_int(s: &str) -> Option<i64> {
 
 /// The 22-dimension score table.
 pub fn score_dimensions(raw: &Value) -> Value {
+    if is_crypto_raw(raw) {
+        return score_crypto(raw);
+    }
     let dims = raw.get("dimensions").cloned().unwrap_or(json!({}));
     let mut out = Map::new();
 
@@ -512,6 +515,11 @@ pub fn score_dimensions(raw: &Value) -> Value {
     );
 
     // ── Overall fundamental score ─────────────────────────────
+    finalize(raw, out)
+}
+
+/// Weighted average of every scored dimension (`weight` 0 entries are ignored).
+fn finalize(raw: &Value, out: Map<String, Value>) -> Value {
     let mut total_weighted = 0.0f64;
     let mut total_weight = 0.0f64;
     for (_, v) in out.iter() {
@@ -531,6 +539,534 @@ pub fn score_dimensions(raw: &Value) -> Value {
         "fundamental_score": round(fundamental, 1),
         "dimensions": Value::Object(out),
     })
+}
+
+/// True when a dim carries a fetched payload (not a filled-in placeholder).
+fn dim_ok(dims: &Value, key: &str) -> bool {
+    let d = dims.get(key).unwrap_or(&Value::Null);
+    let q = d
+        .get("_pipeline")
+        .and_then(|p| p.get("quality"))
+        .and_then(|q| q.as_str())
+        .or_else(|| d.get("quality").and_then(|q| q.as_str()))
+        .unwrap_or("full");
+    q != "missing" && q != "error"
+}
+
+/// Neutral entry for a dim the active depth profile never fetched.
+fn not_collected(label: &str, weight: i64) -> Value {
+    json!({
+        "score": 5,
+        "weight": weight,
+        "label": format!("{label} · 当前档位未采集"),
+        "reasons_pass": [],
+        "reasons_fail": [],
+    })
+}
+
+/// True when the snapshot is a crypto venue (`market == "C"`).
+fn is_crypto_raw(raw: &Value) -> bool {
+    if let Some(m) = raw
+        .get("dimensions")
+        .and_then(|d| d.get("0_basic"))
+        .and_then(|d| d.get("data"))
+        .and_then(|d| d.get("market"))
+        .and_then(|m| m.as_str())
+    {
+        return m == "C";
+    }
+    raw.get("ticker")
+        .and_then(|t| t.as_str())
+        .map(|t| uzi_core::ticker::parse_ticker(t).market == uzi_core::ticker::CRYPTO_MARKET)
+        .unwrap_or(false)
+}
+
+/// Crypto score table.
+///
+/// Same 19 keys as the equity table so the renderer/scorer contract holds, but
+/// the drivers are crypto-native: tokenomics, market-cap rank, developer
+/// activity, NVT, funding rates, fear & greed and the pump/dump risk score.
+/// Dimensions with no crypto analogue (16 龙虎榜 / 19 实盘赛) carry `weight: 0`
+/// so they do not dilute the weighted average.
+fn score_crypto(raw: &Value) -> Value {
+    let dims = raw.get("dimensions").cloned().unwrap_or(json!({}));
+    let mut out = Map::new();
+
+    // ── 1 · 代币经济 ──────────────────────────────────────────
+    let fin = dim_data(&dims, "1_financials");
+    let circ = f(fin.get("circulating_ratio_pct").unwrap_or(&Value::Null), 0.0);
+    let fdv_to_mcap = f(fin.get("fdv_to_mcap").unwrap_or(&Value::Null), 0.0);
+    let supply_model = py_str_of(fin.get("supply_model"));
+    let mut score_1 = 5;
+    if circ >= 80.0 {
+        score_1 += 2;
+    } else if circ >= 50.0 {
+        score_1 += 1;
+    } else if circ > 0.0 && circ < 25.0 {
+        score_1 -= 2;
+    }
+    if fdv_to_mcap > 0.0 && fdv_to_mcap <= 1.2 {
+        score_1 += 1;
+    } else if fdv_to_mcap > 2.0 {
+        score_1 -= 1;
+    }
+    let score_1 = score_1.clamp(1, 10);
+    let mut reasons_pass_1: Vec<String> = Vec::new();
+    let mut reasons_fail_1: Vec<String> = Vec::new();
+    if circ >= 50.0 {
+        reasons_pass_1.push(format!("流通率 {:.0}%", circ));
+    } else if circ > 0.0 {
+        reasons_fail_1.push(format!("流通率仅 {:.0}% · 解锁抛压", circ));
+    }
+    if fdv_to_mcap > 2.0 {
+        reasons_fail_1.push(format!("FDV/市值 {:.1} · 稀释空间大", fdv_to_mcap));
+    }
+    out.insert(
+        "1_financials".into(),
+        json!({
+            "score": score_1,
+            "weight": 5,
+            "label": format!(
+                "流通率 {:.0}% · FDV/市值 {} · {}",
+                circ,
+                if fdv_to_mcap > 0.0 { format!("{fdv_to_mcap:.2}") } else { "—".to_string() },
+                if supply_model.is_empty() { "供应模型未知" } else { supply_model.as_str() }
+            ),
+            "reasons_pass": reasons_pass_1,
+            "reasons_fail": reasons_fail_1,
+        }),
+    );
+
+    // ── 2 · K 线（与股票同一套 Wyckoff/均线口径） ─────────────
+    let kline = dim_data(&dims, "2_kline");
+    let stage = py_str_of(kline.get("stage"));
+    let ma_align = py_str_of(kline.get("ma_align"));
+    let stats = kline.get("kline_stats").cloned().unwrap_or(Value::Null);
+    let mut score_2 = 5;
+    if stage.contains("Stage 2") {
+        score_2 += 2;
+    } else if stage.contains("Stage 1") {
+        score_2 += 1;
+    } else if stage.contains("Stage 3") || stage.contains("Stage 4") {
+        score_2 -= 2;
+    }
+    if ma_align.contains("多头") {
+        score_2 += 1;
+    }
+    let dd_str = stats.get("max_drawdown").cloned().unwrap_or_else(|| json!("0%"));
+    let dd = f(&dd_str, 0.0);
+    if dd <= -30.0 {
+        score_2 -= 1;
+    }
+    let score_2 = score_2.clamp(1, 10);
+    let mut label_2 = format!("{} · 均线{}", stage, ma_align);
+    if truthy(stats.get("ytd_return").unwrap_or(&Value::Null)) {
+        label_2.push_str(&format!(
+            " · YTD {}",
+            uzi_core::py::py_str(&stats["ytd_return"])
+        ));
+    }
+    if truthy(stats.get("volatility").unwrap_or(&Value::Null)) {
+        label_2.push_str(&format!(" · 年化波动 {}", uzi_core::py::py_str(&stats["volatility"])));
+    }
+    out.insert(
+        "2_kline".into(),
+        json!({
+            "score": score_2,
+            "weight": 4,
+            "label": label_2,
+            "reasons_pass": if stage.contains("Stage 2") { vec![stage.clone()] } else { Vec::<String>::new() },
+            "reasons_fail": if dd <= -25.0 { vec![format!("最大回撤 {:.1}%", dd)] } else { Vec::<String>::new() },
+        }),
+    );
+
+    // ── 3 · 宏观 / 流动性 ─────────────────────────────────────
+    let mac = dim_data(&dims, "3_macro");
+    let fng = f(mac.get("fear_greed").unwrap_or(&Value::Null), 50.0);
+    let mcap_chg = f(mac.get("mcap_change_24h_pct").unwrap_or(&Value::Null), 0.0);
+    let btc_dom = f(mac.get("btc_dominance_pct").unwrap_or(&Value::Null), 0.0);
+    let mut score_3 = 5;
+    if fng <= 25.0 {
+        score_3 += 2;
+    } else if fng >= 75.0 {
+        score_3 -= 1;
+    }
+    if mcap_chg > 1.0 {
+        score_3 += 1;
+    } else if mcap_chg < -3.0 {
+        score_3 -= 1;
+    }
+    let score_3 = score_3.clamp(1, 10);
+    out.insert(
+        "3_macro".into(),
+        json!({
+            "score": score_3,
+            "weight": 3,
+            "label": format!(
+                "全市场 24h {:+.1}% · BTC 占比 {:.1}% · 恐慌贪婪 {:.0}",
+                mcap_chg, btc_dom, fng
+            ),
+            "reasons_pass": if fng <= 25.0 { vec![format!("恐慌贪婪 {:.0} · 情绪冰点", fng)] } else { Vec::<String>::new() },
+            "reasons_fail": if fng >= 75.0 { vec![format!("恐慌贪婪 {:.0} · 情绪过热", fng)] } else { Vec::<String>::new() },
+        }),
+    );
+
+    // ── 4 · 市值地位 ──────────────────────────────────────────
+    let peers = dim_data(&dims, "4_peers");
+    let rank = f(peers.get("rank").unwrap_or(&Value::Null), 0.0);
+    let peer_count = peers
+        .get("peer_comparison")
+        .and_then(|p| p.get("peer_count"))
+        .map(|v| f0(v) as i64)
+        .unwrap_or(0);
+    let (score_4, rank_label) = if rank > 0.0 && rank <= 3.0 {
+        (9, format!("市值排名 #{}", rank as i64))
+    } else if rank > 0.0 && rank <= 10.0 {
+        (8, format!("市值排名 #{}", rank as i64))
+    } else if rank > 0.0 && rank <= 30.0 {
+        (6, format!("市值排名 #{}", rank as i64))
+    } else if rank > 0.0 && rank <= 100.0 {
+        (5, format!("市值排名 #{}", rank as i64))
+    } else if rank > 0.0 {
+        (4, format!("市值排名 #{}", rank as i64))
+    } else if peer_count > 0 {
+        (5, format!("同业 {} 家对比（缺市值排名）", peer_count))
+    } else {
+        (5, "无同业数据".to_string())
+    };
+    out.insert(
+        "4_peers".into(),
+        json!({"score": score_4, "weight": 4, "label": rank_label, "reasons_pass": [], "reasons_fail": []}),
+    );
+
+    // ── 5 · 生态/业务构成 ────────────────────────────────────
+    let chain = dim_data(&dims, "5_chain");
+    let breakdown = chain
+        .get("main_business_breakdown")
+        .and_then(|v| v.as_array())
+        .cloned()
+        .unwrap_or_default();
+    let score_5 = if !breakdown.is_empty() { 6 } else { 5 };
+    out.insert(
+        "5_chain".into(),
+        json!({
+            "score": score_5,
+            "weight": 3,
+            "label": if breakdown.is_empty() { "生态分类缺失".to_string() } else { format!("生态标签 {} 个", breakdown.len()) },
+            "reasons_pass": [],
+            "reasons_fail": [],
+        }),
+    );
+
+    // ── 6 · 开发者 / 社区活跃度 ──────────────────────────────
+    let research = dim_data(&dims, "6_research");
+    let commits = f(
+        research.get("developer").and_then(|d| d.get("commit_count_4_weeks")).unwrap_or(&Value::Null),
+        0.0,
+    );
+    let followers = f(
+        research.get("community").and_then(|d| d.get("twitter_followers")).unwrap_or(&Value::Null),
+        0.0,
+    );
+    let mut score_6 = 4;
+    if commits >= 50.0 {
+        score_6 += 3;
+    } else if commits >= 15.0 {
+        score_6 += 2;
+    } else if commits >= 1.0 {
+        score_6 += 1;
+    }
+    if followers >= 1_000_000.0 {
+        score_6 += 2;
+    } else if followers >= 100_000.0 {
+        score_6 += 1;
+    }
+    let score_6 = score_6.clamp(1, 10);
+    out.insert(
+        "6_research".into(),
+        json!({
+            "score": score_6,
+            "weight": 3,
+            "label": format!("4 周提交 {:.0} 次 · 推特粉丝 {:.0}", commits, followers),
+            "reasons_pass": if commits >= 15.0 { vec![format!("开发者活跃（4 周 {commits:.0} 次提交）")] } else { Vec::<String>::new() },
+            "reasons_fail": if commits < 1.0 { vec!["近 4 周无代码提交".to_string()] } else { Vec::<String>::new() },
+        }),
+    );
+
+    // ── 7 · 赛道地位 ─────────────────────────────────────────
+    let ind = dim_data(&dims, "7_industry");
+    let share = f(ind.get("market_share_pct").unwrap_or(&Value::Null), 0.0);
+    let score_7 = if share >= 5.0 {
+        8
+    } else if share >= 1.0 {
+        7
+    } else if share > 0.0 {
+        6
+    } else {
+        5
+    };
+    out.insert(
+        "7_industry".into(),
+        json!({
+            "score": score_7,
+            "weight": 4,
+            "label": format!(
+                "{} · 市值占比 {:.2}%",
+                py_str_of(ind.get("industry")),
+                share
+            ),
+        }),
+    );
+
+    // ── 8 · 生产成本（PoW 才有意义） ─────────────────────────
+    out.insert(
+        "8_materials".into(),
+        json!({"score": 5, "weight": 1, "label": "加密网络无传统原材料成本"}),
+    );
+
+    // ── 9 · 合约资金费率 ─────────────────────────────────────
+    let fut = dim_data(&dims, "9_futures");
+    let funding = f(fut.get("funding_rate_pct").unwrap_or(&Value::Null), 0.0);
+    let has_contract = truthy(fut.get("linked_contract").unwrap_or(&Value::Null));
+    let (score_9, fut_label) = if !has_contract {
+        (5, "无永续合约数据".to_string())
+    } else if funding > 0.05 {
+        (3, format!("资金费率 {:+.4}% · 多头拥挤", funding))
+    } else if funding < -0.03 {
+        (7, format!("资金费率 {:+.4}% · 空头拥挤（潜在逼空）", funding))
+    } else {
+        (6, format!("资金费率 {:+.4}% · 多空均衡", funding))
+    };
+    out.insert(
+        "9_futures".into(),
+        json!({"score": score_9, "weight": 2, "label": fut_label}),
+    );
+
+    // ── 10 · 估值（NVT / 区间位置 / ATH 回撤） ───────────────
+    let val = dim_data(&dims, "10_valuation");
+    let nvt = f(val.get("nvt_ratio").unwrap_or(&Value::Null), 0.0);
+    let turnover = f(val.get("turnover_ratio").unwrap_or(&Value::Null), 0.0);
+    let range_pos = f(val.get("price_range_position_pct").unwrap_or(&Value::Null), 50.0);
+    let ath_dd = f(val.get("ath_drawdown_pct").unwrap_or(&Value::Null), 0.0);
+    let mut score_10 = 5;
+    if nvt > 0.0 {
+        // Classic NVT band: < 20 cheap, > 60 expensive.
+        if nvt <= 20.0 {
+            score_10 += 2;
+        } else if nvt >= 60.0 {
+            score_10 -= 2;
+        }
+    }
+    if range_pos <= 30.0 {
+        score_10 += 1;
+    } else if range_pos >= 85.0 {
+        score_10 -= 1;
+    }
+    let score_10 = score_10.clamp(1, 10);
+    out.insert(
+        "10_valuation".into(),
+        json!({
+            "score": score_10,
+            "weight": 5,
+            "label": format!(
+                "NVT {} · 日换手 {:.1}% · 区间位置 {:.0}% · 距 ATH {:.0}%",
+                if nvt > 0.0 { format!("{nvt:.1}") } else { "—".to_string() },
+                turnover * 100.0,
+                range_pos,
+                ath_dd
+            ),
+            "reasons_pass": if nvt > 0.0 && nvt <= 20.0 { vec![format!("NVT {:.1} 低于 20 · 相对网络价值便宜", nvt)] } else { Vec::<String>::new() },
+            "reasons_fail": if nvt >= 60.0 { vec![format!("NVT {:.1} 偏高 · 市值透支网络活动", nvt)] } else { Vec::<String>::new() },
+        }),
+    );
+
+    // ── 11 · 治理/解锁 ───────────────────────────────────────
+    let gov = dim_data(&dims, "11_governance");
+    let unvested = f(gov.get("unvested_supply_pct").unwrap_or(&Value::Null), 0.0);
+    let score_11 = if unvested <= 10.0 {
+        8
+    } else if unvested <= 30.0 {
+        6
+    } else if unvested <= 50.0 {
+        4
+    } else {
+        3
+    };
+    out.insert(
+        "11_governance".into(),
+        json!({
+            "score": score_11,
+            "weight": 2,
+            "label": format!("未流通代币 {:.0}% · 无股权质押口径", unvested),
+        }),
+    );
+
+    // ── 12 · 资金面 ──────────────────────────────────────────
+    let cap = dim_data(&dims, "12_capital_flow");
+    let vol_chg = f(cap.get("volume_change_7d_pct").unwrap_or(&Value::Null), 0.0);
+    let stable_chg = f(cap.get("stablecoin_mcap_change_24h_pct").unwrap_or(&Value::Null), 0.0);
+    let mut score_12 = 5;
+    if vol_chg >= 30.0 {
+        score_12 += 2;
+    } else if vol_chg > 0.0 {
+        score_12 += 1;
+    } else if vol_chg <= -30.0 {
+        score_12 -= 1;
+    }
+    if stable_chg > 0.3 {
+        score_12 += 1;
+    } else if stable_chg < -0.3 {
+        score_12 -= 1;
+    }
+    let score_12 = score_12.clamp(1, 10);
+    out.insert(
+        "12_capital_flow".into(),
+        json!({
+            "score": score_12,
+            "weight": 3,
+            "label": format!("7 日均量 {:+.0}% · 稳定币总量 24h {:+.2}%", vol_chg, stable_chg),
+            "reasons_pass": if vol_chg >= 30.0 { vec![format!("成交额 7 日放大 {:+.0}%", vol_chg)] } else { Vec::<String>::new() },
+            "reasons_fail": if vol_chg <= -30.0 { vec![format!("成交额 7 日萎缩 {:+.0}%", vol_chg)] } else { Vec::<String>::new() },
+        }),
+    );
+
+    // ── 13 · 监管 ────────────────────────────────────────────
+    let pol = dim_data(&dims, "13_policy");
+    let pol_news = pol.get("news").and_then(|v| v.as_array()).map(|a| a.len()).unwrap_or(0);
+    out.insert(
+        "13_policy".into(),
+        json!({
+            "score": 6,
+            "weight": 2,
+            "label": if pol_news > 0 { format!("监管相关快讯 {} 条", pol_news) } else { "监管环境中性".to_string() },
+        }),
+    );
+
+    // ── 14 · 护城河（网络效应） ──────────────────────────────
+    let moat = dim_data(&dims, "14_moat");
+    let moat_total = f(moat.get("scores").and_then(|s| s.get("total")).unwrap_or(&Value::Null), 0.0);
+    let score_14 = if moat_total > 0.0 {
+        moat_total.round().clamp(1.0, 10.0) as i64
+    } else {
+        5
+    };
+    out.insert(
+        "14_moat".into(),
+        json!({
+            "score": score_14,
+            "weight": 3,
+            "label": format!(
+                "网络效应 {:.0}/10 · 市值占比 {:.2}%",
+                moat_total,
+                f(moat.get("market_share_pct").unwrap_or(&Value::Null), 0.0)
+            ),
+        }),
+    );
+
+    // ── 15 · 事件 ────────────────────────────────────────────
+    let events = dim_data(&dims, "15_events");
+    let news_len = list_len(events.get("news").unwrap_or(&Value::Null));
+    let score_15 = 5 + (news_len / 10).min(3);
+    out.insert(
+        "15_events".into(),
+        json!({
+            "score": score_15,
+            "weight": 3,
+            "label": format!("近期加密快讯 {} 条", news_len),
+        }),
+    );
+
+    // ── 16 · 龙虎榜（不适用） ────────────────────────────────
+    out.insert(
+        "16_lhb".into(),
+        json!({"score": 5, "weight": 0, "label": "加密市场无龙虎榜（该维度不计权重）"}),
+    );
+
+    // ── 17 · 情绪 ────────────────────────────────────────────
+    let sent = dim_data(&dims, "17_sentiment");
+    let fng17 = f(sent.get("thermometer_value").unwrap_or(&Value::Null), 50.0);
+    let up_pct = f(sent.get("positive_pct").unwrap_or(&Value::Null), 50.0);
+    let trend_rank = f(sent.get("trending_rank").unwrap_or(&Value::Null), 0.0);
+    let mut score_17 = 5;
+    if fng17 <= 25.0 {
+        score_17 += 2;
+    } else if fng17 >= 75.0 {
+        score_17 -= 1;
+    }
+    if up_pct >= 70.0 {
+        score_17 += 1;
+    } else if up_pct <= 30.0 && up_pct > 0.0 {
+        score_17 -= 1;
+    }
+    if trend_rank > 0.0 && trend_rank <= 5.0 {
+        score_17 += 1;
+    }
+    let score_17 = score_17.clamp(1, 10);
+    out.insert(
+        "17_sentiment".into(),
+        json!({
+            "score": score_17,
+            "weight": 3,
+            "label": format!(
+                "恐慌贪婪 {:.0} · 看多占比 {:.0}%{}",
+                fng17,
+                up_pct,
+                if trend_rank > 0.0 { format!(" · 热搜第 {} 位", trend_rank as i64) } else { String::new() }
+            ),
+        }),
+    );
+
+    // ── 18 · 风险（杀猪盘口径反转：分高 = 安全） ─────────────
+    let trap = dim_data(&dims, "18_trap");
+    let risk = f(trap.get("risk_score").unwrap_or(&Value::Null), 0.0);
+    let score_18 = (10.0 - risk / 12.0).clamp(1.0, 10.0) as i64;
+    let signals: Vec<String> = trap
+        .get("pump_dump_signals")
+        .and_then(|v| v.as_array())
+        .map(|a| a.iter().map(uzi_core::py::py_str).collect())
+        .unwrap_or_default();
+    out.insert(
+        "18_trap".into(),
+        json!({
+            "score": score_18,
+            "weight": 5,
+            "label": format!(
+                "{} · 风险分 {:.0}/100",
+                py_str_of(trap.get("trap_level")),
+                risk
+            ),
+            "reasons_fail": signals.iter().take(2).cloned().collect::<Vec<String>>(),
+        }),
+    );
+
+    // ── 19 · 实盘赛（不适用） ────────────────────────────────
+    out.insert(
+        "19_contests".into(),
+        json!({"score": 5, "weight": 0, "label": "加密资产无实盘赛数据（该维度不计权重）"}),
+    );
+
+    // Dims the active depth profile never fetched (`lite` covers 7 of 20) keep a
+    // neutral 5 but are labelled as "not collected" instead of showing the
+    // zero-valued defaults of the branches above.
+    for (key, label, weight) in [
+        ("3_macro", "宏观流动性", 3),
+        ("4_peers", "市值地位", 4),
+        ("5_chain", "生态构成", 3),
+        ("6_research", "开发者/社区", 3),
+        ("7_industry", "赛道地位", 4),
+        ("9_futures", "合约资金费率", 2),
+        ("12_capital_flow", "资金面", 3),
+        ("13_policy", "监管环境", 2),
+        ("14_moat", "网络效应", 3),
+        ("17_sentiment", "市场情绪", 3),
+        ("18_trap", "风险扫描", 5),
+    ] {
+        if !dim_ok(&dims, key) {
+            out.insert(key.to_string(), not_collected(label, weight));
+        }
+    }
+
+    finalize(raw, out)
 }
 
 fn py_str_of(v: Option<&Value>) -> String {

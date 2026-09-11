@@ -669,18 +669,19 @@ pub fn assemble(ticker: &str) -> anyhow::Result<String> {
         }
     };
     let mkt = {
-        let a = raw.get("market").filter(|v| uzi_core::py::truthy(v));
+        let a = basic
+            .get("market")
+            .filter(|v| uzi_core::py::truthy(v))
+            .map(disp)
+            .or_else(|| raw.get("market").filter(|v| uzi_core::py::truthy(v)).map(disp));
         match a {
-            Some(v) => disp(v),
-            None => match basic.get("market") {
-                Some(v) if uzi_core::py::truthy(v) => disp(v),
-                _ => "A".to_string(),
-            },
+            Some(v) => v,
+            None => "A".to_string(),
         }
     };
     let currency_symbol = match mkt.as_str() {
         "H" => "HK$",
-        "U" => "$",
+        "U" | "C" => "$",
         _ => "¥",
     };
 

@@ -4,7 +4,7 @@
 //! `raw["dimensions"]["20_valuation_models"]` etc. must receive the full
 //! `{data, source, fallback}` dict that upstream `compute_dim_*` returns.
 
-use crate::{deep_methods, fin_models, global_peers, research_workflow};
+use crate::{crypto_models, deep_methods, fin_models, global_peers, research_workflow};
 use crate::{dim_data, get_or, num_value, py_str_py};
 use serde_json::{json, Map, Value};
 use uzi_core::features::sanitize_features;
@@ -121,6 +121,9 @@ fn float_or_int_zero(x: &Value) -> Value {
 
 /// `compute_dim_20` — DCF + Comps + 3-stmt + LBO packaged as dim 20.
 pub fn compute_dim_20(features: &Value, raw: &Value) -> Value {
+    if crypto_models::is_crypto(features, raw) {
+        return crypto_models::dim_20(features, raw);
+    }
     let features = sanitize_features(features);
     let features = &features;
     let dcf = fin_models::compute_dcf(features, None);
@@ -224,6 +227,9 @@ pub fn compute_dim_20(features: &Value, raw: &Value) -> Value {
 
 /// `compute_dim_21` — Initiating + Earnings + Catalyst + Thesis + Morning + Screen + Sector.
 pub fn compute_dim_21(features: &Value, raw: &Value, d20: &Value) -> Value {
+    if crypto_models::is_crypto(features, raw) {
+        return crypto_models::dim_21(features, raw, d20);
+    }
     let features = sanitize_features(features);
     let features = &features;
     // `d20` is upstream's `dim_20_data`: callers pass `compute_dim_20(...)["data"]`
@@ -295,6 +301,9 @@ pub fn compute_dim_21(features: &Value, raw: &Value, d20: &Value) -> Value {
 
 /// `compute_dim_22` — IC Memo + Unit Econ + VCP + DD + Porter/BCG + Rebalance.
 pub fn compute_dim_22(features: &Value, raw: &Value, d20: &Value, d21: &Value) -> Value {
+    if crypto_models::is_crypto(features, raw) {
+        return crypto_models::dim_22(features, raw, d20, d21);
+    }
     // `d21` is part of the frozen signature; dim 22 does not consume it upstream.
     let _ = d21;
     let features = sanitize_features(features);

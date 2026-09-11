@@ -111,10 +111,23 @@ pub fn compute_exit_triggers(raw: &Value, dims_scored: &Value, synthesis: &Value
     let val = dd(raw, "10_valuation");
     let lhb = dd(raw, "16_lhb");
     let research = dd(raw, "6_research");
-    let market = raw.get("market").and_then(|m| m.as_str()).unwrap_or("A");
-    let cur = match market {
+    // Venue: `raw.market` → `0_basic.data.market` → `A`. Crypto dims stamp
+    // `market: "C"`; equity dims carry none, so equity output is unchanged.
+    let market = raw
+        .get("market")
+        .and_then(|m| m.as_str())
+        .filter(|s| !s.is_empty())
+        .or_else(|| {
+            basic
+                .get("market")
+                .and_then(|m| m.as_str())
+                .filter(|s| !s.is_empty())
+        })
+        .unwrap_or("A")
+        .to_string();
+    let cur = match market.as_str() {
         "H" => "HK$",
-        "U" => "$",
+        "U" | "C" => "$",
         _ => "¥",
     };
 

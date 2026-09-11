@@ -47,6 +47,20 @@ const DIM_LABELS: &[(&str, &str)] = &[
     ("19_contests", "实盘比赛"),
 ];
 
+/// True when the snapshot is the crypto venue.
+///
+/// Detected from `0_basic.data.market` (stamped by the crypto data layer) or the
+/// ticker, so it holds both for live runs and for fixtures.
+fn is_crypto_snapshot(raw: &Value, basic: &Value) -> bool {
+    if basic.get("market").and_then(|v| v.as_str()) == Some("C") {
+        return true;
+    }
+    raw.get("ticker")
+        .and_then(|t| t.as_str())
+        .map(|t| uzi_core::ticker::parse_ticker(t).market == uzi_core::ticker::CRYPTO_MARKET)
+        .unwrap_or(false)
+}
+
 /// Generate the synthesis payload, folding in agent overrides when present.
 ///
 /// `agent_analysis` keys honoured: `per_investor_override`, `great_divide_override`,
@@ -100,6 +114,8 @@ pub fn generate_synthesis(
     }
 
     let basic = dim_data(raw, "0_basic");
+    let crypto = is_crypto_snapshot(raw, &basic);
+    let cur = if crypto { "$" } else { "¥" };
     let name = basic
         .get("name")
         .filter(|v| truthy(v))
@@ -139,7 +155,11 @@ pub fn generate_synthesis(
         .unwrap_or(json!({}));
     let feat_for_style = json!({
         "code": raw.get("ticker").cloned().unwrap_or_else(|| json!("")),
-        "market": raw.get("market").cloned().unwrap_or_else(|| json!("A")),
+        "market": if crypto {
+            json!("C")
+        } else {
+            raw.get("market").cloned().unwrap_or_else(|| json!("A"))
+        },
         "industry": basic.get("industry").cloned().unwrap_or_else(|| json!("")),
         "market_cap_yi": mcap_yi,
         "pe": ff(basic.get("pe_ttm").unwrap_or(&Value::Null)),
@@ -367,8 +387,32 @@ pub fn generate_synthesis(
             )
         } else {
             format!(
-                "机构建模定调 {}，目标价 ¥{}（{:+.0}%），LBO 视角 IRR {:.0}%。",
-                rating, tp, upside, lbo_irr
+                "机构建模定调 {}，目标价 {}{}（{:+.0}%），LBO 视角 IRR {:.0}%。",
+                rating, cur, tp, upside, lbo_irr
+            )
+        }
+    } else if crypto {
+        // Crypto first: the equity branch below hardcodes the ¥ target-price
+        // phrasing (upstream parity), which would mislabel a USD target.
+        let val = dim_data(raw, "10_valuation");
+        let ath_dd = f0(val.get("ath_drawdown_pct").unwrap_or(&json!(0)));
+        let nvt = f0(val.get("nvt_ratio").unwrap_or(&json!(0)));
+        if tp > 0.0 && upside.abs() > 5.0 {
+            format!(
+                "NVT 网络价值折现给 {}，目标价 {}{}，空间 {:+.0}%。",
+                rating, cur, tp, upside
+            )
+        } else {
+            format!(
+                "{} · 市值 {} · 距 ATH {:.0}%{} — 加密资产的定价锚是网络效应与流动性，不是 PE。",
+                uzi_core::py::py_str(&name),
+                uzi_core::py::py_str(basic.get("market_cap").unwrap_or(&json!("—"))),
+                ath_dd,
+                if nvt > 0.0 {
+                    format!(" · NVT {nvt:.1}")
+                } else {
+                    String::new()
+                }
             )
         }
     } else if tp > 0.0 && upside.abs() > 5.0 {
@@ -416,25 +460,52 @@ pub fn generate_synthesis(
         }
     }
     if risks.is_empty() {
-        let feats = extract_features(raw, &raw.get("dimensions").cloned().unwrap_or(json!({})));
-        let pe_val = f0(feats.get("pe").unwrap_or(&json!(0)));
-        let debt_val = f0(feats.get("debt_ratio").unwrap_or(&json!(0)));
-        let roe_min = f0(feats.get("roe_5y_min").unwrap_or(&json!(0)));
-        let industry = feats
-            .get("industry")
-            .map(uzi_core::py::py_str)
-            .unwrap_or_else(|| "所属行业".to_string());
-        if pe_val > 30.0 {
-            risks.push(format!("当前 PE {:.0}x，估值偏高", pe_val));
+        if crypto {
+            let mac = dim_data(raw, "3_macro");
+            let trap = dim_data(raw, "18_trap");
+            let btc_dom = f0(mac.get("btc_dominance_pct").unwrap_or(&json!(0)));
+            let risk = f0(trap.get("risk_score").unwrap_or(&json!(0)));
+            if f0(mac.get("mcap_change_24h_pct").unwrap_or(&json!(0))) < -3.0 {
+                risks.push(format!(
+                    "加密总市值 24h {:+.1}% · 系统性去杠杆",
+                    f0(mac.get("mcap_change_24h_pct").unwrap_or(&json!(0)))
+                ));
+            }
+            if risk >= 30.0 {
+                if let Some(sig) = trap
+                    .get("pump_dump_signals")
+                    .and_then(|v| v.as_array())
+                    .and_then(|a| a.first())
+                {
+                    risks.push(uzi_core::py::py_str(sig));
+                }
+            }
+            risks.push(format!("代币解锁/通胀抛压 · 流通率 {}", uzi_core::py::py_str(
+                dim_data(raw, "1_financials").get("circulating_ratio_pct").unwrap_or(&json!("—"))
+            )));
+            risks.push(format!("监管政策不确定（BTC 占比 {:.0}% 决定大盘 beta）", btc_dom));
+            risks.push("交易所/托管对手方风险与流动性断层".to_string());
+        } else {
+            let feats = extract_features(raw, &raw.get("dimensions").cloned().unwrap_or(json!({})));
+            let pe_val = f0(feats.get("pe").unwrap_or(&json!(0)));
+            let debt_val = f0(feats.get("debt_ratio").unwrap_or(&json!(0)));
+            let roe_min = f0(feats.get("roe_5y_min").unwrap_or(&json!(0)));
+            let industry = feats
+                .get("industry")
+                .map(uzi_core::py::py_str)
+                .unwrap_or_else(|| "所属行业".to_string());
+            if pe_val > 30.0 {
+                risks.push(format!("当前 PE {:.0}x，估值偏高", pe_val));
+            }
+            if debt_val > 50.0 {
+                risks.push(format!("资产负债率 {:.0}%，财务杠杆偏高", debt_val));
+            }
+            if roe_min < 5.0 {
+                risks.push(format!("ROE 最低 {:.1}%，盈利稳定性不足", roe_min));
+            }
+            risks.push(format!("{}行业竞争加剧风险", industry));
+            risks.push("宏观经济或政策环境变化".to_string());
         }
-        if debt_val > 50.0 {
-            risks.push(format!("资产负债率 {:.0}%，财务杠杆偏高", debt_val));
-        }
-        if roe_min < 5.0 {
-            risks.push(format!("ROE 最低 {:.1}%，盈利稳定性不足", roe_min));
-        }
-        risks.push(format!("{}行业竞争加剧风险", industry));
-        risks.push("宏观经济或政策环境变化".to_string());
     }
     risks.truncate(5);
 
@@ -544,14 +615,24 @@ pub fn generate_synthesis(
     };
 
     let price_num = f0(&price);
-    // upstream: f"¥{round(price * mult, 2) if price else '—'}" — the ¥ prefix is
-    // unconditional, so a falsy price renders as "¥—".
+    // upstream: f"¥{round(price * mult, 2) if price else '—'}" — the symbol is
+    // unconditional, so a falsy price renders as "¥—". Non-CNY venues swap it.
     let price_display = |mult: f64| -> Value {
         if price_num != 0.0 {
-            json!(format!("¥{}", uzi_core::py::float_str(round(price_num * mult, 2))))
+            json!(format!(
+                "{cur}{}",
+                uzi_core::py::float_str(round(price_num * mult, 2))
+            ))
         } else {
-            json!("¥—")
+            json!(format!("{cur}—"))
         }
+    };
+
+    // Buy-zone defaults: equity anchors on PE/PEG, crypto on cost basis / ATH.
+    let (rz_value, rz_growth, rz_tech) = if crypto {
+        ("长期持有成本区（现货定投）", "上一轮周期中枢", "MA200 支撑位")
+    } else {
+        ("历史 PE 25 分位", "PEG 合理区", "MA60 支撑位")
     };
 
     json!({
@@ -627,10 +708,10 @@ pub fn generate_synthesis(
         },
         "risks": risks,
         "buy_zones": narrative_override.get("buy_zones").filter(|v| truthy(v)).cloned().unwrap_or_else(|| json!({
-            "value": {"price": if price_num != 0.0 { json!(round(price_num * 0.85, 2)) } else { json!("—") }, "rationale": "历史 PE 25 分位"},
-            "growth": {"price": if price_num != 0.0 { json!(round(price_num * 0.92, 2)) } else { json!("—") }, "rationale": "PEG 合理区"},
-            "technical": {"price": if price_num != 0.0 { json!(round(price_num * 0.95, 2)) } else { json!("—") }, "rationale": "MA60 支撑位"},
-            "youzi": {"price": if price_num != 0.0 { price.clone() } else { json!("—") }, "rationale": "当前情绪未破"},
+            "value": {"price": if price_num != 0.0 { json!(round(price_num * 0.85, 2)) } else { json!("—") }, "rationale": rz_value},
+            "growth": {"price": if price_num != 0.0 { json!(round(price_num * 0.92, 2)) } else { json!("—") }, "rationale": rz_growth},
+            "technical": {"price": if price_num != 0.0 { json!(round(price_num * 0.95, 2)) } else { json!("—") }, "rationale": rz_tech},
+            "youzi": {"price": if price_num != 0.0 { price.clone() } else { json!("—") }, "rationale": if crypto { "动量未破位" } else { "当前情绪未破" }},
         })),
         "friendly": {
             "scenarios": scenarios,
@@ -642,7 +723,7 @@ pub fn generate_synthesis(
             "core_conclusion": core_conclusion,
             "data_perspective": {
                 "trend": uzi_core::py::py_str(&kline.get("stage").cloned().unwrap_or_else(|| json!("—"))),
-                "price": if price_num != 0.0 { format!("¥{}", uzi_core::py::py_str(&price)) } else { "—".to_string() },
+                "price": if price_num != 0.0 { format!("{cur}{}", uzi_core::py::py_str(&price)) } else { "—".to_string() },
                 "volume": "—",
                 "chips": uzi_core::py::py_str(&kline.get("ma_align").cloned().unwrap_or_else(|| json!("—"))),
             },

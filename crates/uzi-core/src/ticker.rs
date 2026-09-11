@@ -1,10 +1,29 @@
 //! Port of `lib/market_router.py` — listing-market identification and code
-//! normalisation for A / HK / US / global venues.
+//! normalisation for A / HK / US / global venues, plus the crypto venue (`C`).
+//!
+//! Crypto tickers normalise to `BASE-QUOTE` (e.g. `BTC-USD`, `SOL-USDT`) with
+//! `market = "C"`, `exchange = "CRYPTO"`. Accepted inputs:
+//!
+//! | input | normalised |
+//! |---|---|
+//! | `BTC` (registered bare symbol) | `BTC-USD` |
+//! | `btc-usdt` / `BTC/USDT` | `BTC-USDT` |
+//! | `BTCUSDT` (registered base + quote) | `BTC-USDT` |
+//! | `FOO.CRYPTO` / `SOL.CRYPTO` | `FOO-USD` / `SOL-USD` |
+//!
+//! Bare symbols that collide with a live US listing (`SOL`, `LINK`, `OP`,
+//! `ARB`, `COMP`, `AXS`, `DASH`, `STX`) are deliberately **not** bare-resolved;
+//! those need the explicit pair or `.CRYPTO` form.
 
 use serde::{Deserialize, Serialize};
 use std::sync::LazyLock;
 
+use crate::crypto;
+
 pub type Market = String;
+
+/// `market` value identifying the crypto venue.
+pub const CRYPTO_MARKET: &str = "C";
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -255,6 +274,56 @@ pub fn classify_security_type_with<F: Fn(&str) -> bool>(code6: &str, is_fund: F)
     SecurityType::Unknown
 }
 
+/// Build the canonical crypto `TickerInfo` for `base`/`quote`.
+fn crypto_info(raw: &str, base: &str, quote: &str) -> TickerInfo {
+    let base = base.to_ascii_uppercase();
+    let quote = quote.to_ascii_uppercase();
+    TickerInfo::with_venue(
+        raw,
+        &base,
+        &format!("{base}-{quote}"),
+        CRYPTO_MARKET,
+        "CRYPTO",
+        &quote,
+        "GLOBAL",
+    )
+}
+
+/// Resolve an already upper-cased, space-stripped input as crypto.
+///
+/// Explicit forms win over the registry so unlisted coins still work:
+/// `FOO.CRYPTO`, `FOO-USD`, `FOO/USDT`, `BTCUSDT`, and registered bare symbols.
+fn parse_crypto(s: &str) -> Option<TickerInfo> {
+    // `BTC.CRYPTO` — explicit escape hatch for coins outside the registry.
+    if let Some(base) = s.strip_suffix(".CRYPTO") {
+        if !base.is_empty() && base.chars().all(|c| c.is_ascii_alphanumeric()) {
+            return Some(crypto_info(s, base, "USD"));
+        }
+        return None;
+    }
+
+    // `BTC-USD` / `BTC/USDT`.
+    if let Some(idx) = s.find(['-', '/']) {
+        let (base, quote) = (&s[..idx], &s[idx + 1..]);
+        if base.len() >= 2
+            && base.len() <= 16
+            && base.chars().all(|c| c.is_ascii_alphanumeric())
+            && crypto::is_quote(quote)
+        {
+            return Some(crypto_info(s, base, quote));
+        }
+        return None;
+    }
+
+    // `BTCUSDT` — only when the base is a registered, non-colliding coin.
+    if let Some((coin, quote)) = crypto::split_concat(s) {
+        return Some(crypto_info(s, coin.symbol, quote));
+    }
+
+    // Bare registered symbol (`BTC`, `ETH`, …).
+    crypto::find_bare(s).map(|coin| crypto_info(s, coin.symbol, "USD"))
+}
+
 /// Best-effort parse. Chinese names need a network resolve via `fetch_basic`.
 pub fn parse_ticker(raw: &str) -> TickerInfo {
     static A_NUMERIC: LazyLock<regex::Regex> = LazyLock::new(|| regex::Regex::new(r"^\d{6}$").unwrap());
@@ -338,6 +407,12 @@ pub fn parse_ticker(raw: &str) -> TickerInfo {
                 "HK",
             );
         }
+    }
+
+    // Crypto venues — checked before the global-suffix / US branches because a
+    // bare registered symbol (`BTC`) is otherwise a syntactically valid US code.
+    if let Some(ci) = parse_crypto(&s) {
+        return ci;
     }
 
     for (suffix, market, exchange, currency) in GLOBAL_SUFFIXES {
@@ -437,6 +512,36 @@ mod tests {
         assert_eq!(t.full, "水晶光电");
         assert!(is_chinese_name("水晶光电"));
         assert!(!is_chinese_name("AAPL"));
+    }
+
+    #[test]
+    fn parses_crypto_forms() {
+        let b = parse_ticker("BTC");
+        assert_eq!(b.full, "BTC-USD");
+        assert_eq!(b.code, "BTC");
+        assert_eq!(b.market, "C");
+        assert_eq!(b.currency, "USD");
+        assert_eq!(b.exchange, "CRYPTO");
+
+        assert_eq!(parse_ticker("btc-usdt").full, "BTC-USDT");
+        assert_eq!(parse_ticker("BTC/USDT").full, "BTC-USDT");
+        assert_eq!(parse_ticker("BTCUSDT").full, "BTC-USDT");
+        assert_eq!(parse_ticker("ethusdc").full, "ETH-USDC");
+        assert_eq!(parse_ticker("sol-usd").full, "SOL-USD");
+        assert_eq!(parse_ticker("FOO.CRYPTO").full, "FOO-USD");
+        assert_eq!(parse_ticker("SOL.CRYPTO").full, "SOL-USD");
+        assert_eq!(parse_ticker("BTC.CRYPTO").currency, "USD");
+
+        // Colliding US listings are NOT bare-resolved to crypto.
+        assert_eq!(parse_ticker("SOL").market, "U");
+        assert_eq!(parse_ticker("LINK").market, "U");
+
+        // Existing equity routing is untouched.
+        assert_eq!(parse_ticker("BRK.B").market, "U");
+        assert_eq!(parse_ticker("BRK-B").market, "U");
+        assert_eq!(parse_ticker("600519").market, "A");
+        assert_eq!(parse_ticker("00700.HK").market, "H");
+        assert_eq!(parse_ticker("7203.T").market, "JP");
     }
 
     #[test]
