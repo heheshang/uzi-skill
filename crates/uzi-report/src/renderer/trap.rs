@@ -40,7 +40,7 @@ impl SectionRenderer for TrapRenderer {
         let (color, level) = if risk_score.is_number() && rs > 60.0 {
             ("#dc2626", "高风险")
         } else if risk_score.is_number() && rs > 30.0 {
-            ("#f59e0b", "中风险")
+            ("#d97706", "中风险")
         } else {
             ("#16a34a", "低风险")
         };

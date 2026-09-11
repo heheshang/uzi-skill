@@ -567,7 +567,7 @@ fn render_pipeline_fallback_banner(ticker: &str) -> String {
     let message = escape_text(get_or(&payload, "error", &Value::String("未知错误".into())));
     let created_at = escape_text(get_or(&payload, "created_at", &Value::String(String::new())));
     format!(
-        r##"<div class="pipeline-fallback-banner" style="margin:12px 0;padding:12px 16px;border:1px solid #f59e0b;background:#fffbeb;color:#92400e;font-size:12px">
+        r##"<div class="pipeline-fallback-banner" style="margin:12px 0;padding:12px 16px;border:1px solid #d97706;background:#fffaeb;color:#92400e;font-size:12px">
   <strong>执行路径降级：</strong>本报告由 legacy 流程生成，pipeline 未完整执行。
   <span style="margin-left:8px">{error_type}: {message}</span>
   <span style="margin-left:8px;color:#a16207">{created_at}</span>

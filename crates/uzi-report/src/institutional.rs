@@ -119,15 +119,15 @@ pub fn render_dcf_block(dim20: &Value) -> String {
             for val in row.as_array().cloned().unwrap_or_default() {
                 let numeric_val = number(&val, None);
                 let (color, fg, display_val) = match numeric_val {
-                    None => ("#e5e7eb", "#6b7280", "—".to_string()),
+                    None => ("#e7ecf2", "#64748b", "—".to_string()),
                     Some(n) if cur_px > 0.0 => {
                         let ratio = n / cur_px;
                         let (c, f) = if ratio >= 1.3 {
                             ("#065f46", "#fff")
                         } else if ratio >= 1.1 {
-                            ("#10b981", "#fff")
+                            ("#059669", "#fff")
                         } else if ratio >= 0.9 {
-                            ("#e5e7eb", "#111")
+                            ("#e7ecf2", "#111")
                         } else if ratio >= 0.7 {
                             ("#f97316", "#fff")
                         } else {
@@ -135,7 +135,7 @@ pub fn render_dcf_block(dim20: &Value) -> String {
                         };
                         (c, f, pyf(n))
                     }
-                    Some(n) => ("#e5e7eb", "#111", pyf(n)),
+                    Some(n) => ("#e7ecf2", "#111", pyf(n)),
                 };
                 let value_prefix = if display_val == "—" { "" } else { "¥" };
                 cells.push_str(&format!(
@@ -147,7 +147,7 @@ pub fn render_dcf_block(dim20: &Value) -> String {
                 .map(disp)
                 .unwrap_or_else(|| "—".to_string());
             body.push_str(&format!(
-                r##"<tr><th style="padding:6px 8px;background:#f3f4f6;font-size:12px">WACC {axis_label}</th>{cells}</tr>"##
+                r##"<tr><th style="padding:6px 8px;background:#f4f7fa;font-size:12px">WACC {axis_label}</th>{cells}</tr>"##
             ));
         }
         heat_rows = format!(
@@ -156,37 +156,37 @@ pub fn render_dcf_block(dim20: &Value) -> String {
     }
 
     let sm_color = if sm > 10.0 {
-        "#10b981"
+        "#059669"
     } else if sm > -10.0 {
-        "#f59e0b"
+        "#d97706"
     } else {
-        "#ef4444"
+        "#dc2626"
     };
 
     let tv_pct = safe(dcf.get("tv_pct_of_ev").unwrap_or(&Value::Null), "—");
 
     format!(
         r##"
-    <div class="dcf-block" style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin:16px 0;box-shadow:0 1px 3px rgba(0,0,0,0.06)">
-      <div class="dcf-head" style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #06b6d4;padding-bottom:8px;margin-bottom:14px">
+    <div class="dcf-block" style="background:#fff;border:1px solid #e7ecf2;border-radius:12px;padding:20px;margin:16px 0;box-shadow:0 1px 3px rgba(16,24,40,0.06)">
+      <div class="dcf-head" style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #3b82f6;padding-bottom:8px;margin-bottom:14px">
         <div>
-          <span style="background:#06b6d4;color:#fff;padding:4px 10px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:1px">DCF VALUATION</span>
-          <span style="margin-left:12px;font-size:14px;color:#6b7280">2-Stage FCF + Gordon Growth Terminal</span>
+          <span style="background:#3b82f6;color:#fff;padding:4px 10px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:1px">DCF VALUATION</span>
+          <span style="margin-left:12px;font-size:14px;color:#64748b">2-Stage FCF + Gordon Growth Terminal</span>
         </div>
-        <div style="font-size:11px;color:#9ca3af">dim 20.dcf</div>
+        <div style="font-size:11px;color:#94a3b8">dim 20.dcf</div>
       </div>
       <div class="dcf-summary" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:16px">
-        <div><div style="font-size:11px;color:#6b7280">WACC</div><div style="font-size:22px;font-weight:800;color:#111">{wacc_pct:.2}%</div><div style="font-size:10px;color:#9ca3af">k_e {ke_pct:.1}% · k_d {kd_pct:.1}%</div></div>
-        <div><div style="font-size:11px;color:#6b7280">内在价值 / 股</div><div style="font-size:22px;font-weight:800;color:#111">¥{intrinsic}</div><div style="font-size:10px;color:#9ca3af">vs 当前 ¥{cur_px}</div></div>
-        <div><div style="font-size:11px;color:#6b7280">安全边际</div><div style="font-size:22px;font-weight:800;color:{sm_color}">{sm}</div><div style="font-size:10px;color:#9ca3af">{verdict}</div></div>
-        <div><div style="font-size:11px;color:#6b7280">终值占 EV</div><div style="font-size:22px;font-weight:800;color:#111">{tv_pct}%</div><div style="font-size:10px;color:#9ca3af">高度依赖 g</div></div>
+        <div><div style="font-size:11px;color:#64748b">WACC</div><div style="font-size:22px;font-weight:800;color:#111">{wacc_pct:.2}%</div><div style="font-size:10px;color:#94a3b8">k_e {ke_pct:.1}% · k_d {kd_pct:.1}%</div></div>
+        <div><div style="font-size:11px;color:#64748b">内在价值 / 股</div><div style="font-size:22px;font-weight:800;color:#111">¥{intrinsic}</div><div style="font-size:10px;color:#94a3b8">vs 当前 ¥{cur_px}</div></div>
+        <div><div style="font-size:11px;color:#64748b">安全边际</div><div style="font-size:22px;font-weight:800;color:{sm_color}">{sm}</div><div style="font-size:10px;color:#94a3b8">{verdict}</div></div>
+        <div><div style="font-size:11px;color:#64748b">终值占 EV</div><div style="font-size:22px;font-weight:800;color:#111">{tv_pct}%</div><div style="font-size:10px;color:#94a3b8">高度依赖 g</div></div>
       </div>
       <details style="margin-bottom:14px">
-        <summary style="cursor:pointer;color:#0369a1;font-weight:600;font-size:13px">📐 计算推导（7 步）</summary>
-        <ol style="margin:10px 0 0 20px;color:#374151;font-size:13px;line-height:1.8">{log_items}</ol>
+        <summary style="cursor:pointer;color:#2563eb;font-weight:600;font-size:13px">📐 计算推导（7 步）</summary>
+        <ol style="margin:10px 0 0 20px;color:#475569;font-size:13px;line-height:1.8">{log_items}</ol>
       </details>
       <div>
-        <div style="font-size:12px;color:#6b7280;margin-bottom:6px">📊 5×5 敏感性表（WACC × 终值 g）· 中心 = 基础案例</div>
+        <div style="font-size:12px;color:#64748b;margin-bottom:6px">📊 5×5 敏感性表（WACC × 终值 g）· 中心 = 基础案例</div>
         {heat_rows}
       </div>
     </div>
@@ -213,13 +213,13 @@ pub fn render_comps_block(dim20: &Value) -> String {
 
     let pct_color = |p: f64| -> &'static str {
         if p <= 25.0 {
-            "#10b981"
+            "#059669"
         } else if p <= 50.0 {
-            "#06b6d4"
+            "#3b82f6"
         } else if p <= 75.0 {
-            "#f59e0b"
+            "#d97706"
         } else {
-            "#ef4444"
+            "#dc2626"
         }
     };
 
@@ -231,7 +231,7 @@ pub fn render_comps_block(dim20: &Value) -> String {
         }
         let pct = num0(target_pct.get(m).unwrap_or(&Value::Number(50.into()))).clamp(0.0, 100.0);
         let bar = format!(
-            r##"<div style="background:#e5e7eb;height:6px;border-radius:3px;overflow:hidden"><div style="background:{};height:100%;width:{}%"></div></div>"##,
+            r##"<div style="background:#e7ecf2;height:6px;border-radius:3px;overflow:hidden"><div style="background:{};height:100%;width:{}%"></div></div>"##,
             pct_color(pct),
             pyf(pct)
         );
@@ -258,7 +258,7 @@ pub fn render_comps_block(dim20: &Value) -> String {
             .iter()
             .map(|(k, v)| {
                 format!(
-                    r##"<div style="display:inline-block;margin-right:20px"><span style="color:#6b7280;font-size:11px">{k}</span><div style="font-size:20px;font-weight:800">¥{}</div></div>"##,
+                    r##"<div style="display:inline-block;margin-right:20px"><span style="color:#64748b;font-size:11px">{k}</span><div style="font-size:20px;font-weight:800">¥{}</div></div>"##,
                     disp(v)
                 )
             })
@@ -268,22 +268,22 @@ pub fn render_comps_block(dim20: &Value) -> String {
 
     format!(
         r##"
-    <div class="comps-block" style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin:16px 0;box-shadow:0 1px 3px rgba(0,0,0,0.06)">
+    <div class="comps-block" style="background:#fff;border:1px solid #e7ecf2;border-radius:12px;padding:20px;margin:16px 0;box-shadow:0 1px 3px rgba(16,24,40,0.06)">
       <div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #8b5cf6;padding-bottom:8px;margin-bottom:14px">
         <div>
           <span style="background:#8b5cf6;color:#fff;padding:4px 10px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:1px">COMPS</span>
-          <span style="margin-left:12px;font-size:14px;color:#6b7280">同行对标 · 分位分析</span>
+          <span style="margin-left:12px;font-size:14px;color:#64748b">同行对标 · 分位分析</span>
         </div>
         <div style="font-size:14px;font-weight:700">{verdict}</div>
       </div>
       <table style="width:100%;border-collapse:collapse;font-size:13px">
-        <thead style="background:#f9fafb;color:#6b7280;font-size:11px;letter-spacing:0.5px">
+        <thead style="background:#f7f9fc;color:#64748b;font-size:11px;letter-spacing:0.5px">
           <tr><th style="padding:8px;text-align:left">METRIC</th><th style="padding:8px;text-align:right">MIN</th><th style="padding:8px;text-align:right">MEDIAN</th><th style="padding:8px;text-align:right">MAX</th><th style="padding:8px;text-align:center">目标分位</th></tr>
         </thead>
         <tbody>{metric_rows}</tbody>
       </table>
-      <div style="margin-top:14px;padding-top:12px;border-top:1px dashed #e5e7eb">
-        <div style="font-size:11px;color:#6b7280;margin-bottom:6px">隐含每股价（基于同行中位数倍数）</div>
+      <div style="margin-top:14px;padding-top:12px;border-top:1px dashed #e7ecf2">
+        <div style="font-size:11px;color:#64748b;margin-bottom:6px">隐含每股价（基于同行中位数倍数）</div>
         {implied_rows}
       </div>
     </div>
@@ -303,44 +303,44 @@ pub fn render_lbo_block(dim20: &Value) -> String {
     let debt_sched = numeric_series(lbo.get("debt_schedule").unwrap_or(&Value::Null));
     let ebitda_path = numeric_series(lbo.get("ebitda_path").unwrap_or(&Value::Null));
     let irr_color = if irr >= 20.0 {
-        "#10b981"
+        "#059669"
     } else if irr >= 15.0 {
-        "#f59e0b"
+        "#d97706"
     } else {
-        "#ef4444"
+        "#dc2626"
     };
 
     let ebitda_sparks = if ebitda_path.is_empty() {
         String::new()
     } else {
         let vals: Vec<Value> = ebitda_path.iter().map(|v| Value::from(*v)).collect();
-        svg_sparkline(&vals, 220, 40, "#06b6d4", true)
+        svg_sparkline(&vals, 220, 40, "#3b82f6", true)
     };
     let debt_sparks = if debt_sched.is_empty() {
         String::new()
     } else {
         let vals: Vec<Value> = debt_sched.iter().map(|v| Value::from(*v)).collect();
-        svg_sparkline(&vals, 220, 40, "#ef4444", true)
+        svg_sparkline(&vals, 220, 40, "#dc2626", true)
     };
 
     format!(
         r##"
-    <div class="lbo-block" style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin:16px 0;box-shadow:0 1px 3px rgba(0,0,0,0.06)">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #f59e0b;padding-bottom:8px;margin-bottom:14px">
+    <div class="lbo-block" style="background:#fff;border:1px solid #e7ecf2;border-radius:12px;padding:20px;margin:16px 0;box-shadow:0 1px 3px rgba(16,24,40,0.06)">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #d97706;padding-bottom:8px;margin-bottom:14px">
         <div>
-          <span style="background:#f59e0b;color:#fff;padding:4px 10px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:1px">QUICK LBO</span>
-          <span style="margin-left:12px;font-size:14px;color:#6b7280">PE 买方视角 · 5 年退出</span>
+          <span style="background:#d97706;color:#fff;padding:4px 10px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:1px">QUICK LBO</span>
+          <span style="margin-left:12px;font-size:14px;color:#64748b">PE 买方视角 · 5 年退出</span>
         </div>
       </div>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:16px">
-        <div><div style="font-size:11px;color:#6b7280">入场 EBITDA</div><div style="font-size:20px;font-weight:800">{entry} 亿</div><div style="font-size:10px;color:#9ca3af">EV {ev} 亿</div></div>
-        <div><div style="font-size:11px;color:#6b7280">杠杆倍数</div><div style="font-size:20px;font-weight:800">{lev}x</div><div style="font-size:10px;color:#9ca3af">债 {debt} 亿</div></div>
-        <div><div style="font-size:11px;color:#6b7280">退出 IRR</div><div style="font-size:24px;font-weight:900;color:{irr_color}">{irr_s}%</div><div style="font-size:10px;color:#9ca3af">MOIC {moic}x</div></div>
-        <div><div style="font-size:11px;color:#6b7280">结论</div><div style="font-size:14px;font-weight:700;color:{irr_color}">{verdict}</div></div>
+        <div><div style="font-size:11px;color:#64748b">入场 EBITDA</div><div style="font-size:20px;font-weight:800">{entry} 亿</div><div style="font-size:10px;color:#94a3b8">EV {ev} 亿</div></div>
+        <div><div style="font-size:11px;color:#64748b">杠杆倍数</div><div style="font-size:20px;font-weight:800">{lev}x</div><div style="font-size:10px;color:#94a3b8">债 {debt} 亿</div></div>
+        <div><div style="font-size:11px;color:#64748b">退出 IRR</div><div style="font-size:24px;font-weight:900;color:{irr_color}">{irr_s}%</div><div style="font-size:10px;color:#94a3b8">MOIC {moic}x</div></div>
+        <div><div style="font-size:11px;color:#64748b">结论</div><div style="font-size:14px;font-weight:700;color:{irr_color}">{verdict}</div></div>
       </div>
       <div class="lbo-spark-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
-        <div style="min-width:0"><div style="font-size:11px;color:#6b7280;margin-bottom:4px">5 年 EBITDA 路径</div>{ebitda_sparks}</div>
-        <div style="min-width:0"><div style="font-size:11px;color:#6b7280;margin-bottom:4px">债务偿还进度</div>{debt_sparks}</div>
+        <div style="min-width:0"><div style="font-size:11px;color:#64748b;margin-bottom:4px">5 年 EBITDA 路径</div>{ebitda_sparks}</div>
+        <div style="min-width:0"><div style="font-size:11px;color:#64748b;margin-bottom:4px">债务偿还进度</div>{debt_sparks}</div>
       </div>
     </div>
     "##,
@@ -366,13 +366,13 @@ pub fn render_initiating_coverage(dim21: &Value) -> String {
 
     let is_rated = !rating.contains("未评级");
     let rating_color = if !is_rated {
-        "#6b7280"
+        "#64748b"
     } else if rating.contains("买入") || rating.contains("增持") {
-        "#10b981"
+        "#059669"
     } else if rating.contains("持有") {
-        "#f59e0b"
+        "#d97706"
     } else {
-        "#ef4444"
+        "#dc2626"
     };
     let target_display = if is_rated && num0(&tp) > 0.0 {
         format!("¥{}", disp(&tp))
@@ -398,7 +398,7 @@ pub fn render_initiating_coverage(dim21: &Value) -> String {
         .take(5)
         .map(|p| {
             format!(
-                r##"<li style="margin-bottom:8px"><strong>{}</strong> <span style="background:#e0e7ff;color:#3730a3;padding:2px 6px;border-radius:3px;font-size:10px;margin-left:4px">{}</span><br><span style="color:#6b7280;font-size:12px">{}</span></li>"##,
+                r##"<li style="margin-bottom:8px"><strong>{}</strong> <span style="background:#eef4ff;color:#3730a3;padding:2px 6px;border-radius:3px;font-size:10px;margin-left:4px">{}</span><br><span style="color:#64748b;font-size:12px">{}</span></li>"##,
                 safe(p.get("pillar").unwrap_or(&Value::Null), "—"),
                 disp(p.get("weight").unwrap_or(&Value::String(String::new()))),
                 disp(p.get("evidence").unwrap_or(&Value::String(String::new())))
@@ -410,7 +410,7 @@ pub fn render_initiating_coverage(dim21: &Value) -> String {
         .take(5)
         .map(|r| {
             format!(
-                r##"<li style="margin-bottom:6px"><span style="color:#ef4444">●</span> <strong>{}</strong> <span style="color:#9ca3af;font-size:11px">({})</span><br><span style="color:#6b7280;font-size:12px">{}</span></li>"##,
+                r##"<li style="margin-bottom:6px"><span style="color:#dc2626">●</span> <strong>{}</strong> <span style="color:#94a3b8;font-size:11px">({})</span><br><span style="color:#64748b;font-size:12px">{}</span></li>"##,
                 safe(r.get("risk").unwrap_or(&Value::Null), "—"),
                 disp(r.get("severity").unwrap_or(&Value::String(String::new()))),
                 disp(r.get("detail").unwrap_or(&Value::String(String::new())))
@@ -420,27 +420,27 @@ pub fn render_initiating_coverage(dim21: &Value) -> String {
 
     format!(
         r##"
-    <div class="initiating-block" style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin:16px 0;box-shadow:0 1px 3px rgba(0,0,0,0.06)">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #0369a1;padding-bottom:8px;margin-bottom:14px">
+    <div class="initiating-block" style="background:#fff;border:1px solid #e7ecf2;border-radius:12px;padding:20px;margin:16px 0;box-shadow:0 1px 3px rgba(16,24,40,0.06)">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #2563eb;padding-bottom:8px;margin-bottom:14px">
         <div>
-          <span style="background:#0369a1;color:#fff;padding:4px 10px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:1px">INITIATING COVERAGE</span>
-          <span style="margin-left:12px;font-size:14px;color:#6b7280">机构首次覆盖 · JPM/GS/MS 格式</span>
+          <span style="background:#2563eb;color:#fff;padding:4px 10px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:1px">INITIATING COVERAGE</span>
+          <span style="margin-left:12px;font-size:14px;color:#64748b">机构首次覆盖 · JPM/GS/MS 格式</span>
         </div>
       </div>
-      <div style="display:flex;gap:24px;margin-bottom:14px;padding:12px;background:#f9fafb;border-radius:8px">
-        <div><div style="font-size:11px;color:#6b7280">RATING</div><div style="font-size:18px;font-weight:800;color:{rating_color}">{rating}</div></div>
-        <div><div style="font-size:11px;color:#6b7280">TARGET</div><div style="font-size:18px;font-weight:800">{target_display}</div></div>
-        <div><div style="font-size:11px;color:#6b7280">CURRENT</div><div style="font-size:18px;font-weight:800">¥{cur}</div></div>
-        <div><div style="font-size:11px;color:#6b7280">UPSIDE</div><div style="font-size:18px;font-weight:800;color:{rating_color}">{upside_display}</div></div>
+      <div style="display:flex;gap:24px;margin-bottom:14px;padding:12px;background:#f7f9fc;border-radius:8px">
+        <div><div style="font-size:11px;color:#64748b">RATING</div><div style="font-size:18px;font-weight:800;color:{rating_color}">{rating}</div></div>
+        <div><div style="font-size:11px;color:#64748b">TARGET</div><div style="font-size:18px;font-weight:800">{target_display}</div></div>
+        <div><div style="font-size:11px;color:#64748b">CURRENT</div><div style="font-size:18px;font-weight:800">¥{cur}</div></div>
+        <div><div style="font-size:11px;color:#64748b">UPSIDE</div><div style="font-size:18px;font-weight:800;color:{rating_color}">{upside_display}</div></div>
       </div>
-      <div style="padding:10px;background:#f0f9ff;border-left:3px solid #0369a1;margin-bottom:14px;font-size:13px;line-height:1.6">{summary}</div>
+      <div style="padding:10px;background:#eef4ff;border-left:3px solid #2563eb;margin-bottom:14px;font-size:13px;line-height:1.6">{summary}</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
         <div>
-          <div style="font-size:11px;color:#6b7280;font-weight:700;margin-bottom:8px">💪 INVESTMENT THESIS</div>
+          <div style="font-size:11px;color:#64748b;font-weight:700;margin-bottom:8px">💪 INVESTMENT THESIS</div>
           <ul style="margin:0;padding-left:18px;font-size:13px">{pillar_html}</ul>
         </div>
         <div>
-          <div style="font-size:11px;color:#6b7280;font-weight:700;margin-bottom:8px">⚠️ KEY RISKS</div>
+          <div style="font-size:11px;color:#64748b;font-weight:700;margin-bottom:8px">⚠️ KEY RISKS</div>
           <ul style="margin:0;padding-left:18px;font-size:13px">{risk_html}</ul>
         </div>
       </div>
@@ -469,26 +469,26 @@ pub fn render_ic_memo(dim22: &Value) -> String {
 
     let headline = safe(exec_sum.get("headline").unwrap_or(&Value::Null), "—");
     let rec_color = if headline.contains('🟢') {
-        "#10b981"
+        "#059669"
     } else if headline.contains('🟡') {
-        "#f59e0b"
+        "#d97706"
     } else if headline.contains('⚪') {
-        "#6b7280"
+        "#64748b"
     } else {
-        "#ef4444"
+        "#dc2626"
     };
 
     let mut scen_html = String::new();
     for s in scenarios {
         let ret = num0(s.get("return_pct").unwrap_or(&Value::Null));
-        let ret_color = if ret > 0.0 { "#10b981" } else { "#ef4444" };
+        let ret_color = if ret > 0.0 { "#059669" } else { "#dc2626" };
         scen_html.push_str(&format!(
             r##"
-        <div style="border:1px solid #e5e7eb;border-radius:8px;padding:10px">
-          <div style="font-size:11px;color:#6b7280;font-weight:700">{scenario} · p={prob}%</div>
+        <div style="border:1px solid #e7ecf2;border-radius:8px;padding:10px">
+          <div style="font-size:11px;color:#64748b;font-weight:700">{scenario} · p={prob}%</div>
           <div style="font-size:20px;font-weight:800;margin:4px 0">¥{target}</div>
           <div style="font-size:13px;font-weight:700;color:{ret_color}">{ret}</div>
-          <div style="font-size:10px;color:#9ca3af;margin-top:4px">{assumptions}</div>
+          <div style="font-size:10px;color:#94a3b8;margin-top:4px">{assumptions}</div>
         </div>"##,
             scenario = safe(s.get("scenario").unwrap_or(&Value::Null), "—"),
             prob = safe(s.get("probability_pct").unwrap_or(&Value::Null), "—"),
@@ -503,7 +503,7 @@ pub fn render_ic_memo(dim22: &Value) -> String {
         .take(5)
         .map(|r| {
             format!(
-                r##"<li style="margin-bottom:6px"><strong>{}</strong> <span style="color:#ef4444;font-size:10px">({})</span><br><span style="color:#6b7280;font-size:12px">{}</span> · <span style="color:#059669;font-size:11px">缓解：{}</span></li>"##,
+                r##"<li style="margin-bottom:6px"><strong>{}</strong> <span style="color:#dc2626;font-size:10px">({})</span><br><span style="color:#64748b;font-size:12px">{}</span> · <span style="color:#059669;font-size:11px">缓解：{}</span></li>"##,
                 safe(r.get("risk").unwrap_or(&Value::Null), "—"),
                 disp(r.get("severity").unwrap_or(&Value::String(String::new()))),
                 disp(r.get("detail").unwrap_or(&Value::String(String::new()))),
@@ -514,23 +514,23 @@ pub fn render_ic_memo(dim22: &Value) -> String {
 
     format!(
         r##"
-    <div class="ic-memo-block" style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin:16px 0;box-shadow:0 1px 3px rgba(0,0,0,0.06)">
+    <div class="ic-memo-block" style="background:#fff;border:1px solid #e7ecf2;border-radius:12px;padding:20px;margin:16px 0;box-shadow:0 1px 3px rgba(16,24,40,0.06)">
       <div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #be123c;padding-bottom:8px;margin-bottom:14px">
         <div>
           <span style="background:#be123c;color:#fff;padding:4px 10px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:1px">IC MEMO</span>
-          <span style="margin-left:12px;font-size:14px;color:#6b7280">投委会备忘录 · 8 章节</span>
+          <span style="margin-left:12px;font-size:14px;color:#64748b">投委会备忘录 · 8 章节</span>
         </div>
       </div>
-      <div style="padding:14px;background:#fef2f2;border-left:4px solid {rec_color};margin-bottom:14px">
-        <div style="font-size:11px;color:#6b7280;font-weight:700;margin-bottom:4px">RECOMMENDATION</div>
+      <div style="padding:14px;background:#fef3f2;border-left:4px solid {rec_color};margin-bottom:14px">
+        <div style="font-size:11px;color:#64748b;font-weight:700;margin-bottom:4px">RECOMMENDATION</div>
         <div style="font-size:18px;font-weight:800;color:{rec_color}">{headline}</div>
       </div>
       <div style="margin-bottom:14px">
-        <div style="font-size:11px;color:#6b7280;font-weight:700;margin-bottom:8px">📊 三情景回报分析</div>
+        <div style="font-size:11px;color:#64748b;font-weight:700;margin-bottom:8px">📊 三情景回报分析</div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">{scen_html}</div>
       </div>
       <div>
-        <div style="font-size:11px;color:#6b7280;font-weight:700;margin-bottom:8px">⚠️ 核心风险 + 缓解</div>
+        <div style="font-size:11px;color:#64748b;font-weight:700;margin-bottom:8px">⚠️ 核心风险 + 缓解</div>
         <ul style="margin:0;padding-left:18px;font-size:13px">{risk_html}</ul>
       </div>
     </div>
@@ -550,11 +550,11 @@ pub fn render_catalyst_calendar(dim21: &Value) -> String {
     }
     let impact_color = |imp: &str| -> &'static str {
         match imp {
-            "high" => "#ef4444",
-            "medium" => "#f59e0b",
-            "low" => "#9ca3af",
-            "past" => "#6b7280",
-            _ => "#9ca3af",
+            "high" => "#dc2626",
+            "medium" => "#d97706",
+            "low" => "#94a3b8",
+            "past" => "#64748b",
+            _ => "#94a3b8",
         }
     };
 
@@ -571,7 +571,7 @@ pub fn render_catalyst_calendar(dim21: &Value) -> String {
         let expectation = ev.get("expectation").cloned().unwrap_or(Value::Null);
         let expectation_html = if uzi_core::py::truthy(&expectation) {
             format!(
-                r##"<div style="font-size:11px;color:#9ca3af">{}</div>"##,
+                r##"<div style="font-size:11px;color:#94a3b8">{}</div>"##,
                 disp(&expectation)
             )
         } else {
@@ -579,8 +579,8 @@ pub fn render_catalyst_calendar(dim21: &Value) -> String {
         };
         items.push_str(&format!(
             r##"
-        <div style="display:flex;padding:10px;border-bottom:1px solid #f3f4f6">
-          <div style="min-width:90px;font-size:12px;color:#6b7280;font-family:Menlo,monospace">{event_date}</div>
+        <div style="display:flex;padding:10px;border-bottom:1px solid #f4f7fa">
+          <div style="min-width:90px;font-size:12px;color:#64748b;font-family:Menlo,monospace">{event_date}</div>
           <div style="width:8px;height:8px;border-radius:50%;background:{color};margin:6px 10px 0 0"></div>
           <div style="flex:1"><div style="font-size:13px;color:#111">{event}</div>
             {expectation_html}
@@ -594,13 +594,13 @@ pub fn render_catalyst_calendar(dim21: &Value) -> String {
 
     format!(
         r##"
-    <div class="catalyst-block" style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin:16px 0;box-shadow:0 1px 3px rgba(0,0,0,0.06)">
+    <div class="catalyst-block" style="background:#fff;border:1px solid #e7ecf2;border-radius:12px;padding:20px;margin:16px 0;box-shadow:0 1px 3px rgba(16,24,40,0.06)">
       <div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #059669;padding-bottom:8px;margin-bottom:10px">
         <div>
           <span style="background:#059669;color:#fff;padding:4px 10px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:1px">CATALYST CALENDAR</span>
-          <span style="margin-left:12px;font-size:14px;color:#6b7280">催化剂日历 · 影响分级</span>
+          <span style="margin-left:12px;font-size:14px;color:#64748b">催化剂日历 · 影响分级</span>
         </div>
-        <div style="font-size:11px;color:#9ca3af">共 {n} 条 · {high} 高影响</div>
+        <div style="font-size:11px;color:#94a3b8">共 {n} 条 · {high} 高影响</div>
       </div>
       <div>{items}</div>
     </div>
@@ -643,29 +643,29 @@ pub fn render_competitive_analysis(dim22: &Value) -> String {
         .and_then(|v| v.as_str())
         .unwrap_or("—");
     let bcg_color = match bcg_cat {
-        "Star (明星)" => "#10b981",
-        "Cash Cow (现金牛)" => "#06b6d4",
-        "Question Mark (问号)" => "#f59e0b",
-        "Dog (瘦狗)" => "#9ca3af",
-        _ => "#9ca3af",
+        "Star (明星)" => "#059669",
+        "Cash Cow (现金牛)" => "#3b82f6",
+        "Question Mark (问号)" => "#d97706",
+        "Dog (瘦狗)" => "#94a3b8",
+        _ => "#94a3b8",
     };
 
     format!(
         r##"
-    <div class="competitive-block" style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin:16px 0;box-shadow:0 1px 3px rgba(0,0,0,0.06)">
+    <div class="competitive-block" style="background:#fff;border:1px solid #e7ecf2;border-radius:12px;padding:20px;margin:16px 0;box-shadow:0 1px 3px rgba(16,24,40,0.06)">
       <div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #7c3aed;padding-bottom:8px;margin-bottom:14px">
         <div>
           <span style="background:#7c3aed;color:#fff;padding:4px 10px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:1px">COMPETITIVE</span>
-          <span style="margin-left:12px;font-size:14px;color:#6b7280">Porter 5 Forces + BCG Matrix</span>
+          <span style="margin-left:12px;font-size:14px;color:#64748b">Porter 5 Forces + BCG Matrix</span>
         </div>
-        <div style="font-size:12px;color:#6b7280">行业吸引力 <strong style="color:#111">{attr}</strong>%</div>
+        <div style="font-size:12px;color:#64748b">行业吸引力 <strong style="color:#111">{attr}</strong>%</div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center">
         <div style="text-align:center">{radar}</div>
         <div>
-          <div style="font-size:11px;color:#6b7280;margin-bottom:6px">BCG 矩阵定位</div>
+          <div style="font-size:11px;color:#64748b;margin-bottom:6px">BCG 矩阵定位</div>
           <div style="font-size:22px;font-weight:800;color:{bcg_color};margin-bottom:8px">{bcg_cat}</div>
-          <div style="font-size:12px;color:#374151;margin-bottom:4px">市场份额 {ms}% · 市场增速 {mg}%</div>
+          <div style="font-size:12px;color:#475569;margin-bottom:4px">市场份额 {ms}% · 市场增速 {mg}%</div>
           <div style="padding:10px;background:#faf5ff;border-left:3px solid {bcg_color};font-size:12px">战略建议：{action}</div>
         </div>
       </div>
@@ -918,13 +918,13 @@ pub fn render_school_lock_banner(syn: &Value) -> String {
     };
 
     let themes: &[(&str, &str, &str, &str, &str)] = &[
-        ("A", "#065f46", "rgba(16,185,129,0.10)", "🛡️", "巴菲特 / 格雷厄姆 / 费雪 / 芒格 / 邓普顿 / 卡拉曼"),
+        ("A", "#065f46", "rgba(5,150,105,0.10)", "🛡️", "巴菲特 / 格雷厄姆 / 费雪 / 芒格 / 邓普顿 / 卡拉曼"),
         ("B", "#1e40af", "rgba(59,130,246,0.10)", "🚀", "彼得·林奇 / 木头姐 / Andreessen (a16z) / Gurley / Naval / Gerstner / Chamath"),
         ("C", "#7c2d12", "rgba(217,119,6,0.10)", "🌍", "索罗斯 / 达里奥 / Druckenmiller / Burry / Chanos"),
-        ("D", "#9d174d", "rgba(236,72,153,0.10)", "📈", "利弗莫尔 / 米内尔维尼 / 达瓦斯 / 江恩"),
+        ("D", "#9d174d", "rgba(219,39,119,0.10)", "📈", "利弗莫尔 / 米内尔维尼 / 达瓦斯 / 江恩"),
         ("E", "#7c3aed", "rgba(139,92,246,0.10)", "🇨🇳", "段永平 / 张坤 / 冯柳 / 邓晓峰 / 张磊 (高瓴)"),
-        ("F", "#dc2626", "rgba(239,68,68,0.10)", "⚡", "赵老哥 / 孙哥 / 章盟主 / 葛卫东 / 炒股养家"),
-        ("G", "#0891b2", "rgba(8,145,178,0.10)", "🤖", "Renaissance (Simons) / Ed Thorp / DE Shaw / AQR (Asness)"),
+        ("F", "#dc2626", "rgba(220,38,38,0.10)", "⚡", "赵老哥 / 孙哥 / 章盟主 / 葛卫东 / 炒股养家"),
+        ("G", "#2563eb", "rgba(37,99,235,0.10)", "🤖", "Renaissance (Simons) / Ed Thorp / DE Shaw / AQR (Asness)"),
         ("H", "#b45309", "rgba(217,119,6,0.10)", "👑", "黄仁勋 / 马斯克 / Sam Altman / Saylor · 科技领袖派"),
         ("I", "#4338ca", "rgba(99,102,241,0.10)", "🔗", "Serenity · AI 供应链卡脖子/瓶颈猎手"),
     ];
@@ -932,17 +932,17 @@ pub fn render_school_lock_banner(syn: &Value) -> String {
         .iter()
         .find(|(g, ..)| *g == group)
         .map(|(_, fg, bg, ic, mh)| (*fg, *bg, *ic, *mh))
-        .unwrap_or(("#374151", "rgba(107,114,128,0.10)", "🎯", ""));
+        .unwrap_or(("#475569", "rgba(100,116,139,0.10)", "🎯", ""));
     let members_html = if !members_hint.is_empty() {
         format!(
-            r##"<div style="margin-top:4px;color:#6b7280;font-size:11px">代表评委 · {members_hint}</div>"##
+            r##"<div style="margin-top:4px;color:#64748b;font-size:11px">代表评委 · {members_hint}</div>"##
         )
     } else {
         String::new()
     };
 
     format!(
-        r##"<div class="school-lock-banner" style="margin:16px 0;padding:14px 20px;background:{bg};border-left:5px solid {fg};border-radius:8px;display:flex;align-items:center;gap:14px;font-size:13px;line-height:1.5">  <div style="font-size:22px">{icon}</div>  <div style="flex:1">    <div style="font-size:11px;letter-spacing:2px;color:{fg};font-weight:700;margin-bottom:3px">      SCHOOL LOCK · 已锁定单一流派视角    </div>    <div style="color:#1f2937">      本次分析仅由 <strong style="color:{fg}">{group} · {label}</strong> 的评委参与评分 · 其他流派的评委已 skip · 报告里"评委打分板 / 流派分数 / 多空辩论"均限于该派内.    </div>    {members_html}  </div></div>"##
+        r##"<div class="school-lock-banner" style="margin:16px 0;padding:14px 20px;background:{bg};border-left:5px solid {fg};border-radius:8px;display:flex;align-items:center;gap:14px;font-size:13px;line-height:1.5">  <div style="font-size:22px">{icon}</div>  <div style="flex:1">    <div style="font-size:11px;letter-spacing:2px;color:{fg};font-weight:700;margin-bottom:3px">      SCHOOL LOCK · 已锁定单一流派视角    </div>    <div style="color:#1e293b">      本次分析仅由 <strong style="color:{fg}">{group} · {label}</strong> 的评委参与评分 · 其他流派的评委已 skip · 报告里"评委打分板 / 流派分数 / 多空辩论"均限于该派内.    </div>    {members_html}  </div></div>"##
     )
 }
 
@@ -967,7 +967,7 @@ pub fn render_institutional_section(raw: &Value) -> String {
         .unwrap_or(Value::Null);
 
     if !(uzi_core::py::truthy(&d20) || uzi_core::py::truthy(&d21) || uzi_core::py::truthy(&d22)) {
-        return r##"<div class="muted" style="padding:20px;text-align:center;color:#9ca3af">Task 1.5 机构建模数据缺失 · 请运行 compute_deep_methods</div>"##.to_string();
+        return r##"<div class="muted" style="padding:20px;text-align:center;color:#94a3b8">Task 1.5 机构建模数据缺失 · 请运行 compute_deep_methods</div>"##.to_string();
     }
 
     [

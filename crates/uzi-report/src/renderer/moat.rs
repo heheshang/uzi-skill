@@ -8,7 +8,7 @@ pub struct MoatRenderer;
 
 /// 四力评分阈值配色。
 pub const SCORE_COLORS_STRONG: &str = "#16a34a";
-pub const SCORE_COLORS_MEDIUM: &str = "#f59e0b";
+pub const SCORE_COLORS_MEDIUM: &str = "#d97706";
 pub const SCORE_COLORS_WEAK: &str = "#dc2626";
 
 fn score_color(score: i64) -> &'static str {
@@ -101,7 +101,7 @@ impl SectionRenderer for MoatRenderer {
         };
         let rd_block = if !rd_summary.is_empty() && rd_summary != "—" {
             format!(
-                r##"<div class="moat-rd" style="margin-top:12px;padding:10px;background:#f8fafc;border-left:3px solid #d97706"><strong>R&D 摘要</strong>：{}</div>"##,
+                r##"<div class="moat-rd" style="margin-top:12px;padding:10px;background:#f7f9fc;border-left:3px solid #d97706"><strong>R&D 摘要</strong>：{}</div>"##,
                 rd_summary.chars().take(300).collect::<String>()
             )
         } else {

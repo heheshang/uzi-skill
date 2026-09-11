@@ -9,12 +9,12 @@ use serde_json::Value;
 pub const COLOR_BULL: &str = "#059669";
 pub const COLOR_BEAR: &str = "#dc2626";
 pub const COLOR_GOLD: &str = "#d97706";
-pub const COLOR_CYAN: &str = "#0891b2";
+pub const COLOR_CYAN: &str = "#2563eb";
 pub const COLOR_BLUE: &str = "#2563eb";
 pub const COLOR_PINK: &str = "#db2777";
 pub const COLOR_INDIGO: &str = "#4f46e5";
 pub const COLOR_MUTED: &str = "#94a3b8";
-pub const COLOR_GRID: &str = "#e2e8f0";
+pub const COLOR_GRID: &str = "#e7ecf2";
 
 fn nf(v: &Value) -> f64 {
     num(v)
@@ -85,13 +85,13 @@ pub fn svg_h_bar_compare(
   <div style="display:flex; justify-content:space-between; margin-bottom:4px; color:#475569;">
     <span>{label_a}</span><strong style="color:#0f172a">{va}{unit}</strong>
   </div>
-  <div style="height:8px; background:#f1f5f9; border-radius:4px; overflow:hidden; margin-bottom:8px;">
+  <div style="height:8px; background:#f4f7fa; border-radius:4px; overflow:hidden; margin-bottom:8px;">
     <div style="width:{pa}%; height:100%; background:{color_a}; border-radius:4px;"></div>
   </div>
   <div style="display:flex; justify-content:space-between; margin-bottom:4px; color:#475569;">
     <span>{label_b}</span><strong style="color:#0f172a">{vb}{unit}</strong>
   </div>
-  <div style="height:8px; background:#f1f5f9; border-radius:4px; overflow:hidden;">
+  <div style="height:8px; background:#f4f7fa; border-radius:4px; overflow:hidden;">
     <div style="width:{pb}%; height:100%; background:{color_b}; border-radius:4px;"></div>
   </div>
 </div>"##,
@@ -194,7 +194,7 @@ pub fn svg_gauge(
     let val_a = 180.0 - pct * 180.0;
     let (cx_s, cy_s, r_s) = (pyf(cx), pyf(cy), pyf(r));
     let bg = format!(
-        r##"<path d="M {a},{cy_s} A {r_s},{r_s} 0 0 1 {b},{cy_s}" fill="none" stroke="#e2e8f0" stroke-width="14" stroke-linecap="round"/>"##,
+        r##"<path d="M {a},{cy_s} A {r_s},{r_s} 0 0 1 {b},{cy_s}" fill="none" stroke="#e7ecf2" stroke-width="14" stroke-linecap="round"/>"##,
         a = pyf(cx - r),
         b = pyf(cx + r)
     );
@@ -234,7 +234,7 @@ pub fn svg_radar(labels: &[String], values: &[f64], max_val: f64, size: f64) -> 
         let x = cx + r * a.cos();
         let y = cy + r * a.sin();
         axes.push(format!(
-            r##"<line x1="{cx_s}" y1="{cy_s}" x2="{}" y2="{}" stroke="#e2e8f0" stroke-width="1"/>"##,
+            r##"<line x1="{cx_s}" y1="{cy_s}" x2="{}" y2="{}" stroke="#e7ecf2" stroke-width="1"/>"##,
             pyf(x),
             pyf(y)
         ));
@@ -249,7 +249,7 @@ pub fn svg_radar(labels: &[String], values: &[f64], max_val: f64, size: f64) -> 
     for ring in [0.33_f64, 0.66, 1.0] {
         let ring_r = r * ring;
         axes.push(format!(
-            r##"<circle cx="{cx_s}" cy="{cy_s}" r="{}" fill="none" stroke="#f1f5f9"/>"##,
+            r##"<circle cx="{cx_s}" cy="{cy_s}" r="{}" fill="none" stroke="#f4f7fa"/>"##,
             pyf(ring_r)
         ));
     }
@@ -309,17 +309,17 @@ pub fn svg_supply_flow(upstream: &str, company: &str, downstream: &str) -> Strin
     let downstream = trunc(downstream, 50);
     format!(
         r##"<div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:8px;align-items:center;font-family:Fira Sans;overflow:hidden">
-  <div style="padding:10px 12px;background:#cffafe;border:1px solid #0891b2;border-radius:8px;text-align:center;overflow:hidden">
-    <div style="font-size:9px;color:#0891b2;letter-spacing:.1em;margin-bottom:4px">UPSTREAM</div>
+  <div style="padding:10px 12px;background:#eef4ff;border:1px solid #2563eb;border-radius:8px;text-align:center;overflow:hidden">
+    <div style="font-size:9px;color:#2563eb;letter-spacing:.1em;margin-bottom:4px">UPSTREAM</div>
     <div style="font-size:11px;font-weight:600;color:#0f172a;line-height:1.4;word-break:break-all;overflow-wrap:break-word">{upstream}</div>
   </div>
-  <div style="font-size:18px;color:#0891b2;flex-shrink:0">→</div>
-  <div style="padding:10px 12px;background:#fef3c7;border:2px solid #d97706;border-radius:8px;text-align:center;overflow:hidden">
+  <div style="font-size:18px;color:#2563eb;flex-shrink:0">→</div>
+  <div style="padding:10px 12px;background:#fffaeb;border:2px solid #d97706;border-radius:8px;text-align:center;overflow:hidden">
     <div style="font-size:9px;color:#d97706;letter-spacing:.1em;margin-bottom:4px">COMPANY</div>
     <div style="font-size:11px;font-weight:700;color:#0f172a;line-height:1.4">{company}</div>
   </div>
-  <div style="font-size:18px;color:#0891b2;flex-shrink:0">→</div>
-  <div style="padding:10px 12px;background:#d1fae5;border:1px solid #059669;border-radius:8px;text-align:center;overflow:hidden">
+  <div style="font-size:18px;color:#2563eb;flex-shrink:0">→</div>
+  <div style="padding:10px 12px;background:#ecfdf5;border:1px solid #059669;border-radius:8px;text-align:center;overflow:hidden">
     <div style="font-size:9px;color:#059669;letter-spacing:.1em;margin-bottom:4px">DOWNSTREAM</div>
     <div style="font-size:11px;font-weight:600;color:#0f172a;line-height:1.4;word-break:break-all;overflow-wrap:break-word">{downstream}</div>
   </div>
@@ -336,12 +336,12 @@ pub fn svg_timeline(events: &[String]) -> String {
         .iter()
         .map(|ev| {
             format!(
-                r##"<div style="display:flex;gap:10px;padding:8px 0"><div style="width:10px;height:10px;border-radius:50%;background:{COLOR_GOLD};margin-top:4px;flex-shrink:0;box-shadow:0 0 0 3px #fef3c7"></div><div style="font-size:11px;color:#1e293b;line-height:1.5">{ev}</div></div>"##
+                r##"<div style="display:flex;gap:10px;padding:8px 0"><div style="width:10px;height:10px;border-radius:50%;background:{COLOR_GOLD};margin-top:4px;flex-shrink:0;box-shadow:0 0 0 3px #fffaeb"></div><div style="font-size:11px;color:#1e293b;line-height:1.5">{ev}</div></div>"##
             )
         })
         .collect();
     format!(
-        r##"<div style="border-left:2px solid #e2e8f0;padding-left:12px;margin-left:5px">{items}</div>"##
+        r##"<div style="border-left:2px solid #e7ecf2;padding-left:12px;margin-left:5px">{items}</div>"##
     )
 }
 
@@ -408,7 +408,7 @@ pub fn svg_bars(
 
     let y_zero = pad_t + chart_h - (0.0 - min_v) / span * chart_h;
     let axis = format!(
-        r##"<line x1="{pad_l}" y1="{y_zero:.1}" x2="{}" y2="{y_zero:.1}" stroke="#cbd5e1" stroke-width="1"/>"##,
+        r##"<line x1="{pad_l}" y1="{y_zero:.1}" x2="{}" y2="{y_zero:.1}" stroke="#d7dfe9" stroke-width="1"/>"##,
         pad_l + chart_w
     );
 
@@ -505,7 +505,7 @@ pub fn svg_candlestick(
     for ring in [0.25_f64, 0.5, 0.75] {
         let yg = pad_t + chart_h * ring;
         elems.push(format!(
-            r##"<line x1="{pad_l}" y1="{yg:.1}" x2="{}" y2="{yg:.1}" stroke="#f1f5f9" stroke-width="1"/>"##,
+            r##"<line x1="{pad_l}" y1="{yg:.1}" x2="{}" y2="{yg:.1}" stroke="#f4f7fa" stroke-width="1"/>"##,
             pad_l + chart_w
         ));
     }
@@ -617,9 +617,9 @@ pub fn svg_pe_band(pe_history: &[Value], width: i64, height: i64) -> String {
     let y75 = y_of(p75);
     let bands_svg = format!(
         r##"
-  <rect x="{pad_l}" y="{pad_t}" width="{w}" height="{h1:.1}" fill="#fee2e2" opacity="0.5"/>
-  <rect x="{pad_l}" y="{y75:.1}" width="{w}" height="{h2:.1}" fill="#fef3c7" opacity="0.5"/>
-  <rect x="{pad_l}" y="{y25:.1}" width="{w}" height="{h3:.1}" fill="#d1fae5" opacity="0.5"/>
+  <rect x="{pad_l}" y="{pad_t}" width="{w}" height="{h1:.1}" fill="#fef3f2" opacity="0.5"/>
+  <rect x="{pad_l}" y="{y75:.1}" width="{w}" height="{h2:.1}" fill="#fffaeb" opacity="0.5"/>
+  <rect x="{pad_l}" y="{y25:.1}" width="{w}" height="{h3:.1}" fill="#ecfdf5" opacity="0.5"/>
   <line x1="{pad_l}" y1="{y25:.1}" x2="{x2}" y2="{y25:.1}" stroke="#059669" stroke-width="1" stroke-dasharray="3,3"/>
   <line x1="{pad_l}" y1="{y50:.1}" x2="{x2}" y2="{y50:.1}" stroke="#64748b" stroke-width="1" stroke-dasharray="3,3"/>
   <line x1="{pad_l}" y1="{y75:.1}" x2="{x2}" y2="{y75:.1}" stroke="#dc2626" stroke-width="1" stroke-dasharray="3,3"/>
@@ -674,7 +674,7 @@ pub fn svg_progress_row(label: &str, pct: f64, color: &str, suffix: &str) -> Str
     format!(
         r##"<div style="display:flex;align-items:center;gap:10px;margin:6px 0">
   <div style="width:70px;font-family:Fira Code;font-size:10px;color:#64748b">{label}</div>
-  <div style="flex:1;height:8px;background:#f1f5f9;border-radius:4px;overflow:hidden">
+  <div style="flex:1;height:8px;background:#f4f7fa;border-radius:4px;overflow:hidden">
     <div style="width:{pct_clamped}%;height:100%;background:{color};border-radius:4px"></div>
   </div>
   <div style="min-width:50px;text-align:right;font-family:Fira Code;font-size:11px;color:#0f172a;font-weight:700">{pct:.1}{suffix}</div>
@@ -687,18 +687,18 @@ pub fn svg_peer_table(rows: &[Value]) -> String {
     if rows.is_empty() {
         return String::new();
     }
-    let head = r##"<tr style="background:#f8fafc">
-  <th style="text-align:left;padding:8px 10px;font-family:Fira Code;font-size:9px;color:#64748b;font-weight:700;border-bottom:2px solid #e2e8f0">公司</th>
-  <th style="text-align:right;padding:8px 10px;font-family:Fira Code;font-size:9px;color:#64748b;font-weight:700;border-bottom:2px solid #e2e8f0">PE</th>
-  <th style="text-align:right;padding:8px 10px;font-family:Fira Code;font-size:9px;color:#64748b;font-weight:700;border-bottom:2px solid #e2e8f0">PB</th>
-  <th style="text-align:right;padding:8px 10px;font-family:Fira Code;font-size:9px;color:#64748b;font-weight:700;border-bottom:2px solid #e2e8f0">ROE</th>
-  <th style="text-align:right;padding:8px 10px;font-family:Fira Code;font-size:9px;color:#64748b;font-weight:700;border-bottom:2px solid #e2e8f0">营收增速</th>
+    let head = r##"<tr style="background:#f7f9fc">
+  <th style="text-align:left;padding:8px 10px;font-family:Fira Code;font-size:9px;color:#64748b;font-weight:700;border-bottom:2px solid #e7ecf2">公司</th>
+  <th style="text-align:right;padding:8px 10px;font-family:Fira Code;font-size:9px;color:#64748b;font-weight:700;border-bottom:2px solid #e7ecf2">PE</th>
+  <th style="text-align:right;padding:8px 10px;font-family:Fira Code;font-size:9px;color:#64748b;font-weight:700;border-bottom:2px solid #e7ecf2">PB</th>
+  <th style="text-align:right;padding:8px 10px;font-family:Fira Code;font-size:9px;color:#64748b;font-weight:700;border-bottom:2px solid #e7ecf2">ROE</th>
+  <th style="text-align:right;padding:8px 10px;font-family:Fira Code;font-size:9px;color:#64748b;font-weight:700;border-bottom:2px solid #e7ecf2">营收增速</th>
 </tr>"##;
     let mut body = String::new();
     for r in rows {
         let is_self = uzi_core::py::truthy(r.get("is_self").unwrap_or(&Value::Bool(false)));
         let row_style = if is_self {
-            "background:#fef3c7;font-weight:700"
+            "background:#fffaeb;font-weight:700"
         } else {
             "background:#ffffff"
         };
@@ -711,11 +711,11 @@ pub fn svg_peer_table(rows: &[Value]) -> String {
         };
         body.push_str(&format!(
             r##"<tr style="{row_style}">
-  <td style="padding:8px 10px;font-family:Fira Sans;font-size:12px;color:#0f172a;border-bottom:1px solid #f1f5f9">{star}{name}</td>
-  <td style="text-align:right;padding:8px 10px;font-family:Fira Code;font-size:11px;color:#0f172a;border-bottom:1px solid #f1f5f9">{pe}</td>
-  <td style="text-align:right;padding:8px 10px;font-family:Fira Code;font-size:11px;color:#0f172a;border-bottom:1px solid #f1f5f9">{pb}</td>
-  <td style="text-align:right;padding:8px 10px;font-family:Fira Code;font-size:11px;color:#0f172a;border-bottom:1px solid #f1f5f9">{roe}</td>
-  <td style="text-align:right;padding:8px 10px;font-family:Fira Code;font-size:11px;color:#0f172a;border-bottom:1px solid #f1f5f9">{rg}</td>
+  <td style="padding:8px 10px;font-family:Fira Sans;font-size:12px;color:#0f172a;border-bottom:1px solid #f4f7fa">{star}{name}</td>
+  <td style="text-align:right;padding:8px 10px;font-family:Fira Code;font-size:11px;color:#0f172a;border-bottom:1px solid #f4f7fa">{pe}</td>
+  <td style="text-align:right;padding:8px 10px;font-family:Fira Code;font-size:11px;color:#0f172a;border-bottom:1px solid #f4f7fa">{pb}</td>
+  <td style="text-align:right;padding:8px 10px;font-family:Fira Code;font-size:11px;color:#0f172a;border-bottom:1px solid #f4f7fa">{roe}</td>
+  <td style="text-align:right;padding:8px 10px;font-family:Fira Code;font-size:11px;color:#0f172a;border-bottom:1px solid #f4f7fa">{rg}</td>
 </tr>"##,
             name = getv("name"),
             pe = getv("pe"),
@@ -770,7 +770,7 @@ pub fn svg_unlock_timeline(unlocks: &[Value], width: i64, height: i64) -> String
         ));
     }
     let axis = format!(
-        r##"<line x1="{pad_l}" y1="{}" x2="{}" y2="{}" stroke="#cbd5e1"/>"##,
+        r##"<line x1="{pad_l}" y1="{}" x2="{}" y2="{}" stroke="#d7dfe9"/>"##,
         pad_t + h,
         pad_l + w,
         pad_t + h
@@ -945,7 +945,7 @@ pub fn svg_thermometer(value: i64, max_val: i64, label: &str) -> String {
     };
     format!(
         r##"<div style="display:flex;align-items:center;gap:14px">
-  <div style="width:24px;height:120px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:12px;position:relative;overflow:hidden">
+  <div style="width:24px;height:120px;background:#f4f7fa;border:1px solid #d7dfe9;border-radius:12px;position:relative;overflow:hidden">
     <div style="position:absolute;bottom:0;left:0;right:0;height:{pct_s}%;background:linear-gradient(0deg,{color},{color}cc);border-radius:0 0 12px 12px;transition:height 1s"></div>
   </div>
   <div>

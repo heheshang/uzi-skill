@@ -218,9 +218,9 @@ pub fn generate_summary_html(
             match report_paths.get(index) {
                 Some(path) => {
                     let rel = relpath(Path::new(path), &out_dir);
-                    format!("<a href=\"{rel}\" target=\"_blank\" style=\"color:#0891b2\">查看报告 →</a>")
+                    format!("<a href=\"{rel}\" target=\"_blank\" style=\"color:#2563eb\">查看报告 →</a>")
                 }
-                None => "<span style=\"color:#9ca3af\">报告路径异常</span>".to_string(),
+                None => "<span style=\"color:#94a3b8\">报告路径异常</span>".to_string(),
             }
         } else if let Some(entry) = failed
             .iter()
@@ -229,7 +229,7 @@ pub fn generate_summary_html(
             let err = crate::versus::safe_text(uzi_core::py::get(entry, "error"), "");
             format!("<span style=\"color:#dc2626\" title=\"{err}\">❌ 失败</span>")
         } else {
-            "<span style=\"color:#9ca3af\">未分析</span>".to_string()
+            "<span style=\"color:#94a3b8\">未分析</span>".to_string()
         };
         rows.push(format!(
             "<tr><td>{}</td><td><strong>{name}</strong></td><td><code>{code}</code></td><td>{weight_str}</td><td>{status_html}</td></tr>",

@@ -79,7 +79,7 @@ pub fn render_segmental_block(ticker: &str) -> String {
         }
     };
     let growth_badge = format!(
-        r##"<span style="background:#0891b2;color:#fff;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:700">📈 Bottom-Up Base 3Y 总增速 {b:+.1}% (CAGR {c:+.1}%)</span>"##,
+        r##"<span style="background:#2563eb;color:#fff;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:700">📈 Bottom-Up Base 3Y 总增速 {b:+.1}% (CAGR {c:+.1}%)</span>"##,
         b = base_3y,
         c = base_3y_cagr
     );
@@ -138,7 +138,7 @@ pub fn render_segmental_block(ticker: &str) -> String {
 
     let thesis_icons: &[(&str, &str, &str, &str)] = &[
         ("cash_cow", "💰", "#059669", "稳定现金牛"),
-        ("growth_engine", "🚀", "#0891b2", "成长引擎"),
+        ("growth_engine", "🚀", "#2563eb", "成长引擎"),
         ("declining", "📉", "#dc2626", "衰退中"),
         ("cyclical", "🔄", "#d97706", "周期波动"),
         ("turnaround", "🔁", "#7c3aed", "困境反转"),
@@ -428,7 +428,7 @@ pub fn svg_segment_donut(segments: &[Value], _currency: &str, size: i64) -> Stri
         return format!(r##"<svg width="{size}" height="{size}"></svg>"##);
     }
     let palette = [
-        "#0891b2", "#d97706", "#059669", "#7c3aed", "#dc2626", "#db2777", "#64748b",
+        "#2563eb", "#d97706", "#059669", "#7c3aed", "#dc2626", "#db2777", "#64748b",
     ];
     let cx = size as f64 / 2.0;
     let cy = cx;
@@ -480,7 +480,7 @@ pub fn svg_segment_donut(segments: &[Value], _currency: &str, size: i64) -> Stri
             };
             let name: String = disp(s.get("name").unwrap_or(&Value::Null)).chars().take(8).collect();
             labels.push(format!(
-                r##"<text x="{lx:.1}" y="{ly:.1}" text-anchor="{anchor}" font-size="10" fill="#374151" font-weight="600">{name}</text>"##
+                r##"<text x="{lx:.1}" y="{ly:.1}" text-anchor="{anchor}" font-size="10" fill="#475569" font-weight="600">{name}</text>"##
             ));
         }
         start_angle = end_angle;
@@ -575,7 +575,7 @@ pub fn svg_segment_projection(segments: &[Value], rev_hist: &[Value], width: i64
         let y = pad + frac * chart_h;
         let v = ymax - frac * span;
         grid.push_str(&format!(
-            r##"<line x1="{pad}" y1="{y:.1}" x2="{x2}" y2="{y:.1}" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="2,2"/><text x="{lx}" y="{y:.1}" text-anchor="end" font-size="9" fill="#94a3b8" dy="3">{v:.0}</text>"##,
+            r##"<line x1="{pad}" y1="{y:.1}" x2="{x2}" y2="{y:.1}" stroke="#e7ecf2" stroke-width="1" stroke-dasharray="2,2"/><text x="{lx}" y="{y:.1}" text-anchor="end" font-size="9" fill="#94a3b8" dy="3">{v:.0}</text>"##,
             x2 = width as f64 - 20.0,
             lx = pad - 6.0
         ));

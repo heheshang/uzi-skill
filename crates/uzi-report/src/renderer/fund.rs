@@ -158,14 +158,14 @@ impl FundRenderer {
         let dd_color = if max_dd > -20.0 {
             "#16a34a"
         } else if max_dd > -40.0 {
-            "#f59e0b"
+            "#d97706"
         } else {
             "#dc2626"
         };
         let sharpe_color = if sharpe > 1.0 {
             "#16a34a"
         } else if sharpe > 0.5 {
-            "#f59e0b"
+            "#d97706"
         } else {
             "#dc2626"
         };
@@ -181,7 +181,7 @@ impl FundRenderer {
                 "?".to_string()
             };
             format!(
-                r##"<div style="width:54px;height:54px;background:#fef3c7;border:2px solid #d97706;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:Fira Sans;font-size:20px;font-weight:900;color:#d97706;flex-shrink:0">{initial}</div>"##
+                r##"<div style="width:54px;height:54px;background:#fffaeb;border:2px solid #d97706;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:Fira Sans;font-size:20px;font-weight:900;color:#d97706;flex-shrink:0">{initial}</div>"##
             )
         };
 
@@ -234,11 +234,11 @@ impl FundRenderer {
         };
 
         let badge_style = if rank <= 3 {
-            "background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff"
+            "background:linear-gradient(135deg,#d97706,#d97706);color:#fff"
         } else if rank <= 10 {
-            "background:#e2e8f0;color:#475569"
+            "background:#e7ecf2;color:#475569"
         } else {
-            "background:#f1f5f9;color:#64748b"
+            "background:#f4f7fa;color:#64748b"
         };
 
         let avatar_html = if !avatar.is_empty() {

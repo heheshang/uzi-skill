@@ -102,7 +102,7 @@ pub fn viz_chain(raw: &Value) -> String {
         || (raw.get("supplier_concentration").map(uzi_core::py::truthy).unwrap_or(false))
     {
         extras = format!(
-            r##"<div style="display:flex;justify-content:space-around;margin-top:10px;padding:10px;background:#ffffff;border:1px solid #e2e8f0;border-radius:6px;font-family:Fira Code;font-size:11px;color:#475569">
+            r##"<div style="display:flex;justify-content:space-around;margin-top:10px;padding:10px;background:#ffffff;border:1px solid #e7ecf2;border-radius:6px;font-family:Fira Code;font-size:11px;color:#475569">
   <span>🔧 供应商 <strong style="color:#0f172a">{supplier_conc}</strong></span>
   <span>🎯 大客户 <strong style="color:#0f172a">{client_conc}</strong></span>
 </div>"##
@@ -127,7 +127,7 @@ pub fn viz_chain(raw: &Value) -> String {
             })
             .collect();
         if !segments.is_empty() {
-            pie.push_str(r##"<div style="margin-top:12px;padding-top:10px;border-top:1px solid #e2e8f0">"##);
+            pie.push_str(r##"<div style="margin-top:12px;padding-top:10px;border-top:1px solid #e7ecf2">"##);
             pie.push_str(r##"<div style="font-family:Fira Code;font-size:10px;color:#64748b;margin-bottom:8px">🥧 主营业务构成</div>"##);
             pie.push_str(&svg_donut(&segments, None, "主营", 120));
             pie.push_str("</div>");
@@ -175,16 +175,16 @@ pub fn viz_valuation(raw: &Value) -> String {
     }
 
     viz.push_str(&format!(
-        r##"<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid #e2e8f0;text-align:center">
-  <div style="padding:8px;background:#ffffff;border:1px solid #e2e8f0;border-radius:6px">
+        r##"<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid #e7ecf2;text-align:center">
+  <div style="padding:8px;background:#ffffff;border:1px solid #e7ecf2;border-radius:6px">
     <div style="font-family:Fira Code;font-size:9px;color:#64748b">当前 PE</div>
     <div style="font-family:Fira Sans;font-size:16px;color:#0f172a;font-weight:700">{pe}</div>
   </div>
-  <div style="padding:8px;background:#ffffff;border:1px solid #e2e8f0;border-radius:6px">
+  <div style="padding:8px;background:#ffffff;border:1px solid #e7ecf2;border-radius:6px">
     <div style="font-family:Fira Code;font-size:9px;color:#64748b">行业均值</div>
     <div style="font-family:Fira Sans;font-size:16px;color:#0f172a;font-weight:700">{industry_pe}</div>
   </div>
-  <div style="padding:8px;background:#ffffff;border:1px solid #e2e8f0;border-radius:6px">
+  <div style="padding:8px;background:#ffffff;border:1px solid #e7ecf2;border-radius:6px">
     <div style="font-family:Fira Code;font-size:9px;color:#64748b">DCF 内在</div>
     <div style="font-family:Fira Sans;font-size:16px;color:#0f172a;font-weight:700">{dcf}</div>
   </div>
@@ -197,7 +197,7 @@ pub fn viz_valuation(raw: &Value) -> String {
     let values_matrix = alist(&dcf_matrix, "values");
     if !waccs.is_empty() && !growths.is_empty() && !values_matrix.is_empty() {
         let current_price = num(dcf_matrix.get("current_price").unwrap_or(&Value::Number(0.into())));
-        viz.push_str(r##"<div style="margin-top:12px;padding-top:10px;border-top:1px solid #e2e8f0">"##);
+        viz.push_str(r##"<div style="margin-top:12px;padding-top:10px;border-top:1px solid #e7ecf2">"##);
         viz.push_str(r##"<div style="font-family:Fira Code;font-size:10px;color:#64748b;margin-bottom:6px">🧮 DCF 敏感度矩阵 (行=WACC, 列=增长率)</div>"##);
         viz.push_str(r##"<table style="width:100%;border-collapse:collapse;font-family:Fira Code;font-size:10px">"##);
         let mut header = String::from("<tr><td></td>");
@@ -310,7 +310,7 @@ pub fn viz_financials(raw: &Value) -> String {
         };
         let spark = svg_sparkline(values, 150, 30, color, true);
         format!(
-            r##"<div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-top:1px solid #f1f5f9">
+            r##"<div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-top:1px solid #f4f7fa">
   <div style="width:52px;font-family:Fira Code;font-size:10px;color:#64748b">{label}</div>
   <div style="flex:1">{spark}</div>
   <div style="font-family:Fira Code;font-size:11px;text-align:right;min-width:72px">
@@ -332,7 +332,7 @@ pub fn viz_financials(raw: &Value) -> String {
     let div_amounts = alist(raw, "dividend_amounts");
     let div_yields = alist(raw, "dividend_yields");
     if !div_years.is_empty() && !div_amounts.is_empty() {
-        viz.push_str(r##"<div style="margin-top:12px;padding-top:10px;border-top:1px solid #e2e8f0">"##);
+        viz.push_str(r##"<div style="margin-top:12px;padding-top:10px;border-top:1px solid #e7ecf2">"##);
         viz.push_str(r##"<div style="font-family:Fira Code;font-size:10px;color:#64748b;margin-bottom:4px">💰 分红（元/10股）· 金线=股息率 %</div>"##);
         viz.push_str(&svg_dividend_combo(&div_years, &div_amounts, &div_yields, 320, 130));
         viz.push_str("</div>");
@@ -340,7 +340,7 @@ pub fn viz_financials(raw: &Value) -> String {
 
     let health = raw.get("financial_health").cloned().unwrap_or(Value::Null);
     if uzi_core::py::truthy(&health) {
-        viz.push_str(r##"<div style="margin-top:12px;padding-top:10px;border-top:1px solid #e2e8f0">"##);
+        viz.push_str(r##"<div style="margin-top:12px;padding-top:10px;border-top:1px solid #e7ecf2">"##);
         viz.push_str(r##"<div style="font-family:Fira Code;font-size:10px;color:#64748b;margin-bottom:6px">💪 财务健康度</div>"##);
         for (k, label, max_v, good_high) in [
             ("current_ratio", "流动比率", 3.0_f64, true),
@@ -400,10 +400,10 @@ pub fn viz_kline(raw: &Value) -> String {
 
     let mut badges = format!(
         r##"<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px">
-  <span style="padding:4px 10px;background:#fef3c7;color:#d97706;border-radius:4px;font-family:Fira Code;font-size:11px;font-weight:600">{stage}</span>
-  <span style="padding:4px 10px;background:#cffafe;color:#0891b2;border-radius:4px;font-family:Fira Code;font-size:11px;font-weight:600">MA {ma_align}</span>
-  <span style="padding:4px 10px;background:#d1fae5;color:#059669;border-radius:4px;font-family:Fira Code;font-size:11px;font-weight:600">MACD {macd}</span>
-  <span style="padding:4px 10px;background:#e0e7ff;color:#4f46e5;border-radius:4px;font-family:Fira Code;font-size:11px;font-weight:600">RSI {rsi}</span>"##
+  <span style="padding:4px 10px;background:#fffaeb;color:#d97706;border-radius:4px;font-family:Fira Code;font-size:11px;font-weight:600">{stage}</span>
+  <span style="padding:4px 10px;background:#eef4ff;color:#2563eb;border-radius:4px;font-family:Fira Code;font-size:11px;font-weight:600">MA {ma_align}</span>
+  <span style="padding:4px 10px;background:#ecfdf5;color:#059669;border-radius:4px;font-family:Fira Code;font-size:11px;font-weight:600">MACD {macd}</span>
+  <span style="padding:4px 10px;background:#eef4ff;color:#4f46e5;border-radius:4px;font-family:Fira Code;font-size:11px;font-weight:600">RSI {rsi}</span>"##
     );
     let ind = raw.get("indicators").cloned().unwrap_or(Value::Null);
     if let Some(kj) = ind.get("kdj_j").filter(|v| !v.is_null()) {
@@ -429,7 +429,7 @@ pub fn viz_kline(raw: &Value) -> String {
             "#64748b"
         };
         badges.push_str(&format!(
-            r##"<span style="padding:4px 10px;background:#f1f5f9;color:{wc};border-radius:4px;font-family:Fira Code;font-size:11px;font-weight:600">W%R {wrf:.0}</span>"##
+            r##"<span style="padding:4px 10px;background:#f4f7fa;color:{wc};border-radius:4px;font-family:Fira Code;font-size:11px;font-weight:600">W%R {wrf:.0}</span>"##
         ));
     }
     if let Some(obv) = ind.get("obv_trend_up").filter(|v| !v.is_null()) {
@@ -460,7 +460,7 @@ pub fn viz_kline(raw: &Value) -> String {
         }
         if !stat_items.is_empty() {
             badges.push_str(&format!(
-                r##"<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid #e2e8f0">{}</div>"##,
+                r##"<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid #e7ecf2">{}</div>"##,
                 stat_items.concat()
             ));
         }
@@ -481,7 +481,7 @@ pub fn viz_macro(raw: &Value) -> String {
         .iter()
         .map(|(l, v, ic)| {
             format!(
-                r##"<div style="padding:10px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;text-align:center"><div style="font-size:18px;margin-bottom:4px">{ic}</div><div style="font-family:Fira Code;font-size:9px;color:#64748b;letter-spacing:.1em">{l}</div><div style="font-family:Fira Sans;font-size:11px;color:#0f172a;font-weight:600;margin-top:2px">{v}</div></div>"##
+                r##"<div style="padding:10px;background:#ffffff;border:1px solid #e7ecf2;border-radius:8px;text-align:center"><div style="font-size:18px;margin-bottom:4px">{ic}</div><div style="font-family:Fira Code;font-size:9px;color:#64748b;letter-spacing:.1em">{l}</div><div style="font-family:Fira Sans;font-size:11px;color:#0f172a;font-weight:600;margin-top:2px">{v}</div></div>"##
             )
         })
         .collect();
@@ -500,7 +500,7 @@ pub fn viz_peers(raw: &Value) -> String {
 
     let metrics = alist(raw, "peer_comparison");
     if !metrics.is_empty() {
-        viz.push_str(r##"<div style="margin-top:12px;padding-top:10px;border-top:1px solid #e2e8f0">"##);
+        viz.push_str(r##"<div style="margin-top:12px;padding-top:10px;border-top:1px solid #e7ecf2">"##);
         viz.push_str(r##"<div style="font-family:Fira Code;font-size:10px;color:#64748b;margin-bottom:6px">📊 关键指标 vs 行业均值</div>"##);
         for m in metrics.iter().take(4) {
             let name = disp(m.get("name").unwrap_or(&Value::String(String::new())));
@@ -538,7 +538,7 @@ pub fn viz_peers(raw: &Value) -> String {
     <span>{name}</span>
     <span><strong style="color:#0f172a">自己 {sv}</strong> vs 行业 {pv}</span>
   </div>
-  <div style="position:relative;height:10px;background:#f1f5f9;border-radius:5px">
+  <div style="position:relative;height:10px;background:#f4f7fa;border-radius:5px">
     <div style="position:absolute;height:100%;width:{pp}%;background:{COLOR_MUTED};border-radius:5px;opacity:.6"></div>
     <div style="position:absolute;height:100%;width:{sp}%;background:{self_color};border-radius:5px"></div>
   </div>
@@ -626,7 +626,7 @@ pub fn viz_research(raw: &Value) -> String {
         };
     }
     let tail = format!(
-        r##"<div style="display:flex;justify-content:space-between;margin-top:10px;padding:8px;background:#fef3c7;border-radius:6px">
+        r##"<div style="display:flex;justify-content:space-between;margin-top:10px;padding:8px;background:#fffaeb;border-radius:6px">
   <span style="font-family:Fira Code;font-size:10px;color:#64748b">一致目标价</span>
   <span style="font-family:Fira Code;font-size:12px;color:#d97706;font-weight:700">{ta} ({up})</span>
 </div>"##,
@@ -652,15 +652,15 @@ pub fn viz_industry(raw: &Value) -> String {
     );
     let tail = format!(
         r##"<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px;text-align:center">
-  <div style="padding:6px;background:#ffffff;border:1px solid #e2e8f0;border-radius:6px">
+  <div style="padding:6px;background:#ffffff;border:1px solid #e7ecf2;border-radius:6px">
     <div style="font-family:Fira Code;font-size:9px;color:#64748b">TAM</div>
     <div style="font-family:Fira Sans;font-size:13px;font-weight:700;color:#0f172a">{tam}</div>
   </div>
-  <div style="padding:6px;background:#ffffff;border:1px solid #e2e8f0;border-radius:6px">
+  <div style="padding:6px;background:#ffffff;border:1px solid #e7ecf2;border-radius:6px">
     <div style="font-family:Fira Code;font-size:9px;color:#64748b">渗透率</div>
     <div style="font-family:Fira Sans;font-size:13px;font-weight:700;color:#0f172a">{penetration}</div>
   </div>
-  <div style="padding:6px;background:#ffffff;border:1px solid #e2e8f0;border-radius:6px">
+  <div style="padding:6px;background:#ffffff;border:1px solid #e7ecf2;border-radius:6px">
     <div style="font-family:Fira Code;font-size:9px;color:#64748b">周期</div>
     <div style="font-family:Fira Sans;font-size:11px;font-weight:700;color:#0f172a">{lifecycle}</div>
   </div>
@@ -698,7 +698,7 @@ pub fn viz_futures(raw: &Value) -> String {
     let linked = disp(raw.get("linked_contract").unwrap_or(&Value::String("—".into())));
     let trend = disp(raw.get("contract_trend").unwrap_or(&Value::String("—".into())));
     format!(
-        r##"<div style="padding:16px;text-align:center;background:#ffffff;border:1px dashed #cbd5e1;border-radius:8px">
+        r##"<div style="padding:16px;text-align:center;background:#ffffff;border:1px dashed #d7dfe9;border-radius:8px">
   <div style="font-family:Fira Code;font-size:9px;color:#64748b;letter-spacing:.15em">LINKED CONTRACT</div>
   <div style="font-family:Fira Sans;font-size:16px;color:#0f172a;font-weight:700;margin-top:4px">{linked}</div>
   <div style="font-size:11px;color:#475569;margin-top:4px">{trend}</div>
@@ -770,11 +770,11 @@ pub fn viz_governance(raw: &Value) -> String {
             COLOR_GOLD
         };
         let bg = if positive == Some(true) {
-            "#d1fae5"
+            "#ecfdf5"
         } else if positive == Some(false) {
-            "#fee2e2"
+            "#fef3f2"
         } else {
-            "#fef3c7"
+            "#fffaeb"
         };
         format!(
             r##"<div style="padding:10px 12px;background:{bg};border-left:3px solid {color};border-radius:0 8px 8px 0">
@@ -796,7 +796,7 @@ pub fn viz_capital_flow(raw: &Value) -> String {
         let summary = safe(&Value::String(summary.to_string()), "数据暂缺");
         if values.len() < 2 {
             return format!(
-                r##"<div style="padding:10px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px">
+                r##"<div style="padding:10px;background:#ffffff;border:1px solid #e7ecf2;border-radius:8px">
   <div style="font-family:Fira Code;font-size:9px;color:#64748b">{label}</div>
   <div style="font-family:Fira Code;font-size:12px;font-weight:700;color:#64748b;margin-top:2px">{summary}</div>
 </div>"##
@@ -805,7 +805,7 @@ pub fn viz_capital_flow(raw: &Value) -> String {
         let vals: Vec<Value> = values.iter().map(|v| Value::from(*v)).collect();
         let spark = svg_sparkline(&vals, 120, 34, color, true);
         format!(
-            r##"<div style="padding:10px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px">
+            r##"<div style="padding:10px;background:#ffffff;border:1px solid #e7ecf2;border-radius:8px">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
     <span style="font-family:Fira Code;font-size:9px;color:#64748b">{label}</span>
     <strong style="font-family:Fira Code;font-size:10px;color:#0f172a">{summary}</strong>
@@ -881,7 +881,7 @@ pub fn viz_capital_flow(raw: &Value) -> String {
 
     let inst = raw.get("institutional_history").cloned().unwrap_or(Value::Null);
     if uzi_core::py::truthy(inst.get("quarters").unwrap_or(&Value::Null)) {
-        viz.push_str(r##"<div style="margin-top:12px;padding-top:10px;border-top:1px solid #e2e8f0">"##);
+        viz.push_str(r##"<div style="margin-top:12px;padding-top:10px;border-top:1px solid #e7ecf2">"##);
         viz.push_str(r##"<div style="font-family:Fira Code;font-size:10px;color:#64748b;margin-bottom:4px">🏛 机构持仓变化（近 8 季）</div>"##);
         viz.push_str(&svg_institutional_quarters(&inst, 320, 120));
         viz.push_str("</div>");
@@ -889,7 +889,7 @@ pub fn viz_capital_flow(raw: &Value) -> String {
 
     let unlocks = alist(raw, "unlock_schedule");
     if !unlocks.is_empty() {
-        viz.push_str(r##"<div style="margin-top:12px;padding-top:10px;border-top:1px solid #e2e8f0">"##);
+        viz.push_str(r##"<div style="margin-top:12px;padding-top:10px;border-top:1px solid #e7ecf2">"##);
         viz.push_str(r##"<div style="font-family:Fira Code;font-size:10px;color:#64748b;margin-bottom:4px">🔓 未来 12 月解禁时间表（亿元）</div>"##);
         viz.push_str(&svg_unlock_timeline(&unlocks, 320, 110));
         viz.push_str("</div>");
@@ -909,11 +909,11 @@ pub fn viz_policy(raw: &Value) -> String {
     for (label, val, positive) in items {
         if val == "—" || val == "不适用" || val == "无" || val == "数据暂缺" {
             cells.push_str(&format!(
-                r##"<div style="padding:10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px"><div style="font-family:Fira Code;font-size:9px;color:#94a3b8">{label}</div><div style="font-size:11px;color:#94a3b8;margin-top:2px">{val}</div></div>"##
+                r##"<div style="padding:10px;background:#f7f9fc;border:1px solid #e7ecf2;border-radius:8px"><div style="font-family:Fira Code;font-size:9px;color:#94a3b8">{label}</div><div style="font-size:11px;color:#94a3b8;margin-top:2px">{val}</div></div>"##
             ));
         } else {
             let color = if positive == Some(true) { COLOR_BULL } else { COLOR_GOLD };
-            let bg = if positive == Some(true) { "#d1fae5" } else { "#fef3c7" };
+            let bg = if positive == Some(true) { "#ecfdf5" } else { "#fffaeb" };
             cells.push_str(&format!(
                 r##"<div style="padding:10px;background:{bg};border:1px solid {color};border-radius:8px"><div style="font-family:Fira Code;font-size:9px;color:#64748b">{label}</div><div style="font-family:Fira Sans;font-size:11px;color:#0f172a;font-weight:600;margin-top:2px">{val}</div></div>"##
             ));
@@ -1045,7 +1045,7 @@ pub fn viz_lhb(raw: &Value) -> String {
             ));
         }
         avatars_row = format!(
-            r##"<div style="display:flex;gap:8px;flex-wrap:wrap;padding:10px;background:#fef3c7;border-radius:8px;margin-bottom:10px">{cells}</div>"##
+            r##"<div style="display:flex;gap:8px;flex-wrap:wrap;padding:10px;background:#fffaeb;border-radius:8px;margin-bottom:10px">{cells}</div>"##
         );
     }
     let inst_vs = raw.get("inst_vs_youzi").cloned().unwrap_or(Value::Null);
@@ -1087,7 +1087,7 @@ pub fn viz_lhb(raw: &Value) -> String {
     <span style="color:#2563eb;font-weight:700">🏛 机构 {inst_net}</span>
     <span style="color:#d97706;font-weight:700">🐉 游资 {youzi_net}</span>
   </div>
-  <div style="display:flex;height:10px;border-radius:5px;overflow:hidden;border:1px solid #e2e8f0">
+  <div style="display:flex;height:10px;border-radius:5px;overflow:hidden;border:1px solid #e7ecf2">
     <div style="width:{ip}%;background:#2563eb"></div>
     <div style="width:{yp}%;background:#d97706"></div>
   </div>
@@ -1113,14 +1113,14 @@ pub fn viz_lhb(raw: &Value) -> String {
                     String::new()
                 };
                 rows.push_str(&format!(
-                    r##"<tr><td style="padding:4px 8px;font-size:12px;font-weight:600">{name}</td><td style="padding:4px 8px;font-size:11px;color:#6b7280">{date}</td><td style="padding:4px 8px;font-size:11px;color:#6b7280">{reason}</td></tr>"##
+                    r##"<tr><td style="padding:4px 8px;font-size:12px;font-weight:600">{name}</td><td style="padding:4px 8px;font-size:11px;color:#64748b">{date}</td><td style="padding:4px 8px;font-size:11px;color:#64748b">{reason}</td></tr>"##
                 ));
             }
         }
         if !rows.is_empty() {
             sector_html = format!(
                 r##"
-            <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #e2e8f0">
+            <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #e7ecf2">
               <div style="font-size:10px;color:#94a3b8;margin-bottom:6px">📋 本股近期无龙虎榜 · 同板块龙虎榜 TOP 5:</div>
               <table style="width:100%;border-collapse:collapse;font-size:12px"><tbody>{rows}</tbody></table>
             </div>"##
@@ -1155,7 +1155,7 @@ pub fn viz_contests(raw: &Value) -> String {
     let high_return = disp(raw.get("high_return_cubes").unwrap_or(&Value::String("—".to_string())));
 
     let mut html = format!(
-        r##"<div style="padding:10px;background:#fef3c7;border:1px solid #d97706;border-radius:8px;margin-bottom:12px;display:flex;justify-content:space-around;text-align:center">
+        r##"<div style="padding:10px;background:#fffaeb;border:1px solid #d97706;border-radius:8px;margin-bottom:12px;display:flex;justify-content:space-around;text-align:center">
   <div><div style="font-family:Fira Sans;font-size:22px;font-weight:900;color:#d97706;line-height:1">{xq_summary}</div><div style="font-family:Fira Code;font-size:9px;color:#64748b;margin-top:2px">XUEQIU 组合</div></div>
   <div><div style="font-family:Fira Sans;font-size:22px;font-weight:900;color:#059669;line-height:1">{high_return}</div><div style="font-family:Fira Code;font-size:9px;color:#64748b;margin-top:2px">高收益 &gt;50%</div></div>
 </div>"##
@@ -1175,7 +1175,7 @@ pub fn viz_contests(raw: &Value) -> String {
                 COLOR_BEAR
             };
             cube_rows.push_str(&format!(
-                r##"<a href="{url}" target="_blank" rel="noopener" style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#ffffff;border:1px solid #e2e8f0;border-radius:6px;text-decoration:none;margin-bottom:4px;transition:all .15s">
+                r##"<a href="{url}" target="_blank" rel="noopener" style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#ffffff;border:1px solid #e7ecf2;border-radius:6px;text-decoration:none;margin-bottom:4px;transition:all .15s">
   <div style="min-width:0;flex:1">
     <div style="font-family:Fira Sans;font-size:12px;color:#0f172a;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{name}</div>
     <div style="font-family:Fira Code;font-size:9px;color:#64748b">@{owner}</div>
@@ -1186,7 +1186,7 @@ pub fn viz_contests(raw: &Value) -> String {
         }
         html.push_str(&format!(
             r##"<details open style="margin-bottom:10px">
-  <summary style="cursor:pointer;font-family:Fira Code;font-size:10px;color:#0891b2;padding:4px 0;letter-spacing:.1em">▼ 雪球组合持仓 ({n} 个)</summary>
+  <summary style="cursor:pointer;font-family:Fira Code;font-size:10px;color:#2563eb;padding:4px 0;letter-spacing:.1em">▼ 雪球组合持仓 ({n} 个)</summary>
   <div style="max-height:280px;overflow-y:auto;padding-right:4px">{cube_rows}</div>
 </details>"##,
             n = xq_cubes_list.len()
@@ -1199,12 +1199,12 @@ pub fn viz_contests(raw: &Value) -> String {
             let title = disp(t.get("title").unwrap_or(&Value::String(String::new())));
             let url = disp(t.get("url").unwrap_or(&Value::String(String::new())));
             tgb_rows.push_str(&format!(
-                r##"<a href="{url}" target="_blank" rel="noopener" style="display:block;padding:6px 10px;background:#ffffff;border:1px solid #e2e8f0;border-radius:6px;text-decoration:none;margin-bottom:4px;font-size:11px;color:#1e293b">• {title}</a>"##
+                r##"<a href="{url}" target="_blank" rel="noopener" style="display:block;padding:6px 10px;background:#ffffff;border:1px solid #e7ecf2;border-radius:6px;text-decoration:none;margin-bottom:4px;font-size:11px;color:#1e293b">• {title}</a>"##
             ));
         }
         html.push_str(&format!(
             r##"<details style="margin-bottom:10px">
-  <summary style="cursor:pointer;font-family:Fira Code;font-size:10px;color:#0891b2;padding:4px 0;letter-spacing:.1em">▼ 淘股吧讨论 ({n} 条)</summary>
+  <summary style="cursor:pointer;font-family:Fira Code;font-size:10px;color:#2563eb;padding:4px 0;letter-spacing:.1em">▼ 淘股吧讨论 ({n} 条)</summary>
   <div style="max-height:220px;overflow-y:auto;padding-right:4px">{tgb_rows}</div>
 </details>"##,
             n = tgb_list.len()
@@ -1217,12 +1217,12 @@ pub fn viz_contests(raw: &Value) -> String {
             let nickname = disp(p.get("nickname").unwrap_or(&Value::String(String::new())));
             let ret = disp(p.get("return_pct").unwrap_or(&Value::String(String::new())));
             ths_rows.push_str(&format!(
-                r##"<div style="display:flex;justify-content:space-between;padding:6px 10px;background:#ffffff;border:1px solid #e2e8f0;border-radius:6px;margin-bottom:4px"><span style="font-size:11px;color:#1e293b">{nickname}</span><strong style="font-family:Fira Code;font-size:11px;color:#059669">+{ret}%</strong></div>"##
+                r##"<div style="display:flex;justify-content:space-between;padding:6px 10px;background:#ffffff;border:1px solid #e7ecf2;border-radius:6px;margin-bottom:4px"><span style="font-size:11px;color:#1e293b">{nickname}</span><strong style="font-family:Fira Code;font-size:11px;color:#059669">+{ret}%</strong></div>"##
             ));
         }
         html.push_str(&format!(
             r##"<details>
-  <summary style="cursor:pointer;font-family:Fira Code;font-size:10px;color:#0891b2;padding:4px 0;letter-spacing:.1em">▼ 同花顺模拟 ({n} 位)</summary>
+  <summary style="cursor:pointer;font-family:Fira Code;font-size:10px;color:#2563eb;padding:4px 0;letter-spacing:.1em">▼ 同花顺模拟 ({n} 位)</summary>
   <div style="max-height:220px;overflow-y:auto;padding-right:4px">{ths_rows}</div>
 </details>"##,
             n = ths_list.len()

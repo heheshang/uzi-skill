@@ -54,7 +54,7 @@ impl SectionRenderer for SentimentRenderer {
         let bar_color = if bar_width > 80 {
             "#dc2626"
         } else if bar_width > 50 {
-            "#f59e0b"
+            "#d97706"
         } else {
             "#16a34a"
         };
@@ -64,7 +64,7 @@ impl SectionRenderer for SentimentRenderer {
   <h2>🗣️ 舆情温度</h2>
   <div class="sentiment-bar" style="margin:8px 0">
     <div style="font-size:12px;color:#64748b">热度 {bar_width}/100 · {label}</div>
-    <div style="background:#f1f5f9;border-radius:4px;overflow:hidden;margin-top:4px">
+    <div style="background:#f4f7fa;border-radius:4px;overflow:hidden;margin-top:4px">
       <div style="background:{bar_color};height:8px;width:{bar_width}%"></div>
     </div>
   </div>

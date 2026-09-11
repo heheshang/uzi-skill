@@ -268,7 +268,7 @@ pub fn render_fund_managers(managers: &Value) -> String {
         } else {
             let initial = name.chars().next().map(|c| c.to_string()).unwrap_or_else(|| "?".to_string());
             format!(
-                r##"<div style="width:54px;height:54px;background:#fef3c7;border:2px solid #d97706;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:Fira Sans;font-size:20px;font-weight:900;color:#d97706;flex-shrink:0">{initial}</div>"##
+                r##"<div style="width:54px;height:54px;background:#fffaeb;border:2px solid #d97706;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:Fira Sans;font-size:20px;font-weight:900;color:#d97706;flex-shrink:0">{initial}</div>"##
             )
         };
 
@@ -421,7 +421,7 @@ pub fn render_fund_managers(managers: &Value) -> String {
     </div>
     <div style="text-align:center;margin:16px 0">
       <button onclick="var el=document.getElementById('{uid}');var btn=this;if(el.style.display==='none'){{el.style.display='block';btn.textContent='收起 ▲'}}else{{el.style.display='none';btn.textContent='展开剩余 {hidden_count} 位（按 5Y 收益排名）▼'}}"
-        style="background:#f59e0b;color:#fff;border:none;padding:10px 28px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s">
+        style="background:#d97706;color:#fff;border:none;padding:10px 28px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s">
         展开剩余 {hidden_count} 位（按 5Y 收益排名）▼
       </button>
     </div>"##
@@ -440,11 +440,11 @@ pub fn render_fund_compact_row(m: &Value, rank: usize) -> String {
     let position_pct = num(m.get("position_pct").unwrap_or(&Value::Number(0.into())));
 
     let badge_style = if rank <= 3 {
-        "background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff"
+        "background:linear-gradient(135deg,#d97706,#d97706);color:#fff"
     } else if rank <= 10 {
-        "background:#e2e8f0;color:#475569"
+        "background:#e7ecf2;color:#475569"
     } else {
-        "background:#f1f5f9;color:#64748b"
+        "background:#f4f7fa;color:#64748b"
     };
 
     let avatar_html = if !avatar.is_empty() {
@@ -618,7 +618,7 @@ pub fn render_panel_insights(syn: &Value, panel: &Value) -> String {
     }
 
     format!(
-        r##"<div class="panel-insights" style="margin:20px 0;padding:20px;background:rgba(8,145,178,0.08);border-left:4px solid #0891b2;border-radius:6px;line-height:1.8;font-size:14px"><div style="font-size:11px;color:#0891b2;letter-spacing:2px;margin-bottom:8px">📊 PANEL INSIGHTS · 评委汇总观点 {tag_src}</div><div>{insights}</div></div>"##
+        r##"<div class="panel-insights" style="margin:20px 0;padding:20px;background:rgba(37,99,235,0.08);border-left:4px solid #2563eb;border-radius:6px;line-height:1.8;font-size:14px"><div style="font-size:11px;color:#2563eb;letter-spacing:2px;margin-bottom:8px">📊 PANEL INSIGHTS · 评委汇总观点 {tag_src}</div><div>{insights}</div></div>"##
     )
 }
 
@@ -638,13 +638,13 @@ pub fn render_school_scores(syn: &Value, panel: &Value) -> String {
 
     let verdict_color = |v: &str| -> (&'static str, &'static str) {
         match v {
-            "重仓" => ("#065f46", "rgba(16,185,129,0.15)"),
-            "买入" => ("#047857", "rgba(16,185,129,0.10)"),
+            "重仓" => ("#065f46", "rgba(5,150,105,0.15)"),
+            "买入" => ("#047857", "rgba(5,150,105,0.10)"),
             "关注" => ("#b45309", "rgba(245,158,11,0.10)"),
-            "谨慎" => ("#b91c1c", "rgba(239,68,68,0.10)"),
-            "回避" => ("#991b1b", "rgba(239,68,68,0.18)"),
-            "不适合" => ("#6b7280", "rgba(107,114,128,0.10)"),
-            _ => ("#374151", "rgba(107,114,128,0.10)"),
+            "谨慎" => ("#b91c1c", "rgba(220,38,38,0.10)"),
+            "回避" => ("#991b1b", "rgba(220,38,38,0.18)"),
+            "不适合" => ("#64748b", "rgba(100,116,139,0.10)"),
+            _ => ("#475569", "rgba(100,116,139,0.10)"),
         }
     };
     let sig_icon = |s: &str| -> &'static str {
@@ -702,12 +702,12 @@ pub fn render_school_scores(syn: &Value, panel: &Value) -> String {
             cons = cons
         );
         let skip_display = if skip != 0.0 {
-            format!(r##"· <span style="color:#9ca3af">—{}</span>"##, disp(&skip_v))
+            format!(r##"· <span style="color:#94a3b8">—{}</span>"##, disp(&skip_v))
         } else {
             String::new()
         };
         items.push(format!(
-            r##"<div title="{tip}" style="background:{bg};border-radius:8px;padding:14px 16px;border:1px solid rgba(0,0,0,0.05)">  <div style="display:flex;justify-content:space-between;align-items:baseline">    <div style="font-weight:600;font-size:14px;color:{fg}">      {icon} {label} <span style="font-weight:400;font-size:11px;color:#9ca3af">· {n_members} 人</span>    </div>    <div style="font-size:11px;color:{fg};font-weight:600;letter-spacing:1px">{verdict}</div>  </div>  <div style="margin-top:6px;font-size:11px;color:#6b7280">{desc}</div>  <div style="display:flex;gap:12px;margin-top:10px;align-items:center">    <div style="flex:1">      <div style="height:6px;background:rgba(0,0,0,0.06);border-radius:3px;overflow:hidden">        <div style="height:100%;width:{bar_fill}%;background:linear-gradient(90deg,{fg} 0%,{fg} 100%);opacity:0.75"></div>      </div>      <div style="font-size:10px;color:#9ca3af;margin-top:3px">        流派分 <strong style="color:{fg};font-size:12px">{cons:.1}</strong>        <span style="color:#d1d5db"> · 实分均值 {score_mean:.1} · 投票共识 {vote_cons:.0}%</span>      </div>    </div>    <div style="font-size:11px;color:#374151;white-space:nowrap">      <span style="color:#059669">📈{bull}</span> ·       <span style="color:#6b7280">⚖️{neu}</span> ·       <span style="color:#dc2626">📉{bear}</span>      {skip_display}    </div>  </div></div>"##,
+            r##"<div title="{tip}" style="background:{bg};border-radius:8px;padding:14px 16px;border:1px solid rgba(16,24,40,0.05)">  <div style="display:flex;justify-content:space-between;align-items:baseline">    <div style="font-weight:600;font-size:14px;color:{fg}">      {icon} {label} <span style="font-weight:400;font-size:11px;color:#94a3b8">· {n_members} 人</span>    </div>    <div style="font-size:11px;color:{fg};font-weight:600;letter-spacing:1px">{verdict}</div>  </div>  <div style="margin-top:6px;font-size:11px;color:#64748b">{desc}</div>  <div style="display:flex;gap:12px;margin-top:10px;align-items:center">    <div style="flex:1">      <div style="height:6px;background:rgba(16,24,40,0.06);border-radius:3px;overflow:hidden">        <div style="height:100%;width:{bar_fill}%;background:linear-gradient(90deg,{fg} 0%,{fg} 100%);opacity:0.75"></div>      </div>      <div style="font-size:10px;color:#94a3b8;margin-top:3px">        流派分 <strong style="color:{fg};font-size:12px">{cons:.1}</strong>        <span style="color:#d7dfe9"> · 实分均值 {score_mean:.1} · 投票共识 {vote_cons:.0}%</span>      </div>    </div>    <div style="font-size:11px;color:#475569;white-space:nowrap">      <span style="color:#059669">📈{bull}</span> ·       <span style="color:#64748b">⚖️{neu}</span> ·       <span style="color:#dc2626">📉{bear}</span>      {skip_display}    </div>  </div></div>"##,
         ));
     }
 
@@ -716,7 +716,7 @@ pub fn render_school_scores(syn: &Value, panel: &Value) -> String {
     }
 
     format!(
-        r##"<div class="school-scores" style="margin:20px 0;padding:20px;background:rgba(139,92,246,0.06);border-left:4px solid #8b5cf6;border-radius:6px">  <div style="font-size:11px;color:#7c3aed;letter-spacing:2px;margin-bottom:4px">🎭 SCHOOL SCORES · 七大流派各自评分</div>  <div style="font-size:12px;color:#6b7280;margin-bottom:14px">混合打分 = 0.65 × 实分均值 + 0.35 × 投票共识 · 再做极化拉伸(k=1.3) · 不同哲学给出不同分数 · 分歧越大意味着结论越不稳 · 鼠标悬停查看分量  </div>  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px">{items}  </div></div>"##,
+        r##"<div class="school-scores" style="margin:20px 0;padding:20px;background:rgba(139,92,246,0.06);border-left:4px solid #8b5cf6;border-radius:6px">  <div style="font-size:11px;color:#7c3aed;letter-spacing:2px;margin-bottom:4px">🎭 SCHOOL SCORES · 七大流派各自评分</div>  <div style="font-size:12px;color:#64748b;margin-bottom:14px">混合打分 = 0.65 × 实分均值 + 0.35 × 投票共识 · 再做极化拉伸(k=1.3) · 不同哲学给出不同分数 · 分歧越大意味着结论越不稳 · 鼠标悬停查看分量  </div>  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px">{items}  </div></div>"##,
         items = items.concat()
     )
 }

@@ -143,7 +143,7 @@ fn scatter(target: &Value, peers: &[Value], base_currency: &str) -> String {
         let y = top + idx as f64 * plot_h / 4.0;
         let value = y_max - idx as f64 * (y_max - y_min) / 4.0;
         grid.push(format!(
-            r##"<line x1="{left}" y1="{y:.1}" x2="{x2}" y2="{y:.1}" stroke="#e2e8f0"/><text x="{lx}" y="{ly:.1}" text-anchor="end" font-size="10" fill="#64748b">{value:.1}%</text>"##,
+            r##"<line x1="{left}" y1="{y:.1}" x2="{x2}" y2="{y:.1}" stroke="#e7ecf2"/><text x="{lx}" y="{ly:.1}" text-anchor="end" font-size="10" fill="#64748b">{value:.1}%</text>"##,
             x2 = width - right,
             lx = left - 8.0,
             ly = y + 4.0
@@ -156,7 +156,7 @@ fn scatter(target: &Value, peers: &[Value], base_currency: &str) -> String {
         let x = px(point.revenue);
         let y = py(point.margin);
         let (color, radius) = if point.is_target {
-            ("#f59e0b", 7)
+            ("#d97706", 7)
         } else {
             ("#6478d3", 5)
         };
@@ -183,7 +183,7 @@ fn scatter(target: &Value, peers: &[Value], base_currency: &str) -> String {
         label_y = label_y.max(top + 10.0).min(height - bottom - 5.0);
         placed_labels.push((label_x, label_y));
         dots.push(format!(
-            r##"<g><title>{title}</title><circle cx="{x:.1}" cy="{y:.1}" r="{radius}" fill="{color}" opacity=".9"/><text x="{lx:.1}" y="{ly:.1}" text-anchor="{anchor}" font-size="10" fill="#334155">{label}</text></g>"##,
+            r##"<g><title>{title}</title><circle cx="{x:.1}" cy="{y:.1}" r="{radius}" fill="{color}" opacity=".9"/><text x="{lx:.1}" y="{ly:.1}" text-anchor="{anchor}" font-size="10" fill="#475569">{label}</text></g>"##,
             lx = label_x,
             ly = label_y
         ));
@@ -276,7 +276,7 @@ pub fn render_global_peer_comparison(comparison: &Value) -> String {
         let fin = entity.get("financials").cloned().unwrap_or(Value::Null);
         let (period, facts) = latest(&fin);
         let style = if is_target {
-            r##" style="background:#fffbeb;font-weight:700""##
+            r##" style="background:#fffaeb;font-weight:700""##
         } else {
             ""
         };
@@ -315,16 +315,16 @@ pub fn render_global_peer_comparison(comparison: &Value) -> String {
     .global-peer-summary{{grid-template-columns:1fr!important}}
   }}
 </style>
-<div class="global-peer-comparison" style="margin-top:16px;padding-top:14px;border-top:1px solid #e2e8f0">
+<div class="global-peer-comparison" style="margin-top:16px;padding-top:14px;border-top:1px solid #e7ecf2">
   <div class="global-peer-head" style="display:flex;justify-content:space-between;gap:12px;align-items:flex-end;flex-wrap:wrap">
     <div><div style="font-size:13px;font-weight:700;color:#0f172a">全球同行业绩对比</div>
     <div style="font-size:10px;color:#64748b;margin-top:2px">跨市场、跨币种标准化 · 原币数据保留</div></div>
     <div class="global-peer-meta" style="font-size:10px;color:#475569">有效同行 <strong>{npeers}</strong> · 市场 <strong>{market_count}</strong> · 基准币 {base_currency}</div>
   </div>
   <div class="global-peer-summary" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px">
-    <div style="padding:8px;background:#f8fafc;border:1px solid #e2e8f0"><div style="font-size:9px;color:#64748b">目标公司</div><div style="font-size:12px;font-weight:700">{target_name}</div></div>
-    <div style="padding:8px;background:#f8fafc;border:1px solid #e2e8f0"><div style="font-size:9px;color:#64748b">同行中位数 · 毛利率</div><div style="font-size:12px;font-weight:700">{bench_median}</div></div>
-    <div style="padding:8px;background:#f8fafc;border:1px solid #e2e8f0"><div style="font-size:9px;color:#64748b">目标毛利率分位</div><div style="font-size:12px;font-weight:700">{gross_pct}</div></div>
+    <div style="padding:8px;background:#f7f9fc;border:1px solid #e7ecf2"><div style="font-size:9px;color:#64748b">目标公司</div><div style="font-size:12px;font-weight:700">{target_name}</div></div>
+    <div style="padding:8px;background:#f7f9fc;border:1px solid #e7ecf2"><div style="font-size:9px;color:#64748b">同行中位数 · 毛利率</div><div style="font-size:12px;font-weight:700">{bench_median}</div></div>
+    <div style="padding:8px;background:#f7f9fc;border:1px solid #e7ecf2"><div style="font-size:9px;color:#64748b">目标毛利率分位</div><div style="font-size:12px;font-weight:700">{gross_pct}</div></div>
   </div>
   {scatter}
   <div class="global-peer-table" style="overflow-x:auto;margin-top:12px"><table style="width:100%;border-collapse:collapse;font-size:10px;white-space:nowrap">
