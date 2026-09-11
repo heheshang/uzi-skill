@@ -46,10 +46,9 @@ fn empty_panel_matches_upstream() {
     run_panel_case("empty");
 }
 
-#[test]
-fn synthetic_synthesis_matches_upstream() {
-    run_synthesis_case("synthetic");
-}
+// `synthetic_synthesis_matches_upstream` lives in `synthesis_quant_style.rs`:
+// that fixture's style is `quant_factor`, which requires seeding the quant cache
+// (`UZI_CACHE_ROOT`, process-wide) — so it cannot share this binary.
 
 #[test]
 fn sparse_synthesis_matches_upstream() {

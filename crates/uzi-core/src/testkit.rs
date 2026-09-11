@@ -163,6 +163,65 @@ pub fn assert_persona_line_known(
     );
 }
 
+/// Seed a quant-fund cache so the `quant_factor` style branch is reachable.
+///
+/// `detect_style`'s quant branch is the one place the pipeline reads the
+/// gitignored `_quant/<fund>/api_cache/top10_holdings*.json` cache; on a clean
+/// checkout there is none, so the branch finds nothing and the style falls
+/// through to `balanced`. Any test that pins a `quant_factor` expectation must
+/// therefore seed the universe itself.
+///
+/// Writes into the **current** `UZI_CACHE_ROOT` (set it before calling) and
+/// asserts that it did, so a fixture can never land somewhere the code under
+/// test does not look. Callers pass `(fund_code, top1_pct, target_rank)`:
+/// `top1_pct` is the first holding's `占净值比例` — the field the structural rule
+/// reads ("top-1 < 2% of NAV → quant-like") — and `target_rank` is the 1-based
+/// rank at which `target_code` appears.
+pub fn seed_quant_cache(target_code: &str, funds: &[(&str, f64, usize)]) {
+    let root = crate::cache::cache_root();
+    for (fund, top1_pct, target_rank) in funds {
+        let mut rows: Vec<Value> = Vec::new();
+        for rank in 1..=10usize {
+            let is_target = rank == *target_rank;
+            let pct = if rank == 1 { *top1_pct } else { 0.5 };
+            rows.push(serde_json::json!({
+                "序号": rank,
+                "股票代码": if is_target { target_code } else { "600519" },
+                "股票名称": if is_target { "水晶光电" } else { "贵州茅台" },
+                "占净值比例": pct,
+                "持股数": 100.0,
+                "持仓市值": 5000.0 - rank as f64,
+                "季度": "2025年1季度股票投资明细"
+            }));
+        }
+
+        let path = crate::cache::cache_path(&format!("_quant/{}", fund), "top10_holdings");
+        assert_eq!(
+            crate::cache::cache_root(),
+            root,
+            "UZI_CACHE_ROOT changed mid-test — the fixture would land where the code \
+             under test does not look"
+        );
+        std::fs::create_dir_all(path.parent().expect("cache path has a parent"))
+            .expect("create quant cache dir");
+        let now = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .map(|d| d.as_secs_f64())
+            .unwrap_or(0.0);
+        std::fs::write(
+            &path,
+            serde_json::to_string(&serde_json::json!({
+                "_cached_at": now,
+                "data": rows,
+                "_ttl": 24 * 3600,
+            }))
+            .expect("serialize quant cache"),
+        )
+        .expect("write quant cache");
+    }
+}
+
+
 #[cfg(test)]
 mod tests {
     use super::*;
