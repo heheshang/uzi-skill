@@ -1,0 +1,12 @@
+{
+  "name": "贵州茅台",
+  "overall_score": 88.0,
+  "fundamental_score": 91.0,
+  "panel_consensus": 74.5,
+  "verdict_label": "强烈看好",
+  "verdict_detail": "护城河与定价权",
+  "debate": {
+    "punchline": "高端白酒的定价权仍在公司手里。"
+  },
+  "school_lock": null
+}

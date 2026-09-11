@@ -82,9 +82,6 @@ The four commands you'll use most (say them to any agent):
 
 To be clear: there is no group, and I'm not starting one.
 
-<p align="center">
-  <img src="docs/screenshots/8501bb4280cc56c809c0a19619e49c82.jpg" width="300" alt="Adding me directly is fine — plugin/quant talk only, no individual stock chat" />
-</p>
 
 > Too many requests — please leave a note so I know what's up.
 

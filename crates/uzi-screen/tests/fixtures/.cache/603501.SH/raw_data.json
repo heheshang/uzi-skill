@@ -1,0 +1,33 @@
+{
+  "dimensions": {
+    "0_basic": {
+      "data": {
+        "name": "韦尔股份",
+        "industry": "半导体",
+        "price": 102.3,
+        "market_cap_yi": 1240.0,
+        "pe_ttm": 45.0,
+        "pb": 6.0
+      }
+    },
+    "1_financials": {
+      "data": {
+        "roe": 16.4,
+        "net_margin": 12.8,
+        "gross_margin": 30.1,
+        "rev_growth_3y": 18.7
+      }
+    },
+    "10_valuation": {
+      "data": {
+        "pe_ttm": 45.0,
+        "pb": 6.0
+      }
+    },
+    "18_trap": {
+      "data": {
+        "trap_level": "🟡 关注"
+      }
+    }
+  }
+}

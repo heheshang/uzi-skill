@@ -1,0 +1,33 @@
+{
+  "dimensions": {
+    "0_basic": {
+      "data": {
+        "name": "宁德时代",
+        "industry": "锂电池",
+        "price": 210.0,
+        "market_cap_yi": 9240.0,
+        "pe_ttm": 22.8,
+        "pb": 4.9
+      }
+    },
+    "1_financials": {
+      "data": {
+        "roe": 24.0,
+        "net_margin": 11.2,
+        "gross_margin": 22.9,
+        "rev_growth_3y": "28.1"
+      }
+    },
+    "10_valuation": {
+      "data": {
+        "pe_ttm": 22.8,
+        "pb": 4.9
+      }
+    },
+    "18_trap": {
+      "data": {
+        "trap_level": "🟢 安全"
+      }
+    }
+  }
+}

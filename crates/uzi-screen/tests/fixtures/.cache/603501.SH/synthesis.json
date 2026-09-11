@@ -1,0 +1,12 @@
+{
+  "name": "韦尔股份",
+  "overall_score": 85.0,
+  "fundamental_score": 82.0,
+  "panel_consensus": 70.0,
+  "verdict_label": "看好",
+  "verdict_detail": "车载 CIS 放量",
+  "debate": {
+    "punchline": "CIS 车载放量是主要变量。"
+  },
+  "school_lock": null
+}

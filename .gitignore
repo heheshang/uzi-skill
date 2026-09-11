@@ -7,7 +7,16 @@ target/
 .cache/
 **/.cache/
 reports/
+**/.reports/
 **/reports/
+
+# 例外：uzi-screen 的黄金夹具是一份**签入**的 ticker 缓存
+# （`--versus` / `--portfolio` 的对比基线）。目录名沿用上游的 `.cache` 布局，
+# 但它不是运行产物 —— 必须随仓库分发，否则干净 clone 跑测试会挂。
+# 注意：negation 必须排在排除规则之后，且要显式放行目录本身（git 只在父目录
+# 未被排除时才会向下遍历）。
+!crates/uzi-screen/tests/fixtures/.cache/
+!crates/uzi-screen/tests/fixtures/.cache/**
 
 # Python 工具脚本（tools/ 下的对照 / golden 脚本）产生的缓存
 __pycache__/
