@@ -1,0 +1,98 @@
+[
+  {
+    "severity": "warning",
+    "field": "dim_commentary.0_basic",
+    "message": "评语太短（2 字），低于 20 字门槛",
+    "suggestion": "至少写 1-2 句话，引用具体数字"
+  },
+  {
+    "severity": "error",
+    "field": "dim_commentary.1_financials",
+    "message": "评语必须是字符串，实际是 int",
+    "suggestion": "把评语改成一段连贯文字"
+  },
+  {
+    "severity": "warning",
+    "field": "panel_insights",
+    "message": "panel_insights 应是 30+ 字字符串，实际 int / 长度 3",
+    "suggestion": "用一段话概括 51 评委的投票结构和主要分歧"
+  },
+  {
+    "severity": "warning",
+    "field": "great_divide_override.punchline",
+    "message": "punchline 应是 10+ 字冲突金句",
+    "suggestion": "写一句能传播的话，含具体数字"
+  },
+  {
+    "severity": "warning",
+    "field": "great_divide_override.bull_say_rounds",
+    "message": "应有 3 轮（至少），实际 1",
+    "suggestion": "凑齐 3 句辩论"
+  },
+  {
+    "severity": "error",
+    "field": "great_divide_override.bear_say_rounds",
+    "message": "必须是 list，实际是 str",
+    "suggestion": "改为 [\"第 1 轮\", \"第 2 轮\", \"第 3 轮\"]"
+  },
+  {
+    "severity": "warning",
+    "field": "narrative_override.core_conclusion",
+    "message": "core_conclusion 应是 20+ 字定论",
+    "suggestion": "1-2 句结论 + 评分 + 关键证据"
+  },
+  {
+    "severity": "error",
+    "field": "narrative_override.risks",
+    "message": "必须是 list，实际是 str",
+    "suggestion": "改为 [\"风险 1\", \"风险 2\", ...]"
+  },
+  {
+    "severity": "error",
+    "field": "narrative_override.buy_zones.value",
+    "message": "必须是 dict 含 price + rationale，实际 str",
+    "suggestion": "改为 {\"price\": 10.5, \"rationale\": \"...\"}"
+  },
+  {
+    "severity": "warning",
+    "field": "narrative_override.buy_zones.growth.price",
+    "message": "缺 price 字段",
+    "suggestion": "加 \"price\": <数值>"
+  },
+  {
+    "severity": "warning",
+    "field": "narrative_override.buy_zones.growth.rationale",
+    "message": "缺 rationale 解释",
+    "suggestion": "加 \"rationale\": \"...\""
+  },
+  {
+    "severity": "warning",
+    "field": "narrative_override.buy_zones.technical.price",
+    "message": "缺 price 字段",
+    "suggestion": "加 \"price\": <数值>"
+  },
+  {
+    "severity": "warning",
+    "field": "narrative_override.buy_zones.technical.rationale",
+    "message": "缺 rationale 解释",
+    "suggestion": "加 \"rationale\": \"...\""
+  },
+  {
+    "severity": "error",
+    "field": "data_gap_acknowledged",
+    "message": "必须是 dict（key 是 dim 或 dim.field），实际 list",
+    "suggestion": "改为 {\"4_peers\": \"已尝试 X 但失败\", ...}"
+  },
+  {
+    "severity": "error",
+    "field": "qualitative_deep_dive.3_macro",
+    "message": "维度内容必须是 dict（含 evidence/associations/conclusion），实际 str",
+    "suggestion": "参考 task2.5 的输出 schema"
+  },
+  {
+    "severity": "error",
+    "field": "qualitative_deep_dive.13_policy.evidence",
+    "message": "evidence 必须是 list",
+    "suggestion": "改为 [{\"source\": \"...\", \"url\": \"...\", \"finding\": \"...\"}, ...]"
+  }
+]

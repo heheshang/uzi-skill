@@ -1,0 +1,17 @@
+[data_integrity] 🔴 CRITICAL coverage=11.0% (2/18)
+  🔴 critical missing (4):
+     - 所属行业 (0_basic.industry)
+     - 总市值 (0_basic.market_cap)
+     - ROE 历史 (1_financials.roe_history)
+     - K 线阶段 (2_kline.stage)
+  🟡 optional missing (12):
+     - PE-TTM (0_basic.pe_ttm)
+     - PB (0_basic.pb)
+     - 营收历史 (1_financials.revenue_history)
+     - 净利历史 (1_financials.net_profit_history)
+     - 财务健康度 (1_financials.financial_health)
+     - 均线多空 (2_kline.ma_align)
+     - MACD (2_kline.macd)
+     - PE (10_valuation.pe)
+  🟡 enrichment dims empty (16): 宏观周期, 同业对标, 上下游, 券商研报, 行业景气, 原材料, 期货关联, 治理/减持, 北向/两融, 政策环境, 护城河, 事件驱动, 龙虎榜/游资, 大V舆情, 杀猪盘, 实盘比赛
+  ⚠️  fallback dims: 1_financials, 2_kline

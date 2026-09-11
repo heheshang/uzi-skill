@@ -1,0 +1,407 @@
+{
+  "ticker": "002273.SZ",
+  "name": "水晶光电",
+  "overall_score": 69.3,
+  "verdict_label": "可以蹲（偏弱） · 3 派看多 / 2 派看空",
+  "verdict_detail": "基本面 71.4 · 共识 66.1",
+  "fundamental_score": 71.4,
+  "panel_consensus": 66.1,
+  "school_lock": null,
+  "school_scores": {
+    "A": {
+      "group": "A",
+      "label": "经典价值派",
+      "desc": "巴菲特 / 格雷厄姆 / 费雪 / 芒格 一脉",
+      "n_members": 6,
+      "n_active": 6,
+      "short_excluded": 0,
+      "consensus": 46.1,
+      "avg_score": 45.3,
+      "vote_consensus": 50.0,
+      "score_mean": 45.3,
+      "verdict": "谨慎",
+      "bullish": 0,
+      "neutral": 5,
+      "bearish": 1,
+      "skip": 0,
+      "dominant_signal": "neutral"
+    },
+    "B": {
+      "group": "B",
+      "label": "成长派",
+      "desc": "彼得·林奇 / 欧奈尔 / 蒂尔 / 伍德 一脉",
+      "n_members": 9,
+      "n_active": 9,
+      "short_excluded": 0,
+      "consensus": 16.3,
+      "avg_score": 26.2,
+      "vote_consensus": 20.0,
+      "score_mean": 26.2,
+      "verdict": "回避",
+      "bullish": 0,
+      "neutral": 3,
+      "bearish": 6,
+      "skip": 0,
+      "dominant_signal": "bearish"
+    },
+    "C": {
+      "group": "C",
+      "label": "宏观派",
+      "desc": "索罗斯 / 达利欧 / 马克斯 一脉",
+      "n_members": 5,
+      "n_active": 5,
+      "short_excluded": 2,
+      "consensus": 89.8,
+      "avg_score": 78.8,
+      "vote_consensus": 84.0,
+      "score_mean": 78.8,
+      "verdict": "重仓",
+      "bullish": 3,
+      "neutral": 2,
+      "bearish": 0,
+      "skip": 0,
+      "dominant_signal": "bullish"
+    },
+    "D": {
+      "group": "D",
+      "label": "技术派",
+      "desc": "利弗莫尔 / Minervini / 达瓦斯 一脉",
+      "n_members": 4,
+      "n_active": 4,
+      "short_excluded": 0,
+      "consensus": 100.0,
+      "avg_score": 100.0,
+      "vote_consensus": 100.0,
+      "score_mean": 100.0,
+      "verdict": "重仓",
+      "bullish": 4,
+      "neutral": 0,
+      "bearish": 0,
+      "skip": 0,
+      "dominant_signal": "bullish"
+    },
+    "E": {
+      "group": "E",
+      "label": "中式价投",
+      "desc": "段永平 / 张坤 / 朱少醒 / 冯柳 一脉",
+      "n_members": 7,
+      "n_active": 7,
+      "short_excluded": 0,
+      "consensus": 54.7,
+      "avg_score": 53.3,
+      "vote_consensus": 54.3,
+      "score_mean": 53.3,
+      "verdict": "关注",
+      "bullish": 2,
+      "neutral": 3,
+      "bearish": 2,
+      "skip": 0,
+      "dominant_signal": "neutral"
+    },
+    "F": {
+      "group": "F",
+      "label": "A 股游资",
+      "desc": "龙虎榜顶流 23 位·章盟主/孙哥/赵老哥为代表",
+      "n_members": 24,
+      "n_active": 21,
+      "short_excluded": 0,
+      "consensus": 100.0,
+      "avg_score": 98.6,
+      "vote_consensus": 100.0,
+      "score_mean": 98.6,
+      "verdict": "重仓",
+      "bullish": 21,
+      "neutral": 0,
+      "bearish": 0,
+      "skip": 3,
+      "dominant_signal": "bullish"
+    },
+    "G": {
+      "group": "G",
+      "label": "量化派",
+      "desc": "Simons / Thorp / Shaw 一脉",
+      "n_members": 4,
+      "n_active": 3,
+      "short_excluded": 0,
+      "consensus": 54.6,
+      "avg_score": 53.7,
+      "vote_consensus": 53.3,
+      "score_mean": 53.7,
+      "verdict": "关注",
+      "bullish": 1,
+      "neutral": 1,
+      "bearish": 1,
+      "skip": 1,
+      "dominant_signal": "bullish"
+    },
+    "H": {
+      "group": "H",
+      "label": "科技领袖派",
+      "desc": "黄仁勋 / 马斯克 / Altman / Saylor 一脉",
+      "n_members": 4,
+      "n_active": 4,
+      "short_excluded": 0,
+      "consensus": 0.2,
+      "avg_score": 18.0,
+      "vote_consensus": 0.0,
+      "score_mean": 18.0,
+      "verdict": "回避",
+      "bullish": 0,
+      "neutral": 0,
+      "bearish": 4,
+      "skip": 0,
+      "dominant_signal": "bearish"
+    },
+    "I": {
+      "group": "I",
+      "label": "AI 卡位/瓶颈猎手",
+      "desc": "Serenity · AI 供应链卡脖子/瓶颈点",
+      "n_members": 1,
+      "n_active": 1,
+      "short_excluded": 0,
+      "consensus": 62.2,
+      "avg_score": 59.0,
+      "vote_consensus": 60.0,
+      "score_mean": 59.0,
+      "verdict": "关注",
+      "bullish": 0,
+      "neutral": 1,
+      "bearish": 0,
+      "skip": 0,
+      "dominant_signal": "neutral"
+    }
+  },
+  "short_consensus": {
+    "total": 2,
+    "active": 2,
+    "skip": 0,
+    "short_candidates": 0,
+    "no_short_thesis": 2,
+    "avg_score": 63.5,
+    "top_short_candidates": [
+      {
+        "id": "chanos",
+        "name": "吉姆·查诺斯",
+        "score": 61,
+        "headline": "观望：OCF/净利 1.1 · 比例合理；但 审计有保留意见 · 立即怀疑"
+      },
+      {
+        "id": "burry",
+        "name": "迈克尔·伯利",
+        "score": 66,
+        "headline": "看多核心：PE 34 · PS 6.0 · 未在 Burry 空头清单"
+      }
+    ]
+  },
+  "dim_commentary": {
+    "0_basic": "基础信息：水晶光电（002273），光学光电子 行业。市值 —，PE 34.2，PB 3.11。",
+    "1_financials": "财报：ROE 11.2，营收同比 14.5，净利同比 —，净利率 11.1。综合得分 6/10。",
+    "2_kline": "K线技术面：Stage 2 · 上升期 · 均线 多头排列 · MACD 水上金叉。",
+    "3_macro": "宏观环境：利率周期 降息周期 · 流动性宽松；汇率 —；地缘 —；大宗商品 原油震荡。得分 6/10。",
+    "4_peers": "同行对比：— 行业，—，主要同行：歌尔股份、蓝思科技。得分 7/10。",
+    "5_chain": "产业链：上游 ['光学玻璃', '树脂']；下游 ['消费电子', '汽车电子']；客户集中度 —。",
+    "6_research": "券商研报：近期券商研报 18 篇，一致评级 —，目标价均值 —。",
+    "7_industry": "行业景气：所属 — · 行业 PE 加权 — · 上市公司数 — · 增速 12.5。",
+    "8_materials": "原材料：核心原料 —；近期价格走势 —；占成本比例 —。",
+    "9_futures": "期货关联：关联合约 —；近期走势 —；。",
+    "10_valuation": "估值分位：PE 5 年分位 5 年 42 分位，PB 5 年分位 —。得分 9/10。",
+    "11_governance": "治理/减持：实控人 —；近期变动 —。",
+    "12_capital_flow": "资金面：资金面数据有限。",
+    "13_policy": "政策与监管：本行业 政策搜索未命中具体内容（建议 web_search 补抓）。",
+    "14_moat": "护城河：四力评分 无形资产 7/10、转换成本 6/10、网络效应 4/10、规模 8/10 · 综合 25/40。",
+    "15_events": "事件驱动：近期事件 2 条，含：新品发布 增长；大订单 合作。",
+    "16_lhb": "龙虎榜：近期未上龙虎榜或非 A 股。",
+    "17_sentiment": "舆情：热度 {'rank_history': [12, 18, 9]}；情绪 偏乐观。",
+    "18_trap": "杀猪盘：🟢 安全 · 8 信号扫描命中 ?/8（已扫 ddgs 24 条搜索结果）· 建议：—",
+    "19_contests": "实盘比赛：雪球 12 个组合持有本股（高收益 >50% 的有 2 个）· 来源 http"
+  },
+  "institutional_modeling": {
+    "dcf_intrinsic": null,
+    "dcf_safety_margin_pct": null,
+    "dcf_verdict": null,
+    "lbo_irr_pct": null,
+    "lbo_verdict": null,
+    "comps_verdict": null,
+    "initiating_rating": null,
+    "target_price": null,
+    "upside_pct": null,
+    "ic_recommendation": null,
+    "bcg_position": null,
+    "industry_attractiveness": null
+  },
+  "detected_style": "quant_factor",
+  "style_label_cn": "量化因子型",
+  "style_explanation": "多家量化基金重仓 · 量化派 (G 组) 加权 ×1.5、资金流维度加权",
+  "style_diagnostics": {
+    "active_weight": 51.6,
+    "bullish_weight": 25.75,
+    "neutral_weight": 8.37,
+    "active_count": 62,
+    "bullish_count": 32,
+    "neutral_count": 16,
+    "bearish_count": 14,
+    "raw_consensus_old": 51.6,
+    "raw_fund_old": 71.4
+  },
+  "agent_reviewed": false,
+  "panel_insights": "",
+  "claude_narrative_stub": {
+    "_note": "以下字段是脚本生成的占位，Task 4 中 Claude 必须根据原始数据重写",
+    "needs_rewrite": [
+      "great_divide.punchline",
+      "dashboard.core_conclusion",
+      "debate.rounds[*].bull_say",
+      "debate.rounds[*].bear_say",
+      "buy_zones.*.rationale",
+      "risks[*]"
+    ]
+  },
+  "debate": {
+    "bull": {
+      "investor_id": "soros",
+      "name": "索罗斯",
+      "group": "C"
+    },
+    "bear": {
+      "investor_id": "graham",
+      "name": "格雷厄姆",
+      "group": "A"
+    },
+    "rounds": [
+      {
+        "round": 1,
+        "bull_say": "看多核心：研报目标涨幅 22% · 市场过度悲观 · 做多反身性",
+        "bear_say": "看空核心：PE 34.2 高于 15"
+      },
+      {
+        "round": 2,
+        "bull_say": "研报目标涨幅 22% · 市场过度悲观 · 做多反身性 · 研报目标涨幅 22% · 未到狂热 · 利率周期 降息周期 · 流动性宽松",
+        "bear_say": "PE 34.2 高于 15 · PB 3.11 高于 1.5 · PE×PB = 106.4 超 22.5 红线"
+      },
+      {
+        "round": 3,
+        "bull_say": "综合看，100 分，我的立场不变。",
+        "bear_say": "综合看，12 分，风险大于收益。"
+      }
+    ],
+    "punchline": "水晶光电 · ROE 历史与当前估值存在结构性分歧，等待方向明朗。"
+  },
+  "great_divide": {
+    "bull_avatar": "soros",
+    "bear_avatar": "graham",
+    "bull_score": 100,
+    "bear_score": 12,
+    "bull_signal": "bullish",
+    "bear_signal": "bearish",
+    "punchline": "水晶光电 · ROE 历史与当前估值存在结构性分歧，等待方向明朗。"
+  },
+  "risks": [
+    "当前 PE 34x，估值偏高",
+    "ROE 最低 -2.3%，盈利稳定性不足",
+    "光学光电子行业竞争加剧风险",
+    "宏观经济或政策环境变化"
+  ],
+  "buy_zones": {
+    "value": {
+      "price": 19.93,
+      "rationale": "历史 PE 25 分位"
+    },
+    "growth": {
+      "price": 21.57,
+      "rationale": "PEG 合理区"
+    },
+    "technical": {
+      "price": 22.28,
+      "rationale": "MA60 支撑位"
+    },
+    "youzi": {
+      "price": 23.45,
+      "rationale": "当前情绪未破"
+    }
+  },
+  "friendly": {
+    "scenarios": {
+      "entry_price": 23.45,
+      "cases": [
+        {
+          "name": "最坏情况",
+          "probability": "5%",
+          "return": -64.2
+        },
+        {
+          "name": "偏差情况",
+          "probability": "25%",
+          "return": -29.1
+        },
+        {
+          "name": "合理情况",
+          "probability": "40%",
+          "return": 15.0
+        },
+        {
+          "name": "乐观情况",
+          "probability": "25%",
+          "return": 39.6
+        },
+        {
+          "name": "极致乐观",
+          "probability": "5%",
+          "return": 79.2
+        }
+      ]
+    },
+    "exit_triggers": [
+      "股价跌破 ¥20.64（当前价 -12%）→ 无条件止损",
+      "下季度营收同比转负 → 基本面反转信号",
+      "下次业绩预告低于 +10% → 预期管理失守",
+      "章盟主 / 赵老哥 席位大额卖出 > 2 亿 → 顶级资金撤离信号",
+      "PE 站上 5 年 57 分位 → 泡沫区获利了结"
+    ],
+    "similar_stocks": [
+      {
+        "code": "300433",
+        "name": "蓝思科技"
+      }
+    ]
+  },
+  "fund_managers": [
+    {
+      "name": "张三",
+      "fund": "某某成长混合",
+      "return_5y": 128.4,
+      "holding_quarters": 4
+    },
+    {
+      "name": "李四",
+      "fund": "某某精选",
+      "return_5y": 62.1,
+      "holding_quarters": 2
+    }
+  ],
+  "dashboard": {
+    "core_conclusion": "水晶光电 · 69 分 · 可以蹲（偏弱） · 3 派看多 / 2 派看空。60 位多头评委里 31 人看多，YTD +18.4%。水晶光电 · ROE 历史与当前估值存在结构性分歧，等待方向明朗。",
+    "data_perspective": {
+      "trend": "Stage 2 · 上升期",
+      "price": "¥23.45",
+      "volume": "—",
+      "chips": "多头排列"
+    },
+    "intelligence": {
+      "news": "已采集 0 项催化剂事件",
+      "risks": [
+        "当前 PE 34x，估值偏高",
+        "ROE 最低 -2.3%，盈利稳定性不足",
+        "光学光电子行业竞争加剧风险"
+      ],
+      "catalysts": [
+        "暂无明确催化剂"
+      ]
+    },
+    "battle_plan": {
+      "entry": "¥21.57",
+      "position": "分批建仓 · 勿满仓",
+      "stop": "¥19.93",
+      "target": "¥29.31"
+    }
+  }
+}

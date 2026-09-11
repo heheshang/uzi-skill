@@ -1,0 +1,46 @@
+# Rust / Cargo 构建产物
+target/
+**/*.rs.bk
+*.pdb
+
+# 分析缓存与报告（每次运行重新生成，用户私有）
+.cache/
+**/.cache/
+reports/
+**/reports/
+
+# Python 工具脚本（tools/ 下的对照 / golden 脚本）产生的缓存
+__pycache__/
+*.py[cod]
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Env（存放 MX_APIKEY 等敏感凭据，绝不 commit）
+.env
+.env.local
+.env.*.local
+*.local.env
+*.key
+
+# 防御性 ignore：cookies / session / 私人状态文件
+**/cookies.json
+**/.uzi-skill/
+*.pem
+*.p12
+id_rsa*
+.netrc
+
+# 本地草稿（不进远端）
+docs/*.local.md
+
+# release 附件的整页截图
+docs/screenshots/full-page.png

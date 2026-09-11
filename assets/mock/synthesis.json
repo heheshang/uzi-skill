@@ -1,0 +1,365 @@
+{
+  "ticker": "MOCK.SZ",
+  "name": "水晶光电",
+  "overall_score": 76.8,
+  "verdict_label": "可以蹲一蹲",
+  "fundamental_score": 76.0,
+  "panel_consensus": 50.0,
+  "debate": {
+    "bull": {
+      "investor_id": "gurley",
+      "name": "比尔·格利",
+      "group": "B"
+    },
+    "bear": {
+      "investor_id": "gerstner",
+      "name": "布拉德·格斯特纳",
+      "group": "B"
+    },
+    "rounds": [
+      {
+        "round": 1,
+        "bull_say": "ROE 五年都在 18% 以上，AR 眼镜渗透率才刚起步，现在 PE 42 看着贵，两年后业绩接上就是便宜。",
+        "bear_say": "ROE 是过去式。PE 已经到历史 75 分位，下一份季报只要稍微不及预期就要杀估值，现在介入是在刀尖上跳舞。"
+      },
+      {
+        "round": 2,
+        "bull_say": "苹果产业链二供身份已经落地，M7 开始放量，这种可见度的定价权本来就该给溢价。",
+        "bear_say": "代价是公司把自己绑在苹果身上了。苹果今年资本开支砍 15%，你确定订单能持续？"
+      },
+      {
+        "round": 3,
+        "bull_say": "短期波动不影响长逻辑，Stage 2 初期 + 章盟主刚进场，技术面和资金面都对。",
+        "bear_say": "章盟主进场的那个时点就是你应该警惕的时点——他不是做右侧，他是做趋势中后段的。"
+      }
+    ],
+    "punchline": "ROE 五年 > 15%，但苹果今年资本开支砍 15%——这就是问题所在。"
+  },
+  "great_divide": {
+    "bull_avatar": "gurley",
+    "bear_avatar": "gerstner",
+    "bull_score": 95,
+    "bear_score": 91,
+    "punchline": "ROE 五年 > 15%，但苹果今年资本开支砍 15%——这就是问题所在。"
+  },
+  "risks": [
+    "PE 已经到历史 75 分位，安全边际收窄",
+    "苹果 2026 年资本开支砍 15%，订单可持续性存疑",
+    "商誉占净资产 28%，减值风险",
+    "AR 眼镜渗透率不达预期，行业景气度可能高估"
+  ],
+  "buy_zones": {
+    "value": {
+      "price": 16.2,
+      "rationale": "DCF + 历史 PE 25 分位"
+    },
+    "growth": {
+      "price": 17.5,
+      "rationale": "PEG=1.2 对应价"
+    },
+    "technical": {
+      "price": 18.0,
+      "rationale": "20 日均线 + 颈线支撑"
+    },
+    "youzi": {
+      "price": 18.56,
+      "rationale": "板块情绪未破前可追"
+    }
+  },
+  "friendly": {
+    "scenarios": {
+      "entry_price": 18.56,
+      "cases": [
+        {
+          "name": "最坏情况",
+          "probability": "15%",
+          "return": -35
+        },
+        {
+          "name": "偏差情况",
+          "probability": "25%",
+          "return": -15
+        },
+        {
+          "name": "合理情况",
+          "probability": "35%",
+          "return": 12
+        },
+        {
+          "name": "乐观情况",
+          "probability": "20%",
+          "return": 38
+        },
+        {
+          "name": "极致乐观",
+          "probability": "5%",
+          "return": 75
+        }
+      ]
+    },
+    "similar_stocks": [
+      {
+        "name": "蓝特光学",
+        "code": "SH688127",
+        "similarity": "92%",
+        "reason": "同为苹果产业链光学薄膜供应商，业务几乎重合",
+        "url": "https://xueqiu.com/S/SH688127"
+      },
+      {
+        "name": "舜宇光学",
+        "code": "HK02382",
+        "similarity": "85%",
+        "reason": "全球光学龙头，业务范围更广但估值有参考性",
+        "url": "https://xueqiu.com/S/HK02382"
+      },
+      {
+        "name": "永新光学",
+        "code": "SH603297",
+        "similarity": "76%",
+        "reason": "光学元器件精密加工，客户结构有部分重合",
+        "url": "https://xueqiu.com/S/SH603297"
+      },
+      {
+        "name": "联创电子",
+        "code": "SZ002036",
+        "similarity": "68%",
+        "reason": "光学镜头同行，车载与 VR 方向有交集",
+        "url": "https://xueqiu.com/S/SZ002036"
+      }
+    ],
+    "exit_triggers": [
+      "股价跌破 ¥15.50（60 日均线支撑位）→ 无条件止损",
+      "苹果季度资本开支指引下修 > 10% → 业绩逻辑动摇",
+      "Q2 业绩预告低于 +25% → 预期管理失守",
+      "章盟主席位大额卖出 > 2 亿 → 顶级游资撤离信号",
+      "PE 站上 5 年 90 分位（≈ 48）→ 泡沫区，获利了结"
+    ]
+  },
+  "fund_managers": [
+    {
+      "name": "张坤",
+      "fund_name": "易方达蓝筹精选混合",
+      "fund_code": "005827",
+      "avatar": "zhangkun",
+      "position_pct": 3.2,
+      "rank_in_fund": 8,
+      "holding_quarters": 4,
+      "position_trend": "加仓",
+      "return_5y": 156.7,
+      "annualized_5y": 20.5,
+      "max_drawdown": -28.3,
+      "sharpe": 1.42,
+      "peer_rank_pct": 5,
+      "nav_history": [
+        1.0,
+        1.08,
+        1.12,
+        1.25,
+        1.42,
+        1.65,
+        1.58,
+        1.72,
+        1.88,
+        2.05,
+        2.18,
+        2.35,
+        2.52,
+        2.41,
+        2.57
+      ],
+      "fund_url": "https://fund.eastmoney.com/005827.html"
+    },
+    {
+      "name": "谢治宇",
+      "fund_name": "兴全合润混合 LOF",
+      "fund_code": "163406",
+      "avatar": "xiezhiyu",
+      "position_pct": 2.8,
+      "rank_in_fund": 10,
+      "holding_quarters": 6,
+      "position_trend": "加仓",
+      "return_5y": 124.3,
+      "annualized_5y": 17.5,
+      "max_drawdown": -22.1,
+      "sharpe": 1.31,
+      "peer_rank_pct": 8,
+      "nav_history": [
+        1.0,
+        1.05,
+        1.12,
+        1.2,
+        1.32,
+        1.48,
+        1.55,
+        1.68,
+        1.78,
+        1.92,
+        2.05,
+        2.15,
+        2.24,
+        2.18,
+        2.24
+      ],
+      "fund_url": "https://fund.eastmoney.com/163406.html"
+    },
+    {
+      "name": "朱少醒",
+      "fund_name": "富国天惠成长混合",
+      "fund_code": "161005",
+      "avatar": "zhushaoxing",
+      "position_pct": 2.1,
+      "rank_in_fund": 14,
+      "holding_quarters": 8,
+      "position_trend": "持平",
+      "return_5y": 98.6,
+      "annualized_5y": 14.7,
+      "max_drawdown": -25.8,
+      "sharpe": 1.12,
+      "peer_rank_pct": 15,
+      "nav_history": [
+        1.0,
+        1.04,
+        1.1,
+        1.18,
+        1.26,
+        1.34,
+        1.42,
+        1.52,
+        1.61,
+        1.68,
+        1.76,
+        1.84,
+        1.92,
+        1.96,
+        1.99
+      ],
+      "fund_url": "https://fund.eastmoney.com/161005.html"
+    },
+    {
+      "name": "傅鹏博",
+      "fund_name": "睿远成长价值混合",
+      "fund_code": "007119",
+      "avatar": "",
+      "position_pct": 3.8,
+      "rank_in_fund": 5,
+      "holding_quarters": 3,
+      "position_trend": "加仓",
+      "return_5y": 142.8,
+      "annualized_5y": 19.4,
+      "max_drawdown": -30.5,
+      "sharpe": 1.28,
+      "peer_rank_pct": 7,
+      "nav_history": [
+        1.0,
+        1.06,
+        1.14,
+        1.22,
+        1.34,
+        1.48,
+        1.58,
+        1.72,
+        1.85,
+        2.02,
+        2.15,
+        2.28,
+        2.38,
+        2.32,
+        2.43
+      ],
+      "fund_url": "https://fund.eastmoney.com/007119.html"
+    },
+    {
+      "name": "刘彦春",
+      "fund_name": "景顺长城新兴成长",
+      "fund_code": "260108",
+      "avatar": "",
+      "position_pct": 2.5,
+      "rank_in_fund": 11,
+      "holding_quarters": 5,
+      "position_trend": "减仓",
+      "return_5y": 88.4,
+      "annualized_5y": 13.6,
+      "max_drawdown": -35.2,
+      "sharpe": 0.98,
+      "peer_rank_pct": 22,
+      "nav_history": [
+        1.0,
+        1.08,
+        1.18,
+        1.15,
+        1.22,
+        1.32,
+        1.48,
+        1.55,
+        1.65,
+        1.72,
+        1.68,
+        1.75,
+        1.82,
+        1.88,
+        1.88
+      ],
+      "fund_url": "https://fund.eastmoney.com/260108.html"
+    },
+    {
+      "name": "冯波",
+      "fund_name": "易方达研究精选股票",
+      "fund_code": "000979",
+      "avatar": "",
+      "position_pct": 3.0,
+      "rank_in_fund": 7,
+      "holding_quarters": 2,
+      "position_trend": "新进",
+      "return_5y": 112.5,
+      "annualized_5y": 16.3,
+      "max_drawdown": -24.8,
+      "sharpe": 1.18,
+      "peer_rank_pct": 12,
+      "nav_history": [
+        1.0,
+        1.04,
+        1.12,
+        1.22,
+        1.32,
+        1.45,
+        1.52,
+        1.63,
+        1.72,
+        1.82,
+        1.92,
+        2.0,
+        2.05,
+        2.08,
+        2.12
+      ],
+      "fund_url": "https://fund.eastmoney.com/000979.html"
+    }
+  ],
+  "dashboard": {
+    "core_conclusion": "77 分，可以蹲一蹲但别上头。50 位大佬里 21 人看多，最看好的是段永平(92)，但 PE 已经到历史 75 分位，苹果订单能不能接住是下半年最大的变量。",
+    "data_perspective": {
+      "trend": "Stage 2 初期，20 日均线刚翻多",
+      "price": "现价 18.56，距压力位 20.10 还有 8%",
+      "volume": "近 5 日温和放量，换手率 4.2%",
+      "chips": "股东户数连续 3 季下降，筹码集中中"
+    },
+    "intelligence": {
+      "news": "iPhone 17 备货传闻 + AR 眼镜 BOM 渗透率提升 + Q2 业绩预告",
+      "risks": [
+        "商誉 28%",
+        "PE 历史 75 分位"
+      ],
+      "catalysts": [
+        "6 月新品发布",
+        "Q2 业绩预告",
+        "苹果秋季发布会"
+      ]
+    },
+    "battle_plan": {
+      "entry": "16.20-17.00 分批",
+      "position": "标准仓 50% 起步",
+      "stop": "破 15.50 离场",
+      "target": "短线 22, 中线 28"
+    }
+  }
+}

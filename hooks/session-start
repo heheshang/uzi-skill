@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+# Session-start hook: injects UZI-Skill context into agent sessions.
+# Called by hooks.json on SessionStart.
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PLUGIN_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+# Resolve the uzi binary: prefer the freshly built release artifact inside the
+# plugin, fall back to whatever is on PATH. If neither exists we skip the
+# background update check entirely — the hook must never error out.
+UZI_BIN=""
+if [ -x "$PLUGIN_ROOT/target/release/uzi" ]; then
+  UZI_BIN="$PLUGIN_ROOT/target/release/uzi"
+elif command -v uzi >/dev/null 2>&1; then
+  UZI_BIN="$(command -v uzi)"
+fi
+
+# v3.9.4 · 后台触发 update check · 结果写到 .cache/_global/update_prompt.md
+# SKILL.md HARD-GATE-UPDATE-PROMPT 负责让 agent 读这个文件并展示给用户
+# `--update-prompt-file` 有新版则写入，无新版则删除该文件 · 文件存在即表示要提示
+if [ -z "${UZI_NO_UPDATE_CHECK}" ] && [ -n "$UZI_BIN" ]; then
+  (
+    "$UZI_BIN" --update-prompt-file .cache/_global/update_prompt.md >/dev/null 2>&1
+  ) &
+fi
+
+# Build the context message with skill summaries
+CONTEXT="$(cat <<'SKILLS_CONTEXT'
+🎯 游资（UZI）Skills v3.9.4 已加载
+
+## 可用技能
+
+| 命令 | 说明 |
+|---|---|
+| `/stock-deep-analyzer:analyze-stock <代码>` | 完整深度分析（22维 + 66评委 + Bloomberg报告） |
+| `/stock-deep-analyzer:dcf <代码>` | DCF 估值 |
+| `/stock-deep-analyzer:comps <代码>` | 同行对标 |
+| `/stock-deep-analyzer:lbo <代码>` | LBO 压力测试 |
+| `/stock-deep-analyzer:scan-trap <代码>` | 杀猪盘检测 |
+| `/stock-deep-analyzer:segmental-model <代码>` | 分业务收入 bottom-up 建模 |
+
+说"分析 XXX"即可开始深度分析。
+
+## ⚠️ 自动更新检查（v3.9.4 新增）
+
+会话开始时，hook 会后台检测 GitHub 是否有新版本：
+- 检到新版 → 写 `.cache/_global/update_prompt.md`
+- Agent 必须在第一次响应用户前检查该文件，若存在则完整展示内容给用户，并收集 y/s/n 回答后调用 `uzi --update-answer <y|s|n> <版本>` 处理。
+- 用户选 s（skip）→ 该版本之后再有新版才会再弹。
+
+## 工作流提醒
+
+深度分析是**两段式**的：
+1. `uzi <ticker> --stage1` 自动采集数据 + 骨架分
+2. **你必须介入**：读 `.cache/{ticker}/panel.json` → role-play 66 评委 → 写 `.cache/{ticker}/agent_analysis.json`
+3. `uzi <ticker> --stage2` 合并你的分析生成报告
+
+⚠️ 不要跳过 agent 分析步骤直接出报告（除非用户明确要快速模式）。
+SKILLS_CONTEXT
+)"
+
+# Output as JSON additionalContext for Claude Code hooks.
+# Escaping is done with bash parameter expansion so the hook stays dependency
+# free (the upstream `sed ':a;N;$!ba;...'` one-liner is a GNU-ism that BSD sed
+# on macOS rejects).
+JSON_CONTEXT="${CONTEXT//\\/\\\\}"
+JSON_CONTEXT="${JSON_CONTEXT//\"/\\\"}"
+JSON_CONTEXT="${JSON_CONTEXT//$'\n'/\\n}"
+printf '{"additionalContext": "%s"}\n' "$JSON_CONTEXT"

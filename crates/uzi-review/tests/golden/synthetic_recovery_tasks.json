@@ -1,0 +1,25 @@
+[
+  {
+    "dim": "0_basic",
+    "field": "market_cap",
+    "label": "总市值",
+    "severity": "critical",
+    "suggested_actions": [
+      "mx: '002273 总市值'",
+      "browser: https://quote.eastmoney.com/0.002273.html",
+      "ws: '002273 市值'"
+    ],
+    "status": "pending"
+  },
+  {
+    "dim": "10_valuation",
+    "field": "pb_quantile",
+    "label": "PB 5 年分位",
+    "severity": "optional",
+    "suggested_actions": [
+      "mx: '002273 PB 5年分位数'",
+      "ws: '002273 PB历史分位'"
+    ],
+    "status": "pending"
+  }
+]

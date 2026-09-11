@@ -1,0 +1,216 @@
+{
+  "fixture": "name_matcher.json",
+  "queries": {
+    "贵州茅台": [
+      {
+        "code": "600519",
+        "name": "贵州茅台",
+        "distance": 0,
+        "jaccard": 1.0
+      },
+      {
+        "code": "600520",
+        "name": "贵州茅太",
+        "distance": 1,
+        "jaccard": 0.6
+      },
+      {
+        "code": "600521",
+        "name": "贵州茅大",
+        "distance": 1,
+        "jaccard": 0.6
+      },
+      {
+        "code": "600522",
+        "name": "贵州茅天",
+        "distance": 1,
+        "jaccard": 0.6
+      }
+    ],
+    "北部港湾": [
+      {
+        "code": "000582",
+        "name": "北部湾港",
+        "distance": 2,
+        "jaccard": 1.0
+      }
+    ],
+    "平安": [
+      {
+        "code": "000001",
+        "name": "平安银行",
+        "distance": 2,
+        "jaccard": 0.5
+      },
+      {
+        "code": "601318",
+        "name": "中国平安",
+        "distance": 2,
+        "jaccard": 0.5
+      }
+    ],
+    "平安银": [
+      {
+        "code": "000001",
+        "name": "平安银行",
+        "distance": 1,
+        "jaccard": 0.75
+      }
+    ],
+    "水晶光电": [
+      {
+        "code": "002273",
+        "name": "水晶光电",
+        "distance": 0,
+        "jaccard": 1.0
+      }
+    ],
+    "茅台": [
+      {
+        "code": "600519",
+        "name": "贵州茅台",
+        "distance": 2,
+        "jaccard": 0.5
+      }
+    ],
+    "五粮液": [
+      {
+        "code": "000858",
+        "name": "五粮液",
+        "distance": 0,
+        "jaccard": 1.0
+      }
+    ],
+    "中国平安": [
+      {
+        "code": "601318",
+        "name": "中国平安",
+        "distance": 0,
+        "jaccard": 1.0
+      }
+    ],
+    "不存在的名字": [],
+    "京东方": [
+      {
+        "code": "000725",
+        "name": "京东方A",
+        "distance": 1,
+        "jaccard": 0.75
+      }
+    ],
+    "隆基": [
+      {
+        "code": "601012",
+        "name": "隆基绿能",
+        "distance": 2,
+        "jaccard": 0.5
+      }
+    ],
+    "药明康得": [
+      {
+        "code": "603259",
+        "name": "药明康德",
+        "distance": 1,
+        "jaccard": 0.6
+      }
+    ],
+    "伊利股分": [
+      {
+        "code": "600887",
+        "name": "伊利股份",
+        "distance": 1,
+        "jaccard": 0.6
+      }
+    ],
+    "宁德时代": [
+      {
+        "code": "300750",
+        "name": "宁德时代",
+        "distance": 0,
+        "jaccard": 1.0
+      }
+    ],
+    "  五粮液  ": [
+      {
+        "code": "000858",
+        "name": "五粮液",
+        "distance": 0,
+        "jaccard": 1.0
+      }
+    ]
+  },
+  "primitives": [
+    {
+      "a": "",
+      "b": "",
+      "levenshtein": 0,
+      "jaccard": 1.0
+    },
+    {
+      "a": "abc",
+      "b": "abc",
+      "levenshtein": 0,
+      "jaccard": 1.0
+    },
+    {
+      "a": "",
+      "b": "abc",
+      "levenshtein": 3,
+      "jaccard": 0.0
+    },
+    {
+      "a": "abc",
+      "b": "",
+      "levenshtein": 3,
+      "jaccard": 0.0
+    },
+    {
+      "a": "kitten",
+      "b": "sitting",
+      "levenshtein": 3,
+      "jaccard": 0.42857142857142855
+    },
+    {
+      "a": "北部港湾",
+      "b": "北部湾港",
+      "levenshtein": 2,
+      "jaccard": 1.0
+    },
+    {
+      "a": "水晶光电",
+      "b": "水晶光电",
+      "levenshtein": 0,
+      "jaccard": 1.0
+    },
+    {
+      "a": "ab",
+      "b": "bc",
+      "levenshtein": 2,
+      "jaccard": 0.3333333333333333
+    },
+    {
+      "a": "ab",
+      "b": "",
+      "levenshtein": 2,
+      "jaccard": 0.0
+    },
+    {
+      "a": "abc",
+      "b": "bca",
+      "levenshtein": 2,
+      "jaccard": 1.0
+    },
+    {
+      "a": "ab",
+      "b": "cd",
+      "levenshtein": 2,
+      "jaccard": 0.0
+    },
+    {
+      "a": "贵州茅台",
+      "b": "贵州茅太",
+      "levenshtein": 1,
+      "jaccard": 0.6
+    }
+  ]
+}

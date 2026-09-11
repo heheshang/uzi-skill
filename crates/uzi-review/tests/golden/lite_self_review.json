@@ -1,0 +1,102 @@
+{
+  "ticker": "002273.SZ",
+  "market": "A",
+  "reviewed_at": "<TS>",
+  "critical_count": 5,
+  "warning_count": 4,
+  "info_count": 0,
+  "passed": false,
+  "issues": [
+    {
+      "severity": "critical",
+      "category": "data",
+      "dim": "10_",
+      "issue": "应跑的维度 10 完全缺失（fetcher 从未运行或崩溃）",
+      "evidence": "dims 里没有 key 以 10_ 开头",
+      "suggested_fix": "重跑 run.py <ticker> --no-resume 或手动 fetch_X"
+    },
+    {
+      "severity": "critical",
+      "category": "data",
+      "dim": "11_",
+      "issue": "应跑的维度 11 完全缺失（fetcher 从未运行或崩溃）",
+      "evidence": "dims 里没有 key 以 11_ 开头",
+      "suggested_fix": "重跑 run.py <ticker> --no-resume 或手动 fetch_X"
+    },
+    {
+      "severity": "critical",
+      "category": "data",
+      "dim": "15_",
+      "issue": "应跑的维度 15 完全缺失（fetcher 从未运行或崩溃）",
+      "evidence": "dims 里没有 key 以 15_ 开头",
+      "suggested_fix": "重跑 run.py <ticker> --no-resume 或手动 fetch_X"
+    },
+    {
+      "severity": "critical",
+      "category": "data",
+      "dim": "16_",
+      "issue": "应跑的维度 16 完全缺失（fetcher 从未运行或崩溃）",
+      "evidence": "dims 里没有 key 以 16_ 开头",
+      "suggested_fix": "重跑 run.py <ticker> --no-resume 或手动 fetch_X"
+    },
+    {
+      "severity": "critical",
+      "category": "panel",
+      "dim": "panel",
+      "issue": "panel.json 无 investors",
+      "evidence": "",
+      "suggested_fix": "重跑 generate_panel()"
+    },
+    {
+      "severity": "warning",
+      "category": "data",
+      "dim": "overall",
+      "issue": "数据完整性仅 38%（< 60% 不该出报告）（lite/CLI 直跑模式降级为 warning，仍出报告供参考）",
+      "evidence": "coverage_pct=38.0, missing_critical=[]",
+      "suggested_fix": "agent 用 WebSearch / mx_api 补齐 missing_critical 维度，重跑 stage2"
+    },
+    {
+      "severity": "warning",
+      "category": "self-check",
+      "dim": "agent_analysis",
+      "issue": "agent_analysis.json 不存在（lite/CLI 直跑模式可接受）",
+      "evidence": "file not found",
+      "suggested_fix": "CLI 直跑无 agent 环境可以忽略此项；若走 Claude Code/Codex/Cursor 则 agent 必须读 panel.json + raw_data.json 后写 agent_analysis.json"
+    },
+    {
+      "severity": "warning",
+      "category": "panel",
+      "dim": "debate",
+      "issue": "debate.bull 未选出 bullish 代表（可能全 skip 或全 bearish）",
+      "evidence": "bull={}",
+      "suggested_fix": "确认 panel 有非 skip 投资者，或 agent 用 great_divide_override 指定"
+    },
+    {
+      "severity": "warning",
+      "category": "panel",
+      "dim": "debate",
+      "issue": "debate.bear 未选出 bearish 代表",
+      "evidence": "bear={}",
+      "suggested_fix": "同上"
+    }
+  ],
+  "checks_run": [
+    "check_industry_mapping_sanity",
+    "check_all_dims_exist",
+    "check_empty_dims",
+    "check_hk_kline_populated",
+    "check_hk_financials_populated",
+    "check_panel_non_empty",
+    "check_coverage_threshold",
+    "check_placeholder_strings",
+    "check_valuation_sanity",
+    "check_industry_data_coverage",
+    "check_metals_materials_populated",
+    "check_agent_analysis_exists",
+    "check_factcheck_redflags",
+    "check_consensus_formula_sanity",
+    "check_panel_hollow_verdicts",
+    "check_panel_insights_rendered",
+    "check_debate_bull_bear_populated"
+  ]
+}

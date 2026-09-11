@@ -1,0 +1,426 @@
+{
+  "data": {
+    "ic_memo": {
+      "method": "Investment Committee Memo",
+      "sections": {
+        "I_exec_summary": {
+          "headline": "⚪ 观望 (HOLD)",
+          "recommendation": "暂不建议建仓，等待估值回落或信号强化",
+          "top_3_risks": []
+        },
+        "II_company_overview": {
+          "name": "—",
+          "industry": "—",
+          "business_model": "—",
+          "market_cap_yi": 0.0,
+          "revenue_last_yi": 0.0
+        },
+        "III_industry_market": {
+          "industry_name": "—",
+          "tam": "—",
+          "growth": "—",
+          "lifecycle": "—"
+        },
+        "IV_financial_analysis": {
+          "roe_5yr": [],
+          "revenue_hist_yi": [],
+          "net_profit_hist_yi": [],
+          "net_margin": 0,
+          "debt_ratio": 0.0,
+          "fcf_positive": false
+        },
+        "V_valuation": {
+          "dcf": {
+            "intrinsic_per_share": null,
+            "safety_margin_pct": null,
+            "verdict": "⛔ 数据不足 · 无法 DCF"
+          },
+          "comps": {
+            "target_percentile": {},
+            "implied_price": {},
+            "verdict": "⚪ 同行样本不足 · 无法对标"
+          }
+        },
+        "VI_risks_mitigants": [],
+        "VII_returns_scenarios": [],
+        "VIII_recommendation": "暂不建议建仓，等待估值回落或信号强化"
+      },
+      "methodology_log": [
+        "Step 1 · 汇总公司/行业/财务快照",
+        "Step 2 · 结合 DCF/Comps 形成估值结论",
+        "Step 3 · 构建三情景回报",
+        "Step 4 · 出具建议: 暂不建议建仓，等待估值回落或信号强化"
+      ]
+    },
+    "unit_economics": {
+      "method": "Margin Decomposition",
+      "business_type": "non-recurring",
+      "revenue_yi": 0.0,
+      "gross_margin_pct": 0.0,
+      "opex_pct_of_rev": -10.0,
+      "net_margin_pct": 10.0,
+      "waterfall": [
+        {
+          "stage": "收入",
+          "value": 100,
+          "label": "100%"
+        },
+        {
+          "stage": "毛利",
+          "value": 0.0,
+          "label": "0%"
+        },
+        {
+          "stage": "税前",
+          "value": 13.333333333333334,
+          "label": "13%"
+        },
+        {
+          "stage": "净利",
+          "value": 10.0,
+          "label": "10%"
+        }
+      ],
+      "methodology_log": [
+        "Step 1 · 营收 0.0 亿",
+        "Step 2 · 毛利率 0% · 运营费率 -10% · 净利率 10%"
+      ]
+    },
+    "value_creation_plan": {
+      "method": "Value Creation Plan (EBITDA Bridge)",
+      "current_ebitda_yi": 0.0,
+      "current_margin_pct": 0,
+      "levers": [
+        {
+          "category": "Revenue · Organic Growth",
+          "lever": "现有市场渗透率提升",
+          "current_state": "市场份额 ~0.0%",
+          "target_state": "5 年内提升 3pp",
+          "ebitda_impact_yi": 0.0,
+          "timeline": "Y1-Y5",
+          "confidence": "Medium"
+        },
+        {
+          "category": "Revenue · Cross-Sell",
+          "lever": "新产品交叉销售",
+          "current_state": "核心产品",
+          "target_state": "5 年新增 20% 营收占比",
+          "ebitda_impact_yi": 0.0,
+          "timeline": "Y2-Y5",
+          "confidence": "Medium"
+        },
+        {
+          "category": "Margin · Pricing Power",
+          "lever": "定价优化",
+          "current_state": "毛利率 0%",
+          "target_state": "+300bps",
+          "ebitda_impact_yi": 0.0,
+          "timeline": "Y1-Y3",
+          "confidence": "High"
+        },
+        {
+          "category": "Margin · COGS",
+          "lever": "采购集中 + 供应链优化",
+          "current_state": "多点采购",
+          "target_state": "−200bps COGS",
+          "ebitda_impact_yi": 0.0,
+          "timeline": "Y1-Y2",
+          "confidence": "High"
+        },
+        {
+          "category": "Capital Efficiency",
+          "lever": "营运资本优化",
+          "current_state": "存货周转 —",
+          "target_state": "存货周转 +20%",
+          "ebitda_impact_yi": 0.0,
+          "timeline": "Y1-Y3",
+          "confidence": "Medium"
+        }
+      ],
+      "total_uplift_yi": 0.0,
+      "target_ebitda_yi": 0.0,
+      "target_margin_pct": 0,
+      "hundred_day_priorities": [
+        "Day 30 · 财务 QoE 验证",
+        "Day 60 · 新管理层招募",
+        "Day 90 · 季度 KPI 仪表盘上线"
+      ],
+      "methodology_log": [
+        "Step 1 · 现 EBITDA 0.0 亿 (0% 利润率)",
+        "Step 2 · 5 大杠杆合计加厚 0.0 亿",
+        "Step 3 · 目标 EBITDA 0.0 亿 (0%)"
+      ]
+    },
+    "dd_checklist": {
+      "method": "Due Diligence Checklist",
+      "workstreams": [
+        {
+          "workstream": "财务尽调 (Financial DD)",
+          "items": [
+            {
+              "item": "5 年营收 / 净利历史",
+              "status": "❌ 缺失"
+            },
+            {
+              "item": "ROE / 毛利 / 净利率",
+              "status": "❌ 缺失"
+            },
+            {
+              "item": "资产负债率",
+              "status": "❌ 缺失"
+            },
+            {
+              "item": "自由现金流",
+              "status": "❌ 缺失"
+            },
+            {
+              "item": "审计意见 / 会计政策",
+              "status": "⚪ 需人工核查"
+            }
+          ]
+        },
+        {
+          "workstream": "商业尽调 (Commercial DD)",
+          "items": [
+            {
+              "item": "市场规模 (TAM)",
+              "status": "❌ 缺失"
+            },
+            {
+              "item": "竞争格局",
+              "status": "❌ 缺失"
+            },
+            {
+              "item": "客户集中度",
+              "status": "⚪ 需年报披露"
+            },
+            {
+              "item": "上下游分析",
+              "status": "❌ 缺失"
+            }
+          ]
+        },
+        {
+          "workstream": "法律尽调 (Legal DD)",
+          "items": [
+            {
+              "item": "股权结构",
+              "status": "❌ 缺失"
+            },
+            {
+              "item": "重大诉讼",
+              "status": "⚪ 需披露核查"
+            },
+            {
+              "item": "关联交易",
+              "status": "⚪ 需年报披露"
+            },
+            {
+              "item": "股权质押 / 内部交易",
+              "status": "❌ 缺失"
+            }
+          ]
+        },
+        {
+          "workstream": "运营尽调 (Operational DD)",
+          "items": [
+            {
+              "item": "护城河评估",
+              "status": "❌ 缺失"
+            },
+            {
+              "item": "研发投入",
+              "status": "⚪ 需年报披露"
+            },
+            {
+              "item": "管理层背景",
+              "status": "⚪ 需人工核查"
+            },
+            {
+              "item": "ESG 评级",
+              "status": "⚪ 需第三方数据"
+            }
+          ]
+        },
+        {
+          "workstream": "市场尽调 (Market DD)",
+          "items": [
+            {
+              "item": "政策环境",
+              "status": "❌ 缺失"
+            },
+            {
+              "item": "舆情扫描",
+              "status": "❌ 缺失"
+            },
+            {
+              "item": "事件驱动监控",
+              "status": "❌ 缺失"
+            },
+            {
+              "item": "杀猪盘排查",
+              "status": "❌ 缺失"
+            }
+          ]
+        }
+      ],
+      "total_items": 21,
+      "items_auto_verified": 0,
+      "completion_pct": 0.0,
+      "manual_review_required": 21,
+      "methodology_log": [
+        "Step 1 · 生成 5 大工作流 21 条清单",
+        "Step 2 · 自动命中 0 条 (0.0%)",
+        "Step 3 · 剩余 21 条需人工复核"
+      ]
+    },
+    "competitive_analysis": {
+      "method": "Competitive Analysis (Porter + BCG)",
+      "porter_five_forces": {
+        "new_entrants_threat": {
+          "score": 4,
+          "rationale": "进入壁垒分 5/10 (无形资产)"
+        },
+        "substitutes_threat": {
+          "score": 4,
+          "rationale": "转换成本分 5/10"
+        },
+        "supplier_power": {
+          "score": 3,
+          "rationale": "中性（未细分）"
+        },
+        "buyer_power": {
+          "score": 3,
+          "rationale": "中性（未细分）"
+        },
+        "rivalry_intensity": {
+          "score": 4,
+          "rationale": "规模优势分 5/10"
+        }
+      },
+      "industry_attractiveness_pct": 35.0,
+      "bcg_position": {
+        "category": "Dog (瘦狗)",
+        "market_share_pct": 0.0,
+        "market_growth_pct": 0.0,
+        "strategic_action": "考虑剥离 / 收缩"
+      },
+      "methodology_log": [
+        "Step 1 · Porter 5 力合计威胁分 18/25，行业吸引力 35.0%",
+        "Step 2 · BCG 定位 Dog (瘦狗) — 考虑剥离 / 收缩"
+      ]
+    },
+    "portfolio_rebalance": {
+      "method": "Portfolio Rebalance Analysis",
+      "portfolio_total_yuan": 10000.0,
+      "drift_rows": [
+        {
+          "asset_class": "A股蓝筹",
+          "target_pct": 30,
+          "current_pct": 0.0,
+          "drift_pct": -30.0,
+          "dollar_drift_yuan": -3000.0,
+          "action": "买入"
+        },
+        {
+          "asset_class": "A股成长",
+          "target_pct": 25,
+          "current_pct": 100.0,
+          "drift_pct": 75.0,
+          "dollar_drift_yuan": 7500.0,
+          "action": "减持"
+        },
+        {
+          "asset_class": "港股",
+          "target_pct": 15,
+          "current_pct": 0.0,
+          "drift_pct": -15.0,
+          "dollar_drift_yuan": -1500.0,
+          "action": "买入"
+        },
+        {
+          "asset_class": "美股",
+          "target_pct": 10,
+          "current_pct": 0.0,
+          "drift_pct": -10.0,
+          "dollar_drift_yuan": -1000.0,
+          "action": "买入"
+        },
+        {
+          "asset_class": "债券/货币",
+          "target_pct": 15,
+          "current_pct": 0.0,
+          "drift_pct": -15.0,
+          "dollar_drift_yuan": -1500.0,
+          "action": "买入"
+        },
+        {
+          "asset_class": "现金",
+          "target_pct": 5,
+          "current_pct": 0.0,
+          "drift_pct": -5.0,
+          "dollar_drift_yuan": -500.0,
+          "action": "维持"
+        }
+      ],
+      "needs_rebalance": true,
+      "rebalance_trades": [
+        {
+          "asset_class": "A股蓝筹",
+          "target_pct": 30,
+          "current_pct": 0.0,
+          "drift_pct": -30.0,
+          "dollar_drift_yuan": -3000.0,
+          "action": "买入"
+        },
+        {
+          "asset_class": "A股成长",
+          "target_pct": 25,
+          "current_pct": 100.0,
+          "drift_pct": 75.0,
+          "dollar_drift_yuan": 7500.0,
+          "action": "减持"
+        },
+        {
+          "asset_class": "港股",
+          "target_pct": 15,
+          "current_pct": 0.0,
+          "drift_pct": -15.0,
+          "dollar_drift_yuan": -1500.0,
+          "action": "买入"
+        },
+        {
+          "asset_class": "美股",
+          "target_pct": 10,
+          "current_pct": 0.0,
+          "drift_pct": -10.0,
+          "dollar_drift_yuan": -1000.0,
+          "action": "买入"
+        },
+        {
+          "asset_class": "债券/货币",
+          "target_pct": 15,
+          "current_pct": 0.0,
+          "drift_pct": -15.0,
+          "dollar_drift_yuan": -1500.0,
+          "action": "买入"
+        }
+      ],
+      "methodology_log": [
+        "Step 1 · 组合总值 ¥10,000",
+        "Step 2 · 6 个资产类别漂移检查",
+        "Step 3 · 需再平衡: True"
+      ]
+    },
+    "summary": {
+      "ic_recommendation": "⚪ 观望 (HOLD)",
+      "bcg_position": "Dog (瘦狗)",
+      "industry_attractiveness": 35.0,
+      "dd_completion_pct": 0.0,
+      "value_creation_uplift_yi": 0.0,
+      "unit_economics_verdict": "—"
+    }
+  },
+  "source": "compute:deep_analysis_methods (6 PE/IB/WM methods)",
+  "fallback": false
+}

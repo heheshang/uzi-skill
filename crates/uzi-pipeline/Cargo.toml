@@ -1,0 +1,12 @@
+[package]
+name = "uzi-pipeline"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+regex.workspace = true
+uzi-core = { path = "../uzi-core" }
+uzi-features = { path = "../uzi-features" }
+uzi-investors = { path = "../uzi-investors" }

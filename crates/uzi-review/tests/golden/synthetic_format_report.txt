@@ -1,0 +1,5 @@
+[data_integrity] 🔴 CRITICAL coverage=89.0% (16/18)
+  🔴 critical missing (1):
+     - 总市值 (0_basic.market_cap)
+  🟡 optional missing (1):
+     - PB 5 年分位 (10_valuation.pb_quantile)

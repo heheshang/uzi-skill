@@ -1,0 +1,44 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/uzi-core",
+    "crates/uzi-features",
+    "crates/uzi-investors",
+    "crates/uzi-pipeline",
+    "crates/uzi-models",
+    "crates/uzi-data",
+    "crates/uzi-report",
+    "crates/uzi-review",
+    "crates/uzi-screen",
+    "crates/uzi-cli",
+]
+
+[workspace.package]
+version = "3.9.4"
+edition = "2021"
+license = "MIT"
+repository = "https://github.com/heheshang/uzi-skill"
+
+[workspace.dependencies]
+anyhow = "1"
+chrono = { version = "0.4", features = ["serde", "clock"] }
+chrono-tz = "0.10"
+clap = { version = "4", features = ["derive"] }
+encoding_rs = "0.8"
+indexmap = { version = "2", features = ["serde"] }
+md-5 = "0.10"
+rayon = "1"
+regex = "1"
+serde = { version = "1", features = ["derive"] }
+# `float_roundtrip` is required for parity: serde_json's default float parser is
+# not correctly rounded, so it can read a golden double 1 ulp high and break
+# exact comparison against Python (which, like Rust's `str::parse`, is correctly
+# rounded).
+serde_json = { version = "1", features = ["preserve_order", "float_roundtrip"] }
+sha2 = "0.10"
+thiserror = "2"
+ureq = "3"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1

@@ -1,0 +1,56 @@
+{
+  "ticker": "AAPL",
+  "code": "AAPL",
+  "market": "U",
+  "dimensions": {
+    "0_basic": {
+      "data": {
+        "code": "AAPL",
+        "name": "Apple Inc.",
+        "price": 0
+      },
+      "source": "fixture:fetch_basic",
+      "fallback": false,
+      "_pipeline": {
+        "dim_key": "fixture:fetch_basic",
+        "quality": "partial",
+        "data_gaps": [],
+        "latency_ms": 12,
+        "fetched_at": 1770000000.0,
+        "cached": false,
+        "top_level_fields": {},
+        "error": null
+      }
+    },
+    "1_financials": {
+      "data": {},
+      "source": "fixture:fetch_financials",
+      "fallback": true,
+      "_pipeline": {
+        "dim_key": "fixture:fetch_financials",
+        "quality": "missing",
+        "data_gaps": [],
+        "latency_ms": 12,
+        "fetched_at": 1770000000.0,
+        "cached": false,
+        "top_level_fields": {},
+        "error": null
+      }
+    },
+    "2_kline": {
+      "data": {},
+      "source": "fixture:fetch_kline",
+      "fallback": true,
+      "_pipeline": {
+        "dim_key": "fixture:fetch_kline",
+        "quality": "error",
+        "data_gaps": [],
+        "latency_ms": 12,
+        "fetched_at": 1770000000.0,
+        "cached": false,
+        "top_level_fields": {},
+        "error": null
+      }
+    }
+  }
+}

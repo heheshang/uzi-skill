@@ -1,0 +1,167 @@
+{
+  "ok": false,
+  "critical_missing": true,
+  "missing_critical": [
+    {
+      "dim": "0_basic",
+      "path": "industry",
+      "label": "所属行业"
+    },
+    {
+      "dim": "0_basic",
+      "path": "market_cap",
+      "label": "总市值"
+    },
+    {
+      "dim": "1_financials",
+      "path": "roe_history",
+      "label": "ROE 历史"
+    },
+    {
+      "dim": "2_kline",
+      "path": "stage",
+      "label": "K 线阶段"
+    }
+  ],
+  "missing_optional": [
+    {
+      "dim": "0_basic",
+      "path": "pe_ttm",
+      "label": "PE-TTM"
+    },
+    {
+      "dim": "0_basic",
+      "path": "pb",
+      "label": "PB"
+    },
+    {
+      "dim": "1_financials",
+      "path": "revenue_history",
+      "label": "营收历史"
+    },
+    {
+      "dim": "1_financials",
+      "path": "net_profit_history",
+      "label": "净利历史"
+    },
+    {
+      "dim": "1_financials",
+      "path": "financial_health",
+      "label": "财务健康度"
+    },
+    {
+      "dim": "2_kline",
+      "path": "ma_align",
+      "label": "均线多空"
+    },
+    {
+      "dim": "2_kline",
+      "path": "macd",
+      "label": "MACD"
+    },
+    {
+      "dim": "10_valuation",
+      "path": "pe",
+      "label": "PE"
+    },
+    {
+      "dim": "10_valuation",
+      "path": "pe_quantile",
+      "label": "PE 5 年分位"
+    },
+    {
+      "dim": "10_valuation",
+      "path": "pb_quantile",
+      "label": "PB 5 年分位"
+    },
+    {
+      "dim": "7_industry",
+      "path": "growth",
+      "label": "行业增速"
+    },
+    {
+      "dim": "14_moat",
+      "path": "scores",
+      "label": "护城河评分"
+    }
+  ],
+  "missing_enrichment": [
+    {
+      "dim": "3_macro",
+      "label": "宏观周期"
+    },
+    {
+      "dim": "4_peers",
+      "label": "同业对标"
+    },
+    {
+      "dim": "5_chain",
+      "label": "上下游"
+    },
+    {
+      "dim": "6_research",
+      "label": "券商研报"
+    },
+    {
+      "dim": "7_industry",
+      "label": "行业景气"
+    },
+    {
+      "dim": "8_materials",
+      "label": "原材料"
+    },
+    {
+      "dim": "9_futures",
+      "label": "期货关联"
+    },
+    {
+      "dim": "11_governance",
+      "label": "治理/减持"
+    },
+    {
+      "dim": "12_capital_flow",
+      "label": "北向/两融"
+    },
+    {
+      "dim": "13_policy",
+      "label": "政策环境"
+    },
+    {
+      "dim": "14_moat",
+      "label": "护城河"
+    },
+    {
+      "dim": "15_events",
+      "label": "事件驱动"
+    },
+    {
+      "dim": "16_lhb",
+      "label": "龙虎榜/游资"
+    },
+    {
+      "dim": "17_sentiment",
+      "label": "大V舆情"
+    },
+    {
+      "dim": "18_trap",
+      "label": "杀猪盘"
+    },
+    {
+      "dim": "19_contests",
+      "label": "实盘比赛"
+    }
+  ],
+  "fallback_dims": [
+    {
+      "dim": "1_financials",
+      "reason": "unknown"
+    },
+    {
+      "dim": "2_kline",
+      "reason": "unknown"
+    }
+  ],
+  "coverage_pct": 11.0,
+  "passed_checks": 2,
+  "total_checks": 18
+}

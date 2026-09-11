@@ -1,0 +1,30 @@
+{
+  "version": "3.9.4",
+  "files": [
+    "Cargo.toml",
+    ".claude-plugin/plugin.json",
+    ".cursor-plugin/plugin.json",
+    "gemini-extension.json",
+    "SKILL.md",
+    "skills/deep-analysis/SKILL.md",
+    "skills/investor-panel/SKILL.md",
+    "skills/lhb-analyzer/SKILL.md",
+    "skills/trap-detector/SKILL.md"
+  ],
+  "patterns": {
+    "Cargo.toml": "version = \"VERSION\"",
+    ".claude-plugin/plugin.json": "\"version\": \"VERSION\"",
+    ".cursor-plugin/plugin.json": "\"version\": \"VERSION\"",
+    "gemini-extension.json": "\"version\": \"VERSION\"",
+    "SKILL.md": "version: VERSION",
+    "skills/deep-analysis/SKILL.md": "version: VERSION",
+    "skills/investor-panel/SKILL.md": "version: VERSION",
+    "skills/lhb-analyzer/SKILL.md": "version: VERSION",
+    "skills/trap-detector/SKILL.md": "version: VERSION"
+  },
+  "notes": {
+    "workspace_version": "Cargo.toml 的 [workspace.package] version 是源码版本真源；`uzi --version` 与更新检查都以它为准。",
+    "runtime_version": "crates/uzi-cli/src/lib.rs 的 `pub const VERSION` 与 root SKILL.md 的 version 必须同步 —— 前者是二进制自报版本，后者是 skill 元数据。",
+    "removed_from_upstream": "package.json（本项目无 npm 产物）与 hooks/hooks.json（该 hook 不内嵌版本号）。"
+  }
+}

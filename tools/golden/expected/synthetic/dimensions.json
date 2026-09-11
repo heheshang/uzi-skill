@@ -1,0 +1,131 @@
+{
+  "ticker": "002273.SZ",
+  "fundamental_score": 71.4,
+  "dimensions": {
+    "1_financials": {
+      "score": 6,
+      "weight": 5,
+      "label": "ROE 11.2% · 营收增速 +14.4% · 负债率 38%",
+      "reasons_pass": [
+        "资产负债率 38% 健康"
+      ],
+      "reasons_fail": []
+    },
+    "2_kline": {
+      "score": 8,
+      "weight": 4,
+      "label": "Stage 2 · 上升期 · 均线多头排列 · YTD +18.4%",
+      "reasons_pass": [
+        "Stage 2 · 上升期"
+      ],
+      "reasons_fail": []
+    },
+    "3_macro": {
+      "score": 6,
+      "weight": 3,
+      "label": "宏观环境中性"
+    },
+    "4_peers": {
+      "score": 7,
+      "weight": 4,
+      "label": "全球同行 4 家对比",
+      "reasons_pass": [],
+      "reasons_fail": []
+    },
+    "5_chain": {
+      "score": 6,
+      "weight": 4,
+      "label": "主营 3 类业务已识别",
+      "reasons_pass": [],
+      "reasons_fail": []
+    },
+    "6_research": {
+      "score": 9,
+      "weight": 3,
+      "label": "18 份研报 · 买入/增持 16 份",
+      "reasons_pass": [
+        "覆盖券商 18 家"
+      ],
+      "reasons_fail": []
+    },
+    "7_industry": {
+      "score": 7,
+      "weight": 4,
+      "label": "行业处于成长期"
+    },
+    "8_materials": {
+      "score": 6,
+      "weight": 3,
+      "label": "原材料成本关注中"
+    },
+    "9_futures": {
+      "score": 5,
+      "weight": 2,
+      "label": "无强关联期货品种"
+    },
+    "10_valuation": {
+      "score": 9,
+      "weight": 5,
+      "label": "PE 34.2 · 5 年 5 分位 · 行业均值 31.8",
+      "reasons_pass": [
+        "PE 在 5 年中位数以下"
+      ],
+      "reasons_fail": []
+    },
+    "11_governance": {
+      "score": 8,
+      "weight": 4,
+      "label": "质押记录 0 · 内部交易 有"
+    },
+    "12_capital_flow": {
+      "score": 7,
+      "weight": 4,
+      "label": "主力 5日 +1.7亿 · 12 个月解禁 1 次",
+      "reasons_pass": [
+        "主力资金 5 日净流入 +1.7亿"
+      ],
+      "reasons_fail": []
+    },
+    "13_policy": {
+      "score": 6,
+      "weight": 3,
+      "label": "政策环境中性"
+    },
+    "14_moat": {
+      "score": 6,
+      "weight": 3,
+      "label": "护城河需定性评估"
+    },
+    "15_events": {
+      "score": 5,
+      "weight": 4,
+      "label": "近期新闻 3 条 · 公告 1 份"
+    },
+    "16_lhb": {
+      "score": 8,
+      "weight": 4,
+      "label": "近 30 天上榜 4 次 · 识别游资 2 位",
+      "reasons_pass": [
+        "章盟主/赵老哥 席位出现"
+      ]
+    },
+    "17_sentiment": {
+      "score": 6,
+      "weight": 3,
+      "label": "雪球热度上榜 3 次"
+    },
+    "18_trap": {
+      "score": 9,
+      "weight": 5,
+      "label": "🟢 未发现推广痕迹"
+    },
+    "19_contests": {
+      "score": 9,
+      "weight": 4,
+      "label": "雪球 12 个组合持有 · 2 个收益 >50%",
+      "reasons_pass": [
+        "12 个雪球组合持有"
+      ]
+    }
+  }
+}

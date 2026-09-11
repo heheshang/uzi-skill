@@ -1,0 +1,124 @@
+{
+  "ticker": "AAPL",
+  "fundamental_score": 56.3,
+  "dimensions": {
+    "1_financials": {
+      "score": 3,
+      "weight": 5,
+      "label": "ROE 0.0% · 营收增速 +0.0% · 负债率 0%",
+      "reasons_pass": [
+        "资产负债率 0% 健康"
+      ],
+      "reasons_fail": [
+        "ROE 最新 0.0% 偏低",
+        "营收增速 0.0% 停滞"
+      ]
+    },
+    "2_kline": {
+      "score": 5,
+      "weight": 4,
+      "label": " · 均线",
+      "reasons_pass": [],
+      "reasons_fail": []
+    },
+    "3_macro": {
+      "score": 6,
+      "weight": 3,
+      "label": "宏观环境中性"
+    },
+    "4_peers": {
+      "score": 5,
+      "weight": 4,
+      "label": "无同行数据",
+      "reasons_pass": [],
+      "reasons_fail": []
+    },
+    "5_chain": {
+      "score": 5,
+      "weight": 4,
+      "label": "产业链数据不完整",
+      "reasons_pass": [],
+      "reasons_fail": []
+    },
+    "6_research": {
+      "score": 5,
+      "weight": 3,
+      "label": "研报数据稀少",
+      "reasons_pass": [],
+      "reasons_fail": [
+        "缺乏覆盖"
+      ]
+    },
+    "7_industry": {
+      "score": 7,
+      "weight": 4,
+      "label": "行业处于成长期"
+    },
+    "8_materials": {
+      "score": 6,
+      "weight": 3,
+      "label": "原材料成本关注中"
+    },
+    "9_futures": {
+      "score": 5,
+      "weight": 2,
+      "label": "无强关联期货品种"
+    },
+    "10_valuation": {
+      "score": 5,
+      "weight": 5,
+      "label": "PE — · 5 年 50 分位 · 行业均值 —",
+      "reasons_pass": [],
+      "reasons_fail": []
+    },
+    "11_governance": {
+      "score": 7,
+      "weight": 4,
+      "label": "质押记录 0 · 内部交易 无"
+    },
+    "12_capital_flow": {
+      "score": 6,
+      "weight": 4,
+      "label": "主力 5日 — · 12 个月解禁 0 次",
+      "reasons_pass": [],
+      "reasons_fail": []
+    },
+    "13_policy": {
+      "score": 6,
+      "weight": 3,
+      "label": "政策环境中性"
+    },
+    "14_moat": {
+      "score": 6,
+      "weight": 3,
+      "label": "护城河需定性评估"
+    },
+    "15_events": {
+      "score": 5,
+      "weight": 4,
+      "label": "近期新闻 0 条 · 公告 0 份"
+    },
+    "16_lhb": {
+      "score": 5,
+      "weight": 4,
+      "label": "近 30 天上榜 0 次 · 识别游资 0 位",
+      "reasons_pass": []
+    },
+    "17_sentiment": {
+      "score": 6,
+      "weight": 3,
+      "label": "雪球热度上榜 0 次"
+    },
+    "18_trap": {
+      "score": 9,
+      "weight": 5,
+      "label": "🟢 未发现推广痕迹"
+    },
+    "19_contests": {
+      "score": 5,
+      "weight": 4,
+      "label": "雪球 0 个组合持有 · 0 个收益 >50%",
+      "reasons_pass": []
+    }
+  }
+}

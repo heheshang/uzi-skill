@@ -1,0 +1,38 @@
+{
+  "ticker": "002273.SZ",
+  "market": "A",
+  "reviewed_at": "2026-09-11T15:01:11",
+  "critical_count": 1,
+  "warning_count": 0,
+  "info_count": 0,
+  "passed": false,
+  "issues": [
+    {
+      "severity": "critical",
+      "category": "self-check",
+      "dim": "agent_analysis",
+      "issue": "agent_analysis.json 不存在",
+      "evidence": "file not found",
+      "suggested_fix": "CLI 直跑无 agent 环境可以忽略此项；若走 Claude Code/Codex/Cursor 则 agent 必须读 panel.json + raw_data.json 后写 agent_analysis.json"
+    }
+  ],
+  "checks_run": [
+    "check_industry_mapping_sanity",
+    "check_all_dims_exist",
+    "check_empty_dims",
+    "check_hk_kline_populated",
+    "check_hk_financials_populated",
+    "check_panel_non_empty",
+    "check_coverage_threshold",
+    "check_placeholder_strings",
+    "check_valuation_sanity",
+    "check_industry_data_coverage",
+    "check_metals_materials_populated",
+    "check_agent_analysis_exists",
+    "check_factcheck_redflags",
+    "check_consensus_formula_sanity",
+    "check_panel_hollow_verdicts",
+    "check_panel_insights_rendered",
+    "check_debate_bull_bear_populated"
+  ]
+}

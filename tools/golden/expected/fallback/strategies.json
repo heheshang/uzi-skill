@@ -1,0 +1,294 @@
+{
+  "strategies": {
+    "4_peers": {
+      "peer_table_playwright": [
+        {
+          "name": "贵州茅台",
+          "code": "600519.SH"
+        },
+        {
+          "name": "北部湾港",
+          "code": "000582.SZ"
+        },
+        {
+          "name": "腾讯控股",
+          "code": "00700.HK"
+        },
+        {
+          "name": "诺思兰德",
+          "code": "430047.BJ"
+        }
+      ]
+    },
+    "8_materials": {
+      "core_business_playwright": "光学薄膜研发与制造"
+    },
+    "15_events": {
+      "event_titles_playwright": [
+        "2026年第一季度报告",
+        "关于回购公司股份的公告"
+      ]
+    },
+    "17_sentiment": {
+      "xueqiu_posts_playwright": [
+        "水晶光电还有机会吗",
+        "聊聊AR眼镜产业链"
+      ]
+    },
+    "3_macro": {
+      "macro_headlines_playwright": [
+        "2026年8月份国民经济运行情况",
+        "国家统计局城市司首席统计师解读数据"
+      ]
+    },
+    "7_industry": {
+      "baidu_search_titles_playwright": [
+        "光学光电子行业景气度持续提升"
+      ],
+      "baidu_search_descs_playwright": [
+        "市场规模预计达到 420 亿元，渗透率稳步提升"
+      ]
+    },
+    "14_moat": {
+      "baike_intro_playwright": "水晶光电是一家光学薄膜企业。",
+      "baike_basic_info_playwright": {
+        "主营业务": "光学元件",
+        "所属行业": "光学光电子"
+      }
+    },
+    "13_policy": {
+      "csrc_policy_titles_playwright": [
+        "证监会发布关于资本市场的最新政策通知"
+      ]
+    },
+    "18_trap": {
+      "xhs_trap_post_count_playwright": 2,
+      "xhs_trap_titles_playwright": [
+        "水晶光电 老师推荐 必涨",
+        "水晶光电财报解读"
+      ]
+    },
+    "19_contests": {
+      "xueqiu_contest_top10_playwright": [
+        {
+          "name": "稳健成长",
+          "total_gain_pct": 45.6
+        },
+        {
+          "name": "激进策略",
+          "total_gain_pct": -12.3
+        }
+      ]
+    }
+  },
+  "empty_pages": {
+    "4_peers": null,
+    "8_materials": null,
+    "15_events": null,
+    "17_sentiment": null,
+    "3_macro": null,
+    "7_industry": null,
+    "14_moat": null,
+    "13_policy": null,
+    "18_trap": null,
+    "19_contests": null
+  },
+  "quality": [
+    {
+      "dim": {
+        "data": {
+          "a": 1,
+          "b": 2
+        }
+      },
+      "needs": false,
+      "score": 1.0
+    },
+    {
+      "dim": {
+        "data": {
+          "a": 1,
+          "b": "—",
+          "c": null,
+          "d": ""
+        }
+      },
+      "needs": true,
+      "score": 0.25
+    },
+    {
+      "dim": {
+        "data": {
+          "a": 1,
+          "b": null
+        }
+      },
+      "needs": false,
+      "score": 0.5
+    },
+    {
+      "dim": {
+        "data": {}
+      },
+      "needs": true,
+      "score": 0.0
+    },
+    {
+      "dim": {
+        "data": {
+          "_src": "x",
+          "a": 1
+        }
+      },
+      "needs": false,
+      "score": 1.0
+    },
+    {
+      "dim": {
+        "data": {
+          "_src": "x",
+          "_e": "y"
+        }
+      },
+      "needs": true,
+      "score": 0.0
+    },
+    {
+      "dim": {
+        "data": null
+      },
+      "needs": true,
+      "score": 0.0
+    },
+    {
+      "dim": {
+        "data": {
+          "a": "—",
+          "b": null
+        }
+      },
+      "needs": true,
+      "score": 0.0
+    },
+    {
+      "dim": {
+        "data": {
+          "a": 1,
+          "b": 2
+        },
+        "fallback": true
+      },
+      "needs": true,
+      "score": 1.0
+    },
+    {
+      "dim": {
+        "data": {
+          "growth": "—",
+          "tam": "—",
+          "penetration": "—",
+          "k1": 1,
+          "k2": 2,
+          "k3": 3
+        }
+      },
+      "needs": false,
+      "score": 0.5
+    }
+  ],
+  "network": [
+    {
+      "profile": {
+        "domestic_ok": true,
+        "search_ok": true,
+        "overseas_ok": true
+      },
+      "effective": [
+        "13_policy",
+        "14_moat",
+        "15_events",
+        "17_sentiment",
+        "18_trap",
+        "19_contests",
+        "3_macro",
+        "4_peers",
+        "7_industry",
+        "8_materials"
+      ],
+      "skipped": []
+    },
+    {
+      "profile": {
+        "domestic_ok": true,
+        "search_ok": false
+      },
+      "effective": [
+        "13_policy",
+        "14_moat",
+        "15_events",
+        "17_sentiment",
+        "19_contests",
+        "3_macro",
+        "4_peers",
+        "8_materials"
+      ],
+      "skipped": [
+        "18_trap(search 不通)",
+        "7_industry(search 不通)"
+      ]
+    },
+    {
+      "profile": {
+        "domestic_ok": false,
+        "search_ok": true
+      },
+      "effective": [],
+      "skipped": [
+        "13_policy(domestic 不通)",
+        "14_moat(domestic 不通)",
+        "15_events(domestic 不通)",
+        "17_sentiment(domestic 不通)",
+        "18_trap(domestic 不通)",
+        "19_contests(domestic 不通)",
+        "3_macro(domestic 不通)",
+        "4_peers(domestic 不通)",
+        "7_industry(domestic 不通)",
+        "8_materials(domestic 不通)"
+      ]
+    }
+  ],
+  "dim_network_requirements": {
+    "13_policy": [
+      "domestic"
+    ],
+    "14_moat": [
+      "domestic"
+    ],
+    "15_events": [
+      "domestic"
+    ],
+    "17_sentiment": [
+      "domestic"
+    ],
+    "18_trap": [
+      "domestic",
+      "search"
+    ],
+    "19_contests": [
+      "domestic"
+    ],
+    "3_macro": [
+      "domestic"
+    ],
+    "4_peers": [
+      "domestic"
+    ],
+    "7_industry": [
+      "domestic",
+      "search"
+    ],
+    "8_materials": [
+      "domestic"
+    ]
+  }
+}

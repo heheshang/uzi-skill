@@ -1,0 +1,336 @@
+{
+  "data": {
+    "initiating_coverage": {
+      "method": "Initiating Coverage (JPM/GS/MS style)",
+      "company": {
+        "name": "—",
+        "code": null,
+        "industry": "—"
+      },
+      "headline": {
+        "rating": "未评级 (Not Rated)",
+        "target_price": 0,
+        "current_price": 0.0,
+        "upside_pct": 0,
+        "report_date": "2026-09-11"
+      },
+      "executive_summary": "我们首次覆盖—（-），暂不给出目标价或方向评级。DCF 与可比公司估值均缺少有效结果，应待盈利恢复或补齐 PB/Comps 数据后重估。公司属于—行业，最新 ROE 0.0%。",
+      "investment_thesis": [
+        {
+          "pillar": "（暂未发现明确支柱）",
+          "evidence": "基本面数据不足以支撑看多论点",
+          "weight": "Low"
+        }
+      ],
+      "key_risks": [
+        {
+          "risk": "ROE 波动大",
+          "severity": "Medium",
+          "detail": "5 年 ROE 最低点 0.0%"
+        },
+        {
+          "risk": "宏观 / 行业需求下行",
+          "severity": "Medium",
+          "detail": "景气周期风险"
+        }
+      ],
+      "valuation_bridge": [],
+      "financial_snapshot": {
+        "revenue_history_yi": [],
+        "net_profit_history_yi": [],
+        "roe_history": []
+      },
+      "coverage_universe_pos": {
+        "analyst_count": 0.0,
+        "ratings": {},
+        "consensus": "—"
+      },
+      "methodology_log": [
+        "Task 1 · 公司研究 — 业务/管理层/行业扫描 ✓",
+        "Task 2 · 财务模型 — 5 年历史 + 3 年预测 ✓",
+        "Task 3 · 估值分析 — 0 种方法混合 ✓",
+        "Task 4 · 综合评级 — 未评级 (Not Rated)，目标价 ¥0.00"
+      ]
+    },
+    "earnings_analysis": {
+      "error": "财务历史数据不足",
+      "method": "Earnings Analysis"
+    },
+    "catalyst_calendar": {
+      "method": "Catalyst Calendar",
+      "generated_at": "2026-09-11",
+      "events": [
+        {
+          "date": "2026-10-11",
+          "event": "股东大会 / 投资者关系活动",
+          "category": "corporate",
+          "impact": "medium"
+        },
+        {
+          "date": "2026-10-23",
+          "event": "美联储 FOMC 会议 (参考)",
+          "category": "macro",
+          "impact": "low"
+        },
+        {
+          "date": "2026-10-31",
+          "event": "季报披露（预计 2026 Q4）",
+          "category": "earnings",
+          "impact": "high",
+          "expectation": "关注营收/净利超预期与否"
+        },
+        {
+          "date": "2026-11-10",
+          "event": "行业展会 / 新品发布窗口",
+          "category": "industry",
+          "impact": "medium"
+        }
+      ],
+      "high_impact_count": 1,
+      "past_event_count": 0,
+      "forward_event_count": 0,
+      "next_30d": [
+        {
+          "date": "2026-10-11",
+          "event": "股东大会 / 投资者关系活动",
+          "category": "corporate",
+          "impact": "medium"
+        }
+      ],
+      "methodology_log": [
+        "Step 1 · 从 15_events 提取 0 条历史事件",
+        "Step 2 · 预排 0 个未来节点（季报/股东会/展会/FOMC）",
+        "Step 3 · 共 4 个节点，其中 1 个高影响"
+      ]
+    },
+    "thesis_tracker": {
+      "method": "Thesis Tracker",
+      "direction": "long",
+      "pillars": [
+        {
+          "pillar": "营收增速 > 15%",
+          "original_target": "维持 15%+",
+          "current_status": "0.0%",
+          "trend": "concerning",
+          "verdict": "⚠️"
+        },
+        {
+          "pillar": "ROE > 15%",
+          "original_target": "15%+",
+          "current_status": "0.0%",
+          "trend": "concerning",
+          "verdict": "⚠️"
+        },
+        {
+          "pillar": "技术面处于 Stage 2",
+          "original_target": "Stage 2 上升",
+          "current_status": "—",
+          "trend": "watch",
+          "verdict": "⚠️"
+        },
+        {
+          "pillar": "估值合理 (PE < 40)",
+          "original_target": "< 40",
+          "current_status": "0",
+          "trend": "stable",
+          "verdict": "✅"
+        },
+        {
+          "pillar": "FCF 为正",
+          "original_target": "持续正 FCF",
+          "current_status": "负",
+          "trend": "concerning",
+          "verdict": "⚠️"
+        }
+      ],
+      "pillars_passed": 1,
+      "pillars_total": 5,
+      "thesis_intact_pct": 20.0,
+      "conviction": "Broken",
+      "recommended_action": "Exit",
+      "methodology_log": [
+        "Step 1 · 构建 5 条核心假设支柱",
+        "Step 2 · 当前命中 1/5，完好率 20.0%",
+        "Step 3 · 信念度 Broken，建议 Exit"
+      ]
+    },
+    "morning_note": {
+      "method": "Morning Note",
+      "date": "2026-09-11",
+      "top_call": "— · 技术面 —，暂观望",
+      "recommendation": "无明确信号",
+      "bullets": [
+        "【价格】¥0.00 · PE 0x",
+        "【技术面】— · 均线 —",
+        "【资金面】龙虎榜 0 次 · 主力资金 —",
+        "【舆情】热度 0 · —"
+      ],
+      "methodology_log": [
+        "Step 1 · 扫描技术面 + 资金面 + 舆情",
+        "Step 2 · Top Call: — · 技术面 —，暂观望"
+      ]
+    },
+    "idea_screens": {
+      "value": {
+        "method": "Idea Screen (value)",
+        "checks": [
+          {
+            "criterion": "PE < 15",
+            "pass": true
+          },
+          {
+            "criterion": "PB < 1.5",
+            "pass": true
+          },
+          {
+            "criterion": "股息率 > 3%",
+            "pass": false
+          },
+          {
+            "criterion": "FCF > 0",
+            "pass": false
+          },
+          {
+            "criterion": "资产负债率 < 50%",
+            "pass": false
+          }
+        ],
+        "passed": 2,
+        "total": 5,
+        "pass_rate_pct": 40.0,
+        "fits_screen": false,
+        "verdict": "🟡 部分命中 (2/5)",
+        "methodology_log": [
+          "Step 1 · value 筛选 — 5 条标准",
+          "Step 2 · 命中 2/5 (40.0%)"
+        ]
+      },
+      "growth": {
+        "method": "Idea Screen (growth)",
+        "checks": [
+          {
+            "criterion": "营收增速 > 15%",
+            "pass": false
+          },
+          {
+            "criterion": "净利增速 > 20%",
+            "pass": false
+          },
+          {
+            "criterion": "毛利率扩张",
+            "pass": false
+          },
+          {
+            "criterion": "ROE > 15%",
+            "pass": false
+          }
+        ],
+        "passed": 0,
+        "total": 4,
+        "pass_rate_pct": 0.0,
+        "fits_screen": false,
+        "verdict": "🟡 部分命中 (0/4)",
+        "methodology_log": [
+          "Step 1 · growth 筛选 — 4 条标准",
+          "Step 2 · 命中 0/4 (0.0%)"
+        ]
+      },
+      "quality": {
+        "method": "Idea Screen (quality)",
+        "checks": [
+          {
+            "criterion": "ROE 连续 5 年 > 15%",
+            "pass": false
+          },
+          {
+            "criterion": "净利率 > 15%",
+            "pass": false
+          },
+          {
+            "criterion": "FCF 持续为正",
+            "pass": false
+          },
+          {
+            "criterion": "资产负债率 < 50%",
+            "pass": false
+          },
+          {
+            "criterion": "护城河 ≥ 28/40",
+            "pass": false
+          }
+        ],
+        "passed": 0,
+        "total": 5,
+        "pass_rate_pct": 0.0,
+        "fits_screen": false,
+        "verdict": "🟡 部分命中 (0/5)",
+        "methodology_log": [
+          "Step 1 · quality 筛选 — 5 条标准",
+          "Step 2 · 命中 0/5 (0.0%)"
+        ]
+      },
+      "gulp": {
+        "method": "Idea Screen (gulp)",
+        "checks": [
+          {
+            "criterion": "PEG < 1.5",
+            "pass": false
+          },
+          {
+            "criterion": "营收增速 > 15%",
+            "pass": false
+          },
+          {
+            "criterion": "ROE > 15%",
+            "pass": false
+          },
+          {
+            "criterion": "Stage 2",
+            "pass": false
+          }
+        ],
+        "passed": 0,
+        "total": 4,
+        "pass_rate_pct": 0.0,
+        "fits_screen": false,
+        "verdict": "🟡 部分命中 (0/4)",
+        "methodology_log": [
+          "Step 1 · gulp 筛选 — 4 条标准",
+          "Step 2 · 命中 0/4 (0.0%)"
+        ]
+      }
+    },
+    "sector_overview": {
+      "method": "Sector Overview",
+      "industry": "—",
+      "market_size": {
+        "tam": "—",
+        "growth": "—",
+        "lifecycle": "—"
+      },
+      "value_chain": {
+        "upstream": [],
+        "company": [],
+        "downstream": []
+      },
+      "competitive_map": [],
+      "peer_count": 0,
+      "methodology_log": [
+        "Step 1 · 行业=—，生命周期=—",
+        "Step 2 · TAM — · 增速 —",
+        "Step 3 · 识别同行 0 家"
+      ]
+    },
+    "summary": {
+      "rec_rating": "未评级 (Not Rated)",
+      "target_price": 0,
+      "upside_pct": 0,
+      "thesis_intact_pct": 20.0,
+      "next_high_impact_event": "股东大会 / 投资者关系活动",
+      "earnings_headline": null,
+      "screens_passed": 0
+    }
+  },
+  "source": "compute:research_workflow (7 research products)",
+  "fallback": false
+}

@@ -1,0 +1,144 @@
+{
+  "cubes": {
+    "cubes": [
+      {
+        "name": "稳健组合",
+        "owner": "张三",
+        "symbol": "ZH001",
+        "daily_gain": 1.2,
+        "monthly_gain": 3.4,
+        "total_gain": 56.7,
+        "annualized_gain_rate": 12.3,
+        "url": "https://xueqiu.com/P/ZH001",
+        "stocks_count": 8,
+        "view_rebalancing_count": 4
+      },
+      {
+        "name": "激进组合",
+        "owner": "李四",
+        "symbol": "ZH002",
+        "daily_gain": -0.5,
+        "monthly_gain": 9.1,
+        "total_gain": 120.4,
+        "annualized_gain_rate": 31.7,
+        "url": "https://xueqiu.com/P/ZH002",
+        "stocks_count": 15,
+        "view_rebalancing_count": 22
+      },
+      {
+        "name": "无主组合",
+        "owner": null,
+        "symbol": "ZH003",
+        "daily_gain": null,
+        "monthly_gain": null,
+        "total_gain": null,
+        "annualized_gain_rate": null,
+        "url": "https://xueqiu.com/P/ZH003",
+        "stocks_count": null,
+        "view_rebalancing_count": null
+      }
+    ],
+    "cubes_alt_key": [
+      {
+        "name": "A",
+        "owner": null,
+        "symbol": "ZH009",
+        "daily_gain": null,
+        "monthly_gain": null,
+        "total_gain": 5,
+        "annualized_gain_rate": null,
+        "url": "https://xueqiu.com/P/ZH009",
+        "stocks_count": null,
+        "view_rebalancing_count": null
+      }
+    ],
+    "cubes_invalid": [],
+    "no_json": [],
+    "empty": []
+  },
+  "peers": {
+    "mixed": [
+      {
+        "name": "贵州茅台",
+        "code": "600519.SH",
+        "mcap_yi": 0,
+        "pe": 0,
+        "pb": 0
+      },
+      {
+        "name": "北部湾港",
+        "code": "000582.SZ",
+        "mcap_yi": 0,
+        "pe": 0,
+        "pb": 0
+      },
+      {
+        "name": "腾讯控股",
+        "code": "00700.HK",
+        "mcap_yi": 0,
+        "pe": 0,
+        "pb": 0
+      },
+      {
+        "name": "诺思兰德",
+        "code": "430047.BJ",
+        "mcap_yi": 0,
+        "pe": 0,
+        "pb": 0
+      }
+    ],
+    "capped": [
+      {
+        "name": "公司00",
+        "code": "600500.SH",
+        "mcap_yi": 0,
+        "pe": 0,
+        "pb": 0
+      },
+      {
+        "name": "公司01",
+        "code": "600501.SH",
+        "mcap_yi": 0,
+        "pe": 0,
+        "pb": 0
+      },
+      {
+        "name": "公司02",
+        "code": "600502.SH",
+        "mcap_yi": 0,
+        "pe": 0,
+        "pb": 0
+      },
+      {
+        "name": "公司03",
+        "code": "600503.SH",
+        "mcap_yi": 0,
+        "pe": 0,
+        "pb": 0
+      },
+      {
+        "name": "公司04",
+        "code": "600504.SH",
+        "mcap_yi": 0,
+        "pe": 0,
+        "pb": 0
+      }
+    ],
+    "unclosed": [],
+    "empty": []
+  },
+  "symbols": {
+    "600519": "SH600519",
+    "900001": "SH900001",
+    "000582": "SZ000582",
+    "300750": "SZ300750",
+    "430047": "BJ430047",
+    "830799": "BJ830799",
+    "00700": "SZ00700",
+    "700": "HK00700",
+    "1": "HK00001",
+    "500": "HK00500",
+    "aapl": "AAPL",
+    " 600519 ": "SH600519"
+  }
+}

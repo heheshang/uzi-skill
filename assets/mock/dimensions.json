@@ -1,0 +1,205 @@
+{
+  "ticker": "MOCK.SZ",
+  "fundamental_score": 76.0,
+  "dimensions": {
+    "1_financials": {
+      "score": 8,
+      "weight": 5,
+      "label": "财报扎实，ROE 三年 >18%",
+      "reasons_pass": [
+        "ROE 18.7%",
+        "净利率 21%",
+        "营收增速 28%"
+      ],
+      "reasons_fail": [
+        "商誉占净资产 28%"
+      ]
+    },
+    "2_kline": {
+      "score": 7,
+      "weight": 4,
+      "label": "Stage 2 初期，均线多头",
+      "reasons_pass": [
+        "MA 多头排列",
+        "MACD 金叉"
+      ],
+      "reasons_fail": [
+        "RSI 62 接近超买"
+      ]
+    },
+    "3_macro": {
+      "score": 6,
+      "weight": 3,
+      "label": "降息周期支持成长股",
+      "reasons_pass": [
+        "货币宽松"
+      ],
+      "reasons_fail": [
+        "人民币偏弱压制利润率"
+      ]
+    },
+    "4_peers": {
+      "score": 8,
+      "weight": 4,
+      "label": "行业第 2，关键指标全部高于均值",
+      "reasons_pass": [
+        "毛利率 +4pp",
+        "ROE +6pp",
+        "增速 +12pp"
+      ],
+      "reasons_fail": []
+    },
+    "5_chain": {
+      "score": 6,
+      "weight": 4,
+      "label": "下游集中度过高，对苹果依赖深",
+      "reasons_pass": [
+        "上游分散",
+        "议价能力强"
+      ],
+      "reasons_fail": [
+        "前五客户 65%"
+      ]
+    },
+    "6_research": {
+      "score": 8,
+      "weight": 3,
+      "label": "26 家覆盖，买入比例 69%",
+      "reasons_pass": [
+        "上涨空间 21%",
+        "评级以买入为主"
+      ],
+      "reasons_fail": []
+    },
+    "7_industry": {
+      "score": 9,
+      "weight": 4,
+      "label": "行业 +35%/年，渗透率仅 12%",
+      "reasons_pass": [
+        "TAM 420亿",
+        "渗透率提升空间大"
+      ],
+      "reasons_fail": []
+    },
+    "8_materials": {
+      "score": 7,
+      "weight": 3,
+      "label": "原材料 12 个月降价 8%",
+      "reasons_pass": [
+        "成本下降"
+      ],
+      "reasons_fail": [
+        "进口依赖 22%"
+      ]
+    },
+    "9_futures": {
+      "score": 5,
+      "weight": 2,
+      "label": "无强关联期货品种"
+    },
+    "10_valuation": {
+      "score": 5,
+      "weight": 5,
+      "label": "PE 已到 5 年 75 分位",
+      "reasons_pass": [],
+      "reasons_fail": [
+        "PE 高于行业均值",
+        "DCF 内在值低于现价"
+      ]
+    },
+    "11_governance": {
+      "score": 8,
+      "weight": 4,
+      "label": "治理良好，管理层增持",
+      "reasons_pass": [
+        "质押低",
+        "近 12 月增持 1.2 亿",
+        "无违规"
+      ],
+      "reasons_fail": []
+    },
+    "12_capital_flow": {
+      "score": 8,
+      "weight": 4,
+      "label": "北向 +8.4 亿 + 筹码集中",
+      "reasons_pass": [
+        "北向流入",
+        "股东户数 3 季降"
+      ],
+      "reasons_fail": []
+    },
+    "13_policy": {
+      "score": 7,
+      "weight": 3,
+      "label": "AI 硬件产业政策利好",
+      "reasons_pass": [
+        "高新减免",
+        "AI 政策"
+      ],
+      "reasons_fail": []
+    },
+    "14_moat": {
+      "score": 7,
+      "weight": 3,
+      "label": "150+ 专利 + 苹果绑定",
+      "reasons_pass": [
+        "无形资产",
+        "转换成本"
+      ],
+      "reasons_fail": [
+        "网络效应弱"
+      ]
+    },
+    "15_events": {
+      "score": 8,
+      "weight": 4,
+      "label": "Q2 业绩预增 25-35%",
+      "reasons_pass": [
+        "业绩预告",
+        "iPhone 17 备货"
+      ],
+      "reasons_fail": []
+    },
+    "16_lhb": {
+      "score": 8,
+      "weight": 4,
+      "label": "章盟主 / 交易猿格局加仓",
+      "reasons_pass": [
+        "机构净买 2.4 亿",
+        "顶级游资进场"
+      ],
+      "reasons_fail": []
+    },
+    "17_sentiment": {
+      "score": 7,
+      "weight": 3,
+      "label": "雪球热度上升，正面 62%",
+      "reasons_pass": [
+        "S 级大V 2 位提及"
+      ],
+      "reasons_fail": [
+        "环比 +45% 注意泡沫"
+      ]
+    },
+    "18_trap": {
+      "score": 9,
+      "weight": 5,
+      "label": "🟢 安全，0/8 信号命中",
+      "reasons_pass": [
+        "未发现推广",
+        "热度与基本面匹配"
+      ],
+      "reasons_fail": []
+    },
+    "19_contests": {
+      "score": 7,
+      "weight": 4,
+      "label": "雪球 32 组合 / 8 个高收益持有",
+      "reasons_pass": [
+        "雪球高收益持有 8 个",
+        "淘股吧 12 篇讨论"
+      ],
+      "reasons_fail": []
+    }
+  }
+}

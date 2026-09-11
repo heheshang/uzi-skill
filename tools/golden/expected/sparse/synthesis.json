@@ -1,0 +1,384 @@
+{
+  "ticker": "AAPL",
+  "name": "Apple Inc.",
+  "overall_score": 38.9,
+  "verdict_label": "谨慎 · 8 派看空",
+  "verdict_detail": "基本面 56.3 · 共识 12.9",
+  "fundamental_score": 56.3,
+  "panel_consensus": 12.9,
+  "school_lock": null,
+  "school_scores": {
+    "A": {
+      "group": "A",
+      "label": "经典价值派",
+      "desc": "巴菲特 / 格雷厄姆 / 费雪 / 芒格 一脉",
+      "n_members": 6,
+      "n_active": 6,
+      "short_excluded": 0,
+      "consensus": 14.5,
+      "avg_score": 20.5,
+      "vote_consensus": 26.7,
+      "score_mean": 20.5,
+      "verdict": "回避",
+      "bullish": 1,
+      "neutral": 1,
+      "bearish": 4,
+      "skip": 0,
+      "dominant_signal": "bearish"
+    },
+    "B": {
+      "group": "B",
+      "label": "成长派",
+      "desc": "彼得·林奇 / 欧奈尔 / 蒂尔 / 伍德 一脉",
+      "n_members": 9,
+      "n_active": 9,
+      "short_excluded": 0,
+      "consensus": 0.0,
+      "avg_score": 10.4,
+      "vote_consensus": 6.7,
+      "score_mean": 10.4,
+      "verdict": "回避",
+      "bullish": 0,
+      "neutral": 1,
+      "bearish": 8,
+      "skip": 0,
+      "dominant_signal": "bearish"
+    },
+    "C": {
+      "group": "C",
+      "label": "宏观派",
+      "desc": "索罗斯 / 达利欧 / 马克斯 一脉",
+      "n_members": 5,
+      "n_active": 5,
+      "short_excluded": 2,
+      "consensus": 7.5,
+      "avg_score": 20.2,
+      "vote_consensus": 12.0,
+      "score_mean": 20.2,
+      "verdict": "回避",
+      "bullish": 0,
+      "neutral": 1,
+      "bearish": 4,
+      "skip": 0,
+      "dominant_signal": "bearish"
+    },
+    "D": {
+      "group": "D",
+      "label": "技术派",
+      "desc": "利弗莫尔 / Minervini / 达瓦斯 一脉",
+      "n_members": 4,
+      "n_active": 4,
+      "short_excluded": 0,
+      "consensus": 0.0,
+      "avg_score": 3.0,
+      "vote_consensus": 0.0,
+      "score_mean": 3.0,
+      "verdict": "回避",
+      "bullish": 0,
+      "neutral": 0,
+      "bearish": 4,
+      "skip": 0,
+      "dominant_signal": "bearish"
+    },
+    "E": {
+      "group": "E",
+      "label": "中式价投",
+      "desc": "段永平 / 张坤 / 朱少醒 / 冯柳 一脉",
+      "n_members": 7,
+      "n_active": 7,
+      "short_excluded": 0,
+      "consensus": 11.8,
+      "avg_score": 19.4,
+      "vote_consensus": 22.9,
+      "score_mean": 19.4,
+      "verdict": "回避",
+      "bullish": 1,
+      "neutral": 1,
+      "bearish": 5,
+      "skip": 0,
+      "dominant_signal": "bearish"
+    },
+    "F": {
+      "group": "F",
+      "label": "A 股游资",
+      "desc": "龙虎榜顶流 23 位·章盟主/孙哥/赵老哥为代表",
+      "n_members": 24,
+      "n_active": 0,
+      "short_excluded": 0,
+      "consensus": 0.0,
+      "avg_score": 0.0,
+      "vote_consensus": 0.0,
+      "score_mean": 0.0,
+      "verdict": "不适合",
+      "bullish": 0,
+      "neutral": 0,
+      "bearish": 0,
+      "skip": 24,
+      "dominant_signal": "skip"
+    },
+    "G": {
+      "group": "G",
+      "label": "量化派",
+      "desc": "Simons / Thorp / Shaw 一脉",
+      "n_members": 4,
+      "n_active": 4,
+      "short_excluded": 0,
+      "consensus": 1.5,
+      "avg_score": 19.5,
+      "vote_consensus": 0.0,
+      "score_mean": 19.5,
+      "verdict": "回避",
+      "bullish": 0,
+      "neutral": 0,
+      "bearish": 4,
+      "skip": 0,
+      "dominant_signal": "bearish"
+    },
+    "H": {
+      "group": "H",
+      "label": "科技领袖派",
+      "desc": "黄仁勋 / 马斯克 / Altman / Saylor 一脉",
+      "n_members": 4,
+      "n_active": 4,
+      "short_excluded": 0,
+      "consensus": 1.7,
+      "avg_score": 19.8,
+      "vote_consensus": 0.0,
+      "score_mean": 19.8,
+      "verdict": "回避",
+      "bullish": 0,
+      "neutral": 0,
+      "bearish": 4,
+      "skip": 0,
+      "dominant_signal": "bearish"
+    },
+    "I": {
+      "group": "I",
+      "label": "AI 卡位/瓶颈猎手",
+      "desc": "Serenity · AI 供应链卡脖子/瓶颈点",
+      "n_members": 1,
+      "n_active": 1,
+      "short_excluded": 0,
+      "consensus": 0.0,
+      "avg_score": 0.0,
+      "vote_consensus": 0.0,
+      "score_mean": 0.0,
+      "verdict": "回避",
+      "bullish": 0,
+      "neutral": 0,
+      "bearish": 1,
+      "skip": 0,
+      "dominant_signal": "bearish"
+    }
+  },
+  "short_consensus": {
+    "total": 2,
+    "active": 2,
+    "skip": 0,
+    "short_candidates": 1,
+    "no_short_thesis": 1,
+    "avg_score": 44.5,
+    "top_short_candidates": [
+      {
+        "id": "chanos",
+        "name": "吉姆·查诺斯",
+        "score": 23,
+        "headline": "看空核心：审计有保留意见 · 立即怀疑"
+      },
+      {
+        "id": "burry",
+        "name": "迈克尔·伯利",
+        "score": 66,
+        "headline": "看多核心：PE 0 · PS 0.0 · 未在 Burry 空头清单"
+      }
+    ]
+  },
+  "dim_commentary": {
+    "0_basic": "基础信息：Apple Inc.（AAPL），— 行业。市值 —，PE —，PB —。",
+    "1_financials": "财报：未拉取到数据（fetcher 失败或返回空）。",
+    "2_kline": "K线技术面：未拉取到数据（fetcher 失败或返回空）。",
+    "3_macro": "宏观环境：未拉取到数据（fetcher 失败或返回空）。",
+    "4_peers": "同行对比：未拉取到数据（fetcher 失败或返回空）。",
+    "5_chain": "产业链：未拉取到数据（fetcher 失败或返回空）。",
+    "6_research": "券商研报：未拉取到数据（fetcher 失败或返回空）。",
+    "7_industry": "行业景气：未拉取到数据（fetcher 失败或返回空）。",
+    "8_materials": "原材料：未拉取到数据（fetcher 失败或返回空）。",
+    "9_futures": "期货关联：未拉取到数据（fetcher 失败或返回空）。",
+    "10_valuation": "估值分位：未拉取到数据（fetcher 失败或返回空）。",
+    "11_governance": "治理/减持：未拉取到数据（fetcher 失败或返回空）。",
+    "12_capital_flow": "资金面：未拉取到数据（fetcher 失败或返回空）。",
+    "13_policy": "政策与监管：未拉取到数据（fetcher 失败或返回空）。",
+    "14_moat": "护城河：未拉取到数据（fetcher 失败或返回空）。",
+    "15_events": "事件驱动：未拉取到数据（fetcher 失败或返回空）。",
+    "16_lhb": "龙虎榜：未拉取到数据（fetcher 失败或返回空）。",
+    "17_sentiment": "舆情：未拉取到数据（fetcher 失败或返回空）。",
+    "18_trap": "杀猪盘：未拉取到数据（fetcher 失败或返回空）。",
+    "19_contests": "实盘比赛：未拉取到数据（fetcher 失败或返回空）。"
+  },
+  "institutional_modeling": {
+    "dcf_intrinsic": null,
+    "dcf_safety_margin_pct": null,
+    "dcf_verdict": null,
+    "lbo_irr_pct": null,
+    "lbo_verdict": null,
+    "comps_verdict": null,
+    "initiating_rating": null,
+    "target_price": null,
+    "upside_pct": null,
+    "ic_recommendation": null,
+    "bcg_position": null,
+    "industry_attractiveness": null
+  },
+  "detected_style": "balanced",
+  "style_label_cn": "中性兜底",
+  "style_explanation": "无明显风格倾向 · 全派系等权",
+  "style_diagnostics": {
+    "active_weight": 42.0,
+    "bullish_weight": 3.0,
+    "neutral_weight": 2.4,
+    "active_count": 42,
+    "bullish_count": 3,
+    "neutral_count": 4,
+    "bearish_count": 35,
+    "raw_consensus_old": 7.1,
+    "raw_fund_old": 56.3
+  },
+  "agent_reviewed": false,
+  "panel_insights": "",
+  "claude_narrative_stub": {
+    "_note": "以下字段是脚本生成的占位，Task 4 中 Claude 必须根据原始数据重写",
+    "needs_rewrite": [
+      "great_divide.punchline",
+      "dashboard.core_conclusion",
+      "debate.rounds[*].bull_say",
+      "debate.rounds[*].bear_say",
+      "buy_zones.*.rationale",
+      "risks[*]"
+    ]
+  },
+  "debate": {
+    "bull": {
+      "investor_id": "duan",
+      "name": "段永平",
+      "group": "E"
+    },
+    "bear": {
+      "investor_id": "lynch",
+      "name": "彼得·林奇",
+      "group": "B"
+    },
+    "rounds": [
+      {
+        "round": 1,
+        "bull_say": "看多核心：📌 段永平2011年前后买入苹果，长期持有",
+        "bear_say": "看空核心：PEG 未进入林奇理想区间 (< 1)"
+      },
+      {
+        "round": 2,
+        "bull_say": "📌 段永平2011年前后买入苹果，长期持有 · 治理干净",
+        "bear_say": "PEG 未进入林奇理想区间 (< 1) · PEG 不在 1-1.5 临界区 · PE 0 > 40 · 林奇警戒（Rolls Royce 不是必要品）"
+      },
+      {
+        "round": 3,
+        "bull_say": "综合看，73 分，我的立场不变。",
+        "bear_say": "综合看，11 分，风险大于收益。"
+      }
+    ],
+    "punchline": "Apple Inc. · ROE 历史与当前估值存在结构性分歧，等待方向明朗。"
+  },
+  "great_divide": {
+    "bull_avatar": "duan",
+    "bear_avatar": "lynch",
+    "bull_score": 73,
+    "bear_score": 11,
+    "bull_signal": "bullish",
+    "bear_signal": "bearish",
+    "punchline": "Apple Inc. · ROE 历史与当前估值存在结构性分歧，等待方向明朗。"
+  },
+  "risks": [
+    "ROE 最新 0.0% 偏低"
+  ],
+  "buy_zones": {
+    "value": {
+      "price": "—",
+      "rationale": "历史 PE 25 分位"
+    },
+    "growth": {
+      "price": "—",
+      "rationale": "PEG 合理区"
+    },
+    "technical": {
+      "price": "—",
+      "rationale": "MA60 支撑位"
+    },
+    "youzi": {
+      "price": "—",
+      "rationale": "当前情绪未破"
+    }
+  },
+  "friendly": {
+    "scenarios": {
+      "entry_price": 0,
+      "cases": [
+        {
+          "name": "最坏情况",
+          "probability": "5%",
+          "return": -60.0
+        },
+        {
+          "name": "偏差情况",
+          "probability": "25%",
+          "return": -27.0
+        },
+        {
+          "name": "合理情况",
+          "probability": "40%",
+          "return": 15.0
+        },
+        {
+          "name": "乐观情况",
+          "probability": "25%",
+          "return": 37.5
+        },
+        {
+          "name": "极致乐观",
+          "probability": "5%",
+          "return": 75.0
+        }
+      ]
+    },
+    "exit_triggers": [
+      "股价放量跌破 60 日均线 → 无条件止损",
+      "下季度营收同比转负 → 基本面反转信号",
+      "下次业绩预告低于 +10% → 预期管理失守",
+      "顶级游资 席位大额卖出 > 2 亿 → 顶级资金撤离信号",
+      "PE 站上 5 年 90 分位 → 泡沫区获利了结"
+    ],
+    "similar_stocks": []
+  },
+  "fund_managers": [],
+  "dashboard": {
+    "core_conclusion": "Apple Inc. · 38 分 · 谨慎 · 8 派看空。40 位多头评委里 2 人看多，YTD —。Apple Inc. · ROE 历史与当前估值存在结构性分歧，等待方向明朗。",
+    "data_perspective": {
+      "trend": "—",
+      "price": "—",
+      "volume": "—",
+      "chips": "—"
+    },
+    "intelligence": {
+      "news": "已采集 0 项催化剂事件",
+      "risks": [
+        "ROE 最新 0.0% 偏低"
+      ],
+      "catalysts": [
+        "暂无明确催化剂"
+      ]
+    },
+    "battle_plan": {
+      "entry": "¥—",
+      "position": "分批建仓 · 勿满仓",
+      "stop": "¥—",
+      "target": "¥—"
+    }
+  }
+}

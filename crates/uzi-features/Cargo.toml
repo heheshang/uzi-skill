@@ -1,0 +1,10 @@
+[package]
+name = "uzi-features"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+regex.workspace = true
+uzi-core = { path = "../uzi-core" }

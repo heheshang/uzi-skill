@@ -1,0 +1,9 @@
+[package]
+name = "uzi-investors"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+uzi-core = { path = "../uzi-core" }

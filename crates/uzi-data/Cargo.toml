@@ -1,0 +1,15 @@
+[package]
+name = "uzi-data"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+chrono.workspace = true
+encoding_rs.workspace = true
+regex.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+ureq.workspace = true
+rayon.workspace = true
+uzi-core = { path = "../uzi-core" }

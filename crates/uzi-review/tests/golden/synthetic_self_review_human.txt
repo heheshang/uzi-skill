@@ -1,0 +1,8 @@
+✗ Self-Review · 002273.SZ (A)
+  critical=1 warning=0 info=0
+  reviewed_at=2026-09-11T15:02:25
+
+  🔴 CRITICAL (1):
+    [agent_analysis] agent_analysis.json 不存在
+      evidence: file not found
+      fix: CLI 直跑无 agent 环境可以忽略此项；若走 Claude Code/Codex/Cursor 则 agent 必须读 panel.json + raw_data.json 后写 agent_analysis.json

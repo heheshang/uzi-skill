@@ -1,0 +1,54 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+
+      - name: Build
+        run: cargo build --workspace --all-targets
+
+      # The whole suite is offline by design: network-bound tests are `#[ignore]`d
+      # (see `crates/uzi-data/tests/live_quote.rs`) and the differential tests run
+      # against the checked-in golden artifacts under `tools/golden/`.
+      - name: Run test suite
+        env:
+          UZI_NO_UPDATE_CHECK: "1"
+        run: cargo test --workspace
+
+      # Warnings are a regression here, not noise: the workspace builds clean, so
+      # a new one should fail the run.
+      - name: Check for warnings
+        run: |
+          out=$(cargo build --workspace --all-targets 2>&1)
+          echo "$out"
+          if echo "$out" | grep -q '^warning'; then
+            echo "::error::build emitted warnings; the tree is expected to be clean"
+            exit 1
+          fi
+
+      - name: Lint
+        run: cargo clippy --workspace --all-targets
+
+      # Docs must not reference modules, links, or CLI flags that do not exist.
+      # `--all-targets` above already produced the binary it inspects.
+      - name: Verify skill docs
+        run: python3 tools/skills/verify_docs.py

@@ -1,0 +1,10 @@
+[package]
+name = "uzi-review"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+chrono.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+uzi-core = { path = "../uzi-core" }

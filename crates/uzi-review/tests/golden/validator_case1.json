@@ -1,0 +1,14 @@
+[
+  {
+    "severity": "warning",
+    "field": "agent_reviewed",
+    "message": "缺少 agent_reviewed: true 标记",
+    "suggestion": "加 \"agent_reviewed\": true 在顶层"
+  },
+  {
+    "severity": "error",
+    "field": "dim_commentary",
+    "message": "dim_commentary 必须是 dict（key 是维度名），实际是 list",
+    "suggestion": "改为 {\"0_basic\": \"...\", \"1_financials\": \"...\", ...}"
+  }
+]

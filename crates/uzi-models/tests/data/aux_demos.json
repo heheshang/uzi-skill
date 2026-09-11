@@ -1,0 +1,2096 @@
+{
+ "accretion": {
+  "method": "Accretion/Dilution",
+  "offer_price": 13.0,
+  "equity_value_yi": 65.0,
+  "cash_portion_yi": 32.5,
+  "stock_portion_yi": 32.5,
+  "new_shares_issued_yi": 1.625,
+  "pro_forma_shares_yi": 11.625,
+  "pro_forma_ni_yi": 11.28,
+  "pro_forma_eps": 0.97,
+  "standalone_eps": 1.0,
+  "accretion_pct": -3.0,
+  "verdict": "⚪ 中性",
+  "methodology_log": [
+   "Step 1 · 报价 ¥13.00（溢价 30%）→ 总对价 65.0 亿",
+   "Step 2 · 现金 50% = 32.5 亿; 换股 32.5 亿 → 新增 1.62 亿股",
+   "Step 3 · 合并 NI = 收购方 10.0 + 标的 2.5 + 协同 0.0 − 利息 1.2 = 11.3",
+   "Step 4 · Pro-forma EPS = 0.970（vs 独立 1.000，摊薄 3.0%）"
+  ]
+ },
+ "accretion_no_eps": {
+  "method": "Accretion/Dilution",
+  "offer_price": 13.0,
+  "equity_value_yi": 65.0,
+  "cash_portion_yi": 32.5,
+  "stock_portion_yi": 32.5,
+  "new_shares_issued_yi": 0,
+  "pro_forma_shares_yi": 10.0,
+  "pro_forma_ni_yi": -1.22,
+  "pro_forma_eps": -0.122,
+  "standalone_eps": 0.0,
+  "accretion_pct": 0,
+  "verdict": "⚪ 中性",
+  "methodology_log": [
+   "Step 1 · 报价 ¥13.00（溢价 30%）→ 总对价 65.0 亿",
+   "Step 2 · 现金 50% = 32.5 亿; 换股 32.5 亿 → 新增 0.00 亿股",
+   "Step 3 · 合并 NI = 收购方 0.0 + 标的 0.0 + 协同 0.0 − 利息 1.2 = -1.2",
+   "Step 4 · Pro-forma EPS = -0.122（vs 独立 0.000，摊薄 0.0%）"
+  ]
+ },
+ "dcf": {
+  "method": "DCF (2-stage + Gordon Growth terminal)",
+  "wacc_breakdown": {
+   "wacc": 0.0696,
+   "cost_of_equity": 0.085,
+   "after_tax_kd": 0.0338,
+   "equity_weight": 0.7,
+   "debt_weight": 0.3,
+   "inputs": {
+    "rf": 0.025,
+    "erp": 0.06,
+    "beta": 1.0,
+    "kd_pretax": 0.045,
+    "tax": 0.25
+   }
+  },
+  "base_fcf_yi": 6.5,
+  "projected_fcf_yi": [
+   7.15,
+   7.865,
+   8.652,
+   9.517,
+   10.468,
+   10.992,
+   11.541,
+   12.118,
+   12.724,
+   13.361
+  ],
+  "pv_fcf_yi": [
+   6.685,
+   6.875,
+   7.071,
+   7.271,
+   7.478,
+   7.341,
+   7.206,
+   7.074,
+   6.944,
+   6.817
+  ],
+  "year_labels": [
+   "Y1",
+   "Y2",
+   "Y3",
+   "Y4",
+   "Y5",
+   "Y6",
+   "Y7",
+   "Y8",
+   "Y9",
+   "Y10"
+  ],
+  "pv_explicit_yi": 70.762,
+  "terminal_value_yi": 307.063,
+  "tv_pv_yi": 156.68,
+  "tv_pct_of_ev": 68.9,
+  "enterprise_value_yi": 227.442,
+  "net_debt_yi": -30.0,
+  "equity_value_yi": 257.442,
+  "net_debt_bridge_note": "",
+  "shares_yi": 14.0,
+  "intrinsic_per_share": 18.39,
+  "current_price": 18.5,
+  "safety_margin_pct": -0.6,
+  "verdict": "⚪ 基本合理",
+  "sensitivity_table": {
+   "wacc_axis": [
+    "5.0%",
+    "6.0%",
+    "7.0%",
+    "8.0%",
+    "9.0%"
+   ],
+   "g_axis": [
+    "1.5%",
+    "2.0%",
+    "2.5%",
+    "3.0%",
+    "3.5%"
+   ],
+   "values_per_share": [
+    [
+     25.01,
+     28.03,
+     32.26,
+     38.66,
+     49.45
+    ],
+    [
+     19.64,
+     21.25,
+     23.31,
+     26.08,
+     29.97
+    ],
+    [
+     16.25,
+     17.21,
+     18.39,
+     19.86,
+     21.76
+    ],
+    [
+     13.92,
+     14.54,
+     15.28,
+     16.16,
+     17.24
+    ],
+    [
+     12.22,
+     12.64,
+     13.13,
+     13.71,
+     14.38
+    ]
+   ],
+   "center_cell": 18.39
+  },
+  "assumptions": {
+   "stage1_growth": 0.1,
+   "stage2_growth": 0.05,
+   "stage1_years": 5,
+   "stage2_years": 5,
+   "terminal_g": 0.025,
+   "beta": 1.0,
+   "tax": 0.25,
+   "target_debt_ratio": 0.3
+  },
+  "methodology_log": [
+   "Step 1 · WACC: CAPM k_e=8.50%, 税后 k_d=3.38%, 加权 WACC=6.96%",
+   "Step 2 · 基期 FCF=6.50 亿",
+   "Step 3 · 两段增长 10% (5年) → 5% (5年)",
+   "Step 4 · 显式期 PV 合计 70.8 亿",
+   "Step 5 · 终值 @ g=2.5% → PV=156.7 亿（占 EV 的 69%）",
+   "Step 6 · EV 227.4 亿 − 净债 -30.0 亿 = 股权价值 257.4 亿",
+   "Step 7 · 每股内在价值 ¥18.39（当前价 ¥18.50，安全边际 -0.6%）"
+  ]
+ },
+ "dcf_proxy": {
+  "method": "DCF (2-stage + Gordon Growth terminal)",
+  "wacc_breakdown": {
+   "wacc": 0.0696,
+   "cost_of_equity": 0.085,
+   "after_tax_kd": 0.0338,
+   "equity_weight": 0.7,
+   "debt_weight": 0.3,
+   "inputs": {
+    "rf": 0.025,
+    "erp": 0.06,
+    "beta": 1.0,
+    "kd_pretax": 0.045,
+    "tax": 0.25
+   }
+  },
+  "base_fcf_yi": 4.0,
+  "projected_fcf_yi": [
+   4.4,
+   4.84,
+   5.324,
+   5.856,
+   6.442,
+   6.764,
+   7.102,
+   7.457,
+   7.83,
+   8.222
+  ],
+  "pv_fcf_yi": [
+   4.114,
+   4.231,
+   4.351,
+   4.474,
+   4.602,
+   4.517,
+   4.434,
+   4.353,
+   4.273,
+   4.195
+  ],
+  "year_labels": [
+   "Y1",
+   "Y2",
+   "Y3",
+   "Y4",
+   "Y5",
+   "Y6",
+   "Y7",
+   "Y8",
+   "Y9",
+   "Y10"
+  ],
+  "pv_explicit_yi": 43.544,
+  "terminal_value_yi": 188.959,
+  "tv_pv_yi": 96.417,
+  "tv_pct_of_ev": 68.9,
+  "enterprise_value_yi": 139.961,
+  "net_debt_yi": 2.0,
+  "equity_value_yi": 137.961,
+  "net_debt_bridge_note": "",
+  "shares_yi": 10.0,
+  "intrinsic_per_share": 13.8,
+  "current_price": 20.0,
+  "safety_margin_pct": -31.0,
+  "verdict": "🔴 明显高估",
+  "sensitivity_table": {
+   "wacc_axis": [
+    "5.0%",
+    "6.0%",
+    "7.0%",
+    "8.0%",
+    "9.0%"
+   ],
+   "g_axis": [
+    "1.5%",
+    "2.0%",
+    "2.5%",
+    "3.0%",
+    "3.5%"
+   ],
+   "values_per_share": [
+    [
+     19.5,
+     22.1,
+     25.75,
+     31.27,
+     40.56
+    ],
+    [
+     14.88,
+     16.26,
+     18.04,
+     20.42,
+     23.78
+    ],
+    [
+     11.95,
+     12.78,
+     13.8,
+     15.07,
+     16.7
+    ],
+    [
+     9.94,
+     10.48,
+     11.11,
+     11.88,
+     12.81
+    ],
+    [
+     8.48,
+     8.85,
+     9.27,
+     9.76,
+     10.35
+    ]
+   ],
+   "center_cell": 13.8
+  },
+  "assumptions": {
+   "stage1_growth": 0.1,
+   "stage2_growth": 0.05,
+   "stage1_years": 5,
+   "stage2_years": 5,
+   "terminal_g": 0.025,
+   "beta": 1.0,
+   "tax": 0.25,
+   "target_debt_ratio": 0.3
+  },
+  "methodology_log": [
+   "Step 1 · WACC: CAPM k_e=8.50%, 税后 k_d=3.38%, 加权 WACC=6.96%",
+   "Step 2 · 基期 FCF=4.00 亿",
+   "Step 3 · 两段增长 10% (5年) → 5% (5年)",
+   "Step 4 · 显式期 PV 合计 43.5 亿",
+   "Step 5 · 终值 @ g=2.5% → PV=96.4 亿（占 EV 的 69%）",
+   "Step 6 · EV 140.0 亿 − 净债 2.0 亿 = 股权价值 138.0 亿",
+   "Step 7 · 每股内在价值 ¥13.80（当前价 ¥20.00，安全边际 -31.0%）"
+  ]
+ },
+ "lbo": {
+  "method": "Quick LBO Test",
+  "entry_ebitda_yi": 10.0,
+  "entry_multiple": 8.0,
+  "entry_ev_yi": 80.0,
+  "entry_debt_yi": 50.0,
+  "entry_equity_yi": 30.0,
+  "leverage_turns": 5.0,
+  "ebitda_path": [
+   10.8,
+   11.66,
+   12.6,
+   13.6,
+   14.69
+  ],
+  "debt_schedule": [
+   50.0,
+   48.32,
+   46.27,
+   43.8,
+   40.88,
+   37.46
+  ],
+  "exit_ebitda_yi": 14.69,
+  "exit_multiple": 8.0,
+  "exit_ev_yi": 117.52,
+  "exit_equity_yi": 80.06,
+  "moic": 2.67,
+  "irr_pct": 21.7,
+  "pass_pe_test": true,
+  "verdict": "🟢 PE 买方可赚 20%+ IRR",
+  "methodology_log": [
+   "Step 1 · 入场 EBITDA 10.0 亿 × 8.0x = EV 80.0 亿",
+   "Step 2 · 5.0x 杠杆 → 债 50.0 亿 + 股本 30.0 亿",
+   "Step 3 · 5 年 8% 成长 → Y5 EBITDA 14.7 亿",
+   "Step 4 · 退出 8.0x × 14.7 = 117.5 亿 EV",
+   "Step 5 · 退出股权 80.1 亿 / 入场股权 30.0 亿 = 2.67x MOIC (21.7% IRR)"
+  ]
+ },
+ "stmt": {
+  "method": "3-Statement Projection (5-year, linked)",
+  "years": [
+   "Y1",
+   "Y2",
+   "Y3",
+   "Y4",
+   "Y5"
+  ],
+  "income_statement": {
+   "revenue": [
+    58.24,
+    64.06,
+    69.19,
+    73.34,
+    77.01
+   ],
+   "cogs": [
+    37.86,
+    41.64,
+    44.97,
+    47.67,
+    50.05
+   ],
+   "gross_profit": [
+    20.38,
+    22.42,
+    24.22,
+    25.67,
+    26.95
+   ],
+   "opex": [
+    10.48,
+    11.53,
+    12.45,
+    13.2,
+    13.86
+   ],
+   "ebit": [
+    9.9,
+    10.89,
+    11.76,
+    12.47,
+    13.09
+   ],
+   "tax": [
+    2.48,
+    2.72,
+    2.94,
+    3.12,
+    3.27
+   ],
+   "net_income": [
+    7.43,
+    8.17,
+    8.82,
+    9.35,
+    9.82
+   ]
+  },
+  "cash_flow": {
+   "net_income": [
+    7.43,
+    8.17,
+    8.82,
+    9.35,
+    9.82
+   ],
+   "dep_amort": [
+    2.33,
+    2.56,
+    2.77,
+    2.93,
+    3.08
+   ],
+   "nwc_change": [
+    0.62,
+    0.58,
+    0.51,
+    0.42,
+    0.37
+   ],
+   "ocf": [
+    9.14,
+    10.15,
+    11.08,
+    11.86,
+    12.53
+   ],
+   "capex": [
+    2.91,
+    3.2,
+    3.46,
+    3.67,
+    3.85
+   ],
+   "fcf": [
+    6.23,
+    6.95,
+    7.62,
+    8.19,
+    8.68
+   ]
+  },
+  "balance_sheet": {
+   "equity_rollforward": [
+    99.43,
+    107.6,
+    116.42,
+    125.77,
+    135.59
+   ]
+  },
+  "assumptions": {
+   "revenue_growth_y1": 0.12,
+   "revenue_growth_y2": 0.1,
+   "revenue_growth_y3": 0.08,
+   "revenue_growth_y4": 0.06,
+   "revenue_growth_y5": 0.05,
+   "gross_margin": 0.35,
+   "opex_pct_revenue": 0.18,
+   "tax_rate": 0.25,
+   "capex_pct_revenue": 0.05,
+   "dep_pct_revenue": 0.04,
+   "nwc_pct_revenue": 0.1
+  },
+  "growth_path": [
+   "12%",
+   "10%",
+   "8%",
+   "6%",
+   "5%"
+  ],
+  "methodology_log": [
+   "Step 1 · 基期营收 52.0 亿 · 5 年增速路径 ['12%', '10%', '8%', '6%', '5%']",
+   "Step 2 · 毛利率假设 35% · 运营费率 18%",
+   "Step 3 · Y5 营收 77.0 亿 · 净利 9.8 亿",
+   "Step 4 · 5 年累计 FCF 37.7 亿"
+  ]
+ },
+ "ai_readiness": {
+  "method": "AI Readiness (single-stock) · 改编自 PE ai-readiness + 复用 ai_chokepoint_score",
+  "company": {
+   "name": "AXT科技",
+   "code": "TEST.US"
+  },
+  "generated_at": "2026-09-11",
+  "rating": "强",
+  "rating_note": "AI 卡位硬 + 真实需求可验证 + 不可替代 → 强就绪",
+  "ai_chokepoint_score": 88.0,
+  "ai_smallcap": true,
+  "gates": [
+   {
+    "gate": "① 是否真在 AI 产业链上",
+    "pass": true,
+    "basis": "命中 AI 链关键词 ['inp', '磷化铟', '光模块', 'cpo']"
+   },
+   {
+    "gate": "② 是否有可验证的 AI 真实收入/订单/产能",
+    "pass": true,
+    "basis": "证据词 ['订单', '扩产', '缺货'] · 行业增速 35%"
+   },
+   {
+    "gate": "③ 卡位是否不可替代且可持续",
+    "pass": true,
+    "basis": "切换成本+规模壁垒达标（moat 25/40）"
+   }
+  ],
+  "gates_passed": 3,
+  "gates_total": 3,
+  "verdict": "Go · 强就绪",
+  "verdict_note": "三道 gate 全通过 — AI 卡位可作为核心投资逻辑之一",
+  "gaps": [],
+  "leverage_points": [
+   {
+    "category": "光互连 / 光模块",
+    "keywords": [
+     "光模块",
+     "cpo",
+     "inp",
+     "磷化铟"
+    ],
+    "stance": "卡位 — 处于 AI 算力/终端供应链关键环节"
+   }
+  ],
+  "conclusion": "AXT科技（TEST.US）AI 暴露评级「强」（卡位强度 88/100），通过 3/3 道 gate → Go · 强就绪；主要 AI 杠杆点：光互连 / 光模块。",
+  "cross_portfolio_ranking": "N/A · 单票评估，无跨公司排序（原版 Step 3）",
+  "replays": "N/A · 单票评估，无跨公司可复用 playbook（原版 Step 4）",
+  "aggregate_ebitda": "N/A · 单票评估，无组合级 EBITDA 汇总（原版 Step 5）",
+  "methodology_log": [
+   "Step 1 · 复用 Serenity ai_chokepoint_score = 88/100（卡位强度锚）",
+   "Step 2 · Gate① AI 链命中=True · Gate② 真实需求=True · Gate③ 不可替代=True",
+   "Step 3 · 通过 3/3 → 评级「强」· Go · 强就绪",
+   "Step 4 · 推断 1 个 AI 杠杆点",
+   "Step 5 · 组合排序/replays/EBITDA 汇总 → 单票 N/A"
+  ]
+ },
+ "ai_readiness_offchain": {
+  "method": "AI Readiness (single-stock) · 改编自 PE ai-readiness + 复用 ai_chokepoint_score",
+  "company": {
+   "name": "钢铁厂",
+   "code": "600019.SH"
+  },
+  "generated_at": "2026-09-11",
+  "rating": "无",
+  "rating_note": "不在 AI 产业链上 — AI 浪潮对其基本面无直接传导",
+  "ai_chokepoint_score": 3.0,
+  "ai_smallcap": false,
+  "gates": [
+   {
+    "gate": "① 是否真在 AI 产业链上",
+    "pass": false,
+    "basis": "未在 AI 算力/终端供应链上检出关键词"
+   },
+   {
+    "gate": "② 是否有可验证的 AI 真实收入/订单/产能",
+    "pass": false,
+    "basis": "缺订单/产能/景气证据，疑似纯概念标签"
+   },
+   {
+    "gate": "③ 卡位是否不可替代且可持续",
+    "pass": false,
+    "basis": "不可替代性不足（moat 10/40，切换+规模未达 12/20）"
+   }
+  ],
+  "gates_passed": 0,
+  "gates_total": 3,
+  "verdict": "Wait · 观察",
+  "verdict_note": "缺口：① 是否真在 AI 产业链上；② 是否有可验证的 AI 真实收入/订单/产能；③ 卡位是否不可替代且可持续",
+  "gaps": [
+   "① 是否真在 AI 产业链上",
+   "② 是否有可验证的 AI 真实收入/订单/产能",
+   "③ 卡位是否不可替代且可持续"
+  ],
+  "leverage_points": [],
+  "conclusion": "钢铁厂（600019.SH）不在 AI 产业链上，AI 就绪度评级「无」，本维度对论点无加分（N/A）。",
+  "cross_portfolio_ranking": "N/A · 单票评估，无跨公司排序（原版 Step 3）",
+  "replays": "N/A · 单票评估，无跨公司可复用 playbook（原版 Step 4）",
+  "aggregate_ebitda": "N/A · 单票评估，无组合级 EBITDA 汇总（原版 Step 5）",
+  "methodology_log": [
+   "Step 1 · 复用 Serenity ai_chokepoint_score = 3/100（卡位强度锚）",
+   "Step 2 · Gate① AI 链命中=False · Gate② 真实需求=False · Gate③ 不可替代=False",
+   "Step 3 · 通过 0/3 → 评级「无」· Wait · 观察",
+   "Step 4 · 推断 0 个 AI 杠杆点",
+   "Step 5 · 组合排序/replays/EBITDA 汇总 → 单票 N/A"
+  ]
+ },
+ "earnings_preview": {
+  "method": "Earnings Preview (pre-earnings)",
+  "company": {
+   "name": "中际旭创",
+   "code": "300308.SZ",
+   "industry": "光模块",
+   "market": "A"
+  },
+  "report_quarter": "2026 Q3",
+  "generated_at": "2026-09-11",
+  "consensus_table": [
+   {
+    "metric": "EPS（市场一致预期）",
+    "consensus": 6.2,
+    "yoy_pct": 37.8,
+    "source": "6_research 一致预期"
+   },
+   {
+    "metric": "营收（亿，估算）",
+    "consensus": 348.0,
+    "yoy_pct": 45.0,
+    "source": "⚠️ 无一致预期 → 用 3yCAGR 外推，需 web 补充"
+   },
+   {
+    "metric": "卖方平均目标价",
+    "consensus": 150.0,
+    "yoy_pct": 25.0,
+    "source": "6_research（覆盖 28 家 / 买入率 90%）"
+   }
+  ],
+  "consensus_notes": [
+   "营收一致预期缺失 → 用历史 3 年 CAGR 外推占位，建议 web 核对"
+  ],
+  "watch_metrics": {
+   "sector": "光模块",
+   "metrics": [
+    "800G/1.6T 出货量",
+    "高端产品占比",
+    "毛利率（供给紧→提价）",
+    "大客户订单能见度"
+   ]
+  },
+  "scenarios": [
+   {
+    "scenario": "bull",
+    "label": "🟢 Bull 乐观",
+    "revenue_yi": 385.2,
+    "revenue_growth_pct": 60.5,
+    "eps": 6.944,
+    "gross_margin_assumption": "毛利率扩张（基准 33.0% → 提价/规模效应）",
+    "triggers": [
+     "营收 / 核心运营指标显著超共识（量价齐升）",
+     "管理层上修全年指引",
+     "高毛利产品占比提升、费用率下降"
+    ],
+    "expected_stock_reaction": "+3.4% 量级（参考历史财报日波动）",
+    "reaction_note": "（历史财报日股价反应可 web 核对：搜 \"中际旭创\" earnings reaction）"
+   },
+   {
+    "scenario": "base",
+    "label": "⚪ Base 中性",
+    "revenue_yi": 366.0,
+    "revenue_growth_pct": 52.5,
+    "eps": 6.2,
+    "gross_margin_assumption": "毛利率持平（约 33.0%）",
+    "triggers": [
+     "营收 / EPS 基本符合一致预期（±2%）",
+     "指引维持不变",
+     "无重大叙事变化"
+    ],
+    "expected_stock_reaction": "±3.4% 区间内震荡",
+    "reaction_note": "（历史财报日股价反应可 web 核对：搜 \"中际旭创\" earnings reaction）"
+   },
+   {
+    "scenario": "bear",
+    "label": "🔴 Bear 悲观",
+    "revenue_yi": 346.8,
+    "revenue_growth_pct": 44.5,
+    "eps": 5.27,
+    "gross_margin_assumption": "毛利率收缩（基准 33.0% → 竞争/成本压力）",
+    "triggers": [
+     "营收 / 核心指标不及共识，或环比走弱",
+     "管理层下修指引 / 谨慎措辞",
+     "毛利率受成本或价格战拖累"
+    ],
+    "expected_stock_reaction": "-3.4% 量级（参考历史财报日波动）",
+    "reaction_note": "（历史财报日股价反应可 web 核对：搜 \"中际旭创\" earnings reaction）"
+   }
+  ],
+  "catalyst_checklist": [
+   {
+    "item": "营收 / EPS vs 一致预期（及 whisper number）",
+    "why": "超预期/不及是财报日股价首要驱动；buy-side whisper 常比公开共识更相关（可 web 补充）",
+    "importance": "high"
+   },
+   {
+    "item": "前瞻指引 vs 共识（全年营收/利润、capex）",
+    "why": "买方更看下一季/全年指引，而非当期数字本身",
+    "importance": "high"
+   },
+   {
+    "item": "行业核心运营指标：800G/1.6T 出货量",
+    "why": "该指标拐点最先反映需求真伪，领先于利润表",
+    "importance": "high"
+   },
+   {
+    "item": "毛利率方向（扩张 / 收缩）+ 管理层归因",
+    "why": "毛利率趋势决定盈利弹性，叙事比单点数值更影响估值",
+    "importance": "medium"
+   },
+   {
+    "item": "战略 / 叙事变化（并购、回购、新品、产能、诉讼）",
+    "why": "近期事件流显示存在叙事变量，可能盖过财务数字",
+    "importance": "medium"
+   }
+  ],
+  "implied_move": {
+   "method": "历史财报日波动代替（A 股个股无期权）",
+   "options_available": false,
+   "implied_move_pct": null,
+   "historical_proxy_pct": 3.4,
+   "note": "A 股无个股期权 → 用历史财报日 ±波动估计预期波幅；年化波动 55% → 单日近似 ±3.4%"
+  },
+  "methodology_log": [
+   "Step 1 · 公司=中际旭创（A股）· 行业=光模块 · 预览季度≈2026 Q3",
+   "Step 2 · 一致预期对照：3 行（1 项需 web 补充）",
+   "Step 3 · 观察指标按行业分类 → 光模块：4 项",
+   "Step 4 · 三情景：Bull 60.5% / Base 52.5% / Bear 44.5% 营收增速",
+   "Step 5 · 催化剂清单 5 项；隐含波动 → 历史财报日波动代替（A 股个股无期权）"
+  ]
+ },
+ "earnings_preview_sparse": {
+  "method": "Earnings Preview (pre-earnings)",
+  "company": {
+   "name": "Sparse",
+   "code": null,
+   "industry": "—",
+   "market": "US"
+  },
+  "report_quarter": "2026 Q3",
+  "generated_at": "2026-09-11",
+  "consensus_table": [
+   {
+    "metric": "EPS（市场一致预期）",
+    "consensus": null,
+    "yoy_pct": null,
+    "source": "⚠️ 需 web 补充（一致预期）"
+   }
+  ],
+  "consensus_notes": [
+   "EPS 一致预期缺失 → 需 web 搜索补充"
+  ],
+  "watch_metrics": {
+   "sector": "—",
+   "metrics": [
+    "营收 vs 共识",
+    "毛利率趋势",
+    "经营性现金流",
+    "前瞻指引 vs 共识"
+   ]
+  },
+  "scenarios": [
+   {
+    "scenario": "bull",
+    "label": "🟢 Bull 乐观",
+    "revenue_yi": null,
+    "revenue_growth_pct": 8.0,
+    "eps": null,
+    "gross_margin_assumption": "毛利率扩张",
+    "triggers": [
+     "营收 / 核心运营指标显著超共识（量价齐升）",
+     "管理层上修全年指引",
+     "高毛利产品占比提升、费用率下降"
+    ],
+    "expected_stock_reaction": "上行，幅度参考历史财报日波动",
+    "reaction_note": "（历史财报日股价反应可 web 核对：搜 \"Sparse\" earnings reaction）"
+   },
+   {
+    "scenario": "base",
+    "label": "⚪ Base 中性",
+    "revenue_yi": null,
+    "revenue_growth_pct": 0.0,
+    "eps": null,
+    "gross_margin_assumption": "毛利率持平",
+    "triggers": [
+     "营收 / EPS 基本符合一致预期（±2%）",
+     "指引维持不变",
+     "无重大叙事变化"
+    ],
+    "expected_stock_reaction": "窄幅波动",
+    "reaction_note": "（历史财报日股价反应可 web 核对：搜 \"Sparse\" earnings reaction）"
+   },
+   {
+    "scenario": "bear",
+    "label": "🔴 Bear 悲观",
+    "revenue_yi": null,
+    "revenue_growth_pct": -8.0,
+    "eps": null,
+    "gross_margin_assumption": "毛利率收缩",
+    "triggers": [
+     "营收 / 核心指标不及共识，或环比走弱",
+     "管理层下修指引 / 谨慎措辞",
+     "毛利率受成本或价格战拖累"
+    ],
+    "expected_stock_reaction": "下行，幅度参考历史财报日波动",
+    "reaction_note": "（历史财报日股价反应可 web 核对：搜 \"Sparse\" earnings reaction）"
+   }
+  ],
+  "catalyst_checklist": [
+   {
+    "item": "营收 / EPS vs 一致预期（及 whisper number）",
+    "why": "超预期/不及是财报日股价首要驱动；buy-side whisper 常比公开共识更相关（可 web 补充）",
+    "importance": "high"
+   },
+   {
+    "item": "前瞻指引 vs 共识（全年营收/利润、capex）",
+    "why": "买方更看下一季/全年指引，而非当期数字本身",
+    "importance": "high"
+   },
+   {
+    "item": "行业核心运营指标：营收 vs 共识",
+    "why": "该指标拐点最先反映需求真伪，领先于利润表",
+    "importance": "high"
+   },
+   {
+    "item": "毛利率方向（扩张 / 收缩）+ 管理层归因",
+    "why": "毛利率趋势决定盈利弹性，叙事比单点数值更影响估值",
+    "importance": "medium"
+   }
+  ],
+  "implied_move": {
+   "method": "期权隐含波动（at-the-money straddle）",
+   "options_available": true,
+   "implied_move_pct": null,
+   "historical_proxy_pct": null,
+   "note": "可用财报到期 ATM straddle 反推 implied move（需 web 补充期权链）"
+  },
+  "methodology_log": [
+   "Step 1 · 公司=Sparse（美股）· 行业=— · 预览季度≈2026 Q3",
+   "Step 2 · 一致预期对照：1 行（1 项需 web 补充）",
+   "Step 3 · 观察指标按行业分类 → —：4 项",
+   "Step 4 · 三情景：Bull 8.0% / Base 0.0% / Bear -8.0% 营收增速",
+   "Step 5 · 催化剂清单 4 项；隐含波动 → 期权隐含波动（at-the-money straddle）"
+  ]
+ },
+ "model_update_demo": {
+  "method": "Model Update (增量更新财务模型)",
+  "company": {
+   "name": "演示科技",
+   "code": "000001.SZ"
+  },
+  "mode": "demo",
+  "generated_at": "2026-09-11",
+  "assumption_deltas": [
+   {
+    "key": "rev_growth",
+    "label": "营收增速",
+    "unit": "pct",
+    "channel": "dcf",
+    "before": 15.0,
+    "after": 22.0,
+    "before_fmt": "15.0%",
+    "after_fmt": "22.0%",
+    "delta": 7.0,
+    "delta_fmt": "+7.0%",
+    "direction": "↑"
+   },
+   {
+    "key": "gross_margin",
+    "label": "毛利率",
+    "unit": "pct",
+    "channel": "dcf",
+    "before": 36.1,
+    "after": 38.0,
+    "before_fmt": "36.1%",
+    "after_fmt": "38.0%",
+    "delta": 1.9,
+    "delta_fmt": "+1.9%",
+    "direction": "↑"
+   },
+   {
+    "key": "net_margin",
+    "label": "净利率",
+    "unit": "pct",
+    "channel": "both",
+    "before": 13.3,
+    "after": 14.0,
+    "before_fmt": "13.3%",
+    "after_fmt": "14.0%",
+    "delta": 0.7,
+    "delta_fmt": "+0.7%",
+    "direction": "↑"
+   },
+   {
+    "key": "target_pe",
+    "label": "目标 PE",
+    "unit": "x",
+    "channel": "comps",
+    "before": 33.25,
+    "after": 35.0,
+    "before_fmt": "33.25x",
+    "after_fmt": "35.00x",
+    "delta": 1.75,
+    "delta_fmt": "+1.75x",
+    "direction": "↑"
+   },
+   {
+    "key": "target_price",
+    "label": "目标价",
+    "unit": "price",
+    "channel": "comps",
+    "before": 18.5,
+    "after": 24.0,
+    "before_fmt": "¥18.50",
+    "after_fmt": "¥24.00",
+    "delta": 5.5,
+    "delta_fmt": "+¥5.50",
+    "direction": "↑"
+   }
+  ],
+  "dcf_impact": {
+   "available": false,
+   "reason": "未提供 dcf_result"
+  },
+  "comps_impact": {
+   "available": false,
+   "reason": "未提供 comps_result"
+  },
+  "thesis_impact": [
+   {
+    "pillar": "成长性（营收增速）",
+    "change": "15.0% → 22.0% (↑)",
+    "impact": "💪 强化"
+   },
+   {
+    "pillar": "盈利质量（毛利率）",
+    "change": "36.1% → 38.0% (↑)",
+    "impact": "💪 强化"
+   },
+   {
+    "pillar": "盈利质量（净利率）",
+    "change": "13.3% → 14.0% (↑)",
+    "impact": "💪 强化"
+   },
+   {
+    "pillar": "估值锚（倍数）",
+    "change": "33.25x → 35.00x (↑)",
+    "impact": "💪 强化"
+   },
+   {
+    "pillar": "估值锚（目标价）",
+    "change": "¥18.50 → ¥24.00 (↑)",
+    "impact": "💪 强化"
+   }
+  ],
+  "verdict": {
+   "rating": "🟢 上修 (Upgrade)",
+   "action": "上调目标价 / 加仓候选",
+   "composite_score": 10.0,
+   "pillars_strengthened": 5,
+   "pillars_weakened": 0
+  },
+  "methodology_log": [
+   "Step 1 · 演示模式（最新 vs 上期推断） → 5 条 delta",
+   "        · 营收增速: 15.0% → 22.0% (↑)",
+   "        · 毛利率: 36.1% → 38.0% (↑)",
+   "        · 净利率: 13.3% → 14.0% (↑)",
+   "        · 目标 PE: 33.25x → 35.00x (↑)",
+   "        · 目标价: ¥18.50 → ¥24.00 (↑)",
+   "Step 2 · DCF 影响：未提供 dcf_result",
+   "Step 3 · Comps 影响：未提供 comps_result",
+   "Step 4 · 投资逻辑：5 强化 / 0 削弱",
+   "Step 5 · 更新后评级：🟢 上修 (Upgrade)（综合分 +10.0）→ 上调目标价 / 加仓候选"
+  ]
+ },
+ "model_update_explicit": {
+  "method": "Model Update (增量更新财务模型)",
+  "company": {
+   "name": "演示科技",
+   "code": "000001.SZ"
+  },
+  "mode": "explicit",
+  "generated_at": "2026-09-11",
+  "assumption_deltas": [
+   {
+    "key": "rev_growth",
+    "label": "营收增速",
+    "unit": "pct",
+    "channel": "dcf",
+    "before": 15.0,
+    "after": 26.0,
+    "before_fmt": "15.0%",
+    "after_fmt": "26.0%",
+    "delta": 11.0,
+    "delta_fmt": "+11.0%",
+    "direction": "↑"
+   },
+   {
+    "key": "net_margin",
+    "label": "净利率",
+    "unit": "pct",
+    "channel": "both",
+    "before": 14.0,
+    "after": 16.0,
+    "before_fmt": "14.0%",
+    "after_fmt": "16.0%",
+    "delta": 2.0,
+    "delta_fmt": "+2.0%",
+    "direction": "↑"
+   },
+   {
+    "key": "capex_pct",
+    "label": "Capex/营收",
+    "unit": "pct",
+    "channel": "dcf",
+    "before": 0.0,
+    "after": 7.0,
+    "before_fmt": "0.0%",
+    "after_fmt": "7.0%",
+    "delta": 7.0,
+    "delta_fmt": "+7.0%",
+    "direction": "↑"
+   }
+  ],
+  "dcf_impact": {
+   "available": true,
+   "intrinsic_before": 20.0,
+   "intrinsic_after": 23.05,
+   "delta_abs": 3.05,
+   "delta_pct": 15.2,
+   "direction": "↑",
+   "wacc_before_pct": 8.5,
+   "wacc_after_pct": 8.5,
+   "safety_margin_before_pct": 8.1,
+   "safety_margin_after_pct": 24.6,
+   "drivers": [
+    "营收增速 15.0%→26.0% (传导 Stage1)",
+    "净利率 14.0%→16.0% (缩放基期 FCF)",
+    "Capex/营收 0.0%→7.0% (压低 FCF)"
+   ]
+  },
+  "comps_impact": {
+   "available": true,
+   "implied_pe_before": 22.0,
+   "implied_pe_after": 25.15,
+   "implied_pb_before": 0.0,
+   "delta_abs": 3.15,
+   "delta_pct": 14.3,
+   "direction": "↑",
+   "drivers": [
+    "净利率 14.0%→16.0% (放大 EPS)"
+   ]
+  },
+  "thesis_impact": [
+   {
+    "pillar": "成长性（营收增速）",
+    "change": "15.0% → 26.0% (↑)",
+    "impact": "💪 强化"
+   },
+   {
+    "pillar": "盈利质量（净利率）",
+    "change": "14.0% → 16.0% (↑)",
+    "impact": "💪 强化"
+   },
+   {
+    "pillar": "现金流 / 资本纪律",
+    "change": "0.0% → 7.0% (↑)",
+    "impact": "⚠️ 削弱"
+   }
+  ],
+  "verdict": {
+   "rating": "🟢 上修 (Upgrade)",
+   "action": "上调目标价 / 加仓候选",
+   "composite_score": 31.5,
+   "pillars_strengthened": 2,
+   "pillars_weakened": 1
+  },
+  "methodology_log": [
+   "Step 1 · 用户传入 3 项新假设 → 3 条 delta",
+   "        · 营收增速: 15.0% → 26.0% (↑)",
+   "        · 净利率: 14.0% → 16.0% (↑)",
+   "        · Capex/营收: 0.0% → 7.0% (↑)",
+   "Step 2 · DCF 内在价值 ¥20.00 → ¥23.05 (+15.2%)",
+   "Step 3 · Comps 隐含价 ¥22.00 → ¥25.15 (+14.3%)",
+   "Step 4 · 投资逻辑：2 强化 / 1 削弱",
+   "Step 5 · 更新后评级：🟢 上修 (Upgrade)（综合分 +31.5）→ 上调目标价 / 加仓候选"
+  ]
+ },
+ "model_update_no_dcf": {
+  "method": "Model Update (增量更新财务模型)",
+  "company": {
+   "name": "演示科技",
+   "code": "000001.SZ"
+  },
+  "mode": "explicit",
+  "generated_at": "2026-09-11",
+  "assumption_deltas": [
+   {
+    "key": "beta",
+    "label": "Beta",
+    "unit": "x",
+    "channel": "dcf",
+    "before": 0.0,
+    "after": 1.4,
+    "before_fmt": "0.00x",
+    "after_fmt": "1.40x",
+    "delta": 1.4,
+    "delta_fmt": "+1.40x",
+    "direction": "↑"
+   },
+   {
+    "key": "target_pe",
+    "label": "目标 PE",
+    "unit": "x",
+    "channel": "comps",
+    "before": 35.0,
+    "after": 40.0,
+    "before_fmt": "35.00x",
+    "after_fmt": "40.00x",
+    "delta": 5.0,
+    "delta_fmt": "+5.00x",
+    "direction": "↑"
+   }
+  ],
+  "dcf_impact": {
+   "available": false,
+   "reason": "未提供 dcf_result"
+  },
+  "comps_impact": {
+   "available": false,
+   "reason": "未提供 comps_result"
+  },
+  "thesis_impact": [
+   {
+    "pillar": "风险 / 折现率",
+    "change": "0.00x → 1.40x (↑)",
+    "impact": "⚠️ 削弱"
+   },
+   {
+    "pillar": "估值锚（倍数）",
+    "change": "35.00x → 40.00x (↑)",
+    "impact": "💪 强化"
+   }
+  ],
+  "verdict": {
+   "rating": "⚪ 维持 (Maintain)",
+   "action": "数据落在噪声区间，观点不变",
+   "composite_score": 0.0,
+   "pillars_strengthened": 1,
+   "pillars_weakened": 1
+  },
+  "methodology_log": [
+   "Step 1 · 用户传入 2 项新假设 → 2 条 delta",
+   "        · Beta: 0.00x → 1.40x (↑)",
+   "        · 目标 PE: 35.00x → 40.00x (↑)",
+   "Step 2 · DCF 影响：未提供 dcf_result",
+   "Step 3 · Comps 影响：未提供 comps_result",
+   "Step 4 · 投资逻辑：1 强化 / 1 削弱",
+   "Step 5 · 更新后评级：⚪ 维持 (Maintain)（综合分 +0.0）→ 数据落在噪声区间，观点不变"
+  ]
+ },
+ "rebalance": {
+  "method": "Portfolio Rebalance (A股适配 · 去TLH)",
+  "summary": {
+   "n_holdings": 3,
+   "target_mode": "等权 (1/3)",
+   "drift_threshold_pp": 5.0,
+   "any_breach": true,
+   "n_breached": 2,
+   "max_drift_pp": 8.33,
+   "n_trades": 2,
+   "estimated_cost": 154.17,
+   "verdict": "🟡 建议再平衡 · 2 只超阈值 (最大漂移 8.3pp) · 2 笔交易",
+   "tlh_note": "A 股 / 港股个人无资本利得税，本工具不做税损收割 (TLH)，仅算漂移 + 风险 + 换手成本。"
+  },
+  "drift_table": [
+   {
+    "ticker": "600519.SH",
+    "market": "A",
+    "industry": "白酒",
+    "current_weight": 0.4,
+    "target_weight": 0.3333,
+    "drift_pp": 6.67,
+    "abs_drift_pp": 6.67,
+    "breached": true,
+    "direction": "超配→卖",
+    "delta_value": -66666.67
+   },
+   {
+    "ticker": "000858.SZ",
+    "market": "A",
+    "industry": "白酒",
+    "current_weight": 0.35,
+    "target_weight": 0.3333,
+    "drift_pp": 1.67,
+    "abs_drift_pp": 1.67,
+    "breached": false,
+    "direction": "超配→卖",
+    "delta_value": -16666.67
+   },
+   {
+    "ticker": "00700.HK",
+    "market": "HK",
+    "industry": "互联网",
+    "current_weight": 0.25,
+    "target_weight": 0.3333,
+    "drift_pp": -8.33,
+    "abs_drift_pp": 8.33,
+    "breached": true,
+    "direction": "低配→买",
+    "delta_value": 83333.33
+   }
+  ],
+  "trades": [
+   {
+    "ticker": "600519.SH",
+    "market": "A",
+    "action": "SELL",
+    "action_cn": "卖出",
+    "weight_change_pp": -6.67,
+    "amount": 66666.67,
+    "est_shares": 0,
+    "reason": "漂移 +6.7pp 超阈值 5pp"
+   },
+   {
+    "ticker": "00700.HK",
+    "market": "HK",
+    "action": "BUY",
+    "action_cn": "买入",
+    "weight_change_pp": 8.33,
+    "amount": 83333.33,
+    "est_shares": 208,
+    "reason": "漂移 -8.3pp 超阈值 5pp"
+   }
+  ],
+  "turnover_cost": {
+   "has_value_input": true,
+   "total_turnover": 150000.0,
+   "total_cost": 154.17,
+   "cost_pct_of_turnover": 0.1028,
+   "by_market": {
+    "A": {
+     "market_label": "A 股",
+     "turnover": 66666.67,
+     "stamp_duty": 33.33,
+     "commission": 16.67,
+     "total": 50.0
+    },
+    "HK": {
+     "market_label": "港股",
+     "turnover": 83333.33,
+     "stamp_duty": 83.33,
+     "commission": 20.83,
+     "total": 104.17
+    }
+   },
+   "note": "已按交易额估算；A 股卖出印花税 0.05%(2023-08 下调)+双边佣金~0.025%，港股印花税 0.1%(双边)，美股印花税近 0。"
+  },
+  "concentration": {
+   "before": {
+    "top_n": 3,
+    "top_n_weight": 1.0,
+    "max_single_weight": 0.4,
+    "hhi": 0.345,
+    "n_industries": 2,
+    "top_industry_weight": 0.75,
+    "industry_breakdown": {
+     "白酒": 0.75,
+     "互联网": 0.25
+    }
+   },
+   "after": {
+    "top_n": 3,
+    "top_n_weight": 1.0,
+    "max_single_weight": 0.3333,
+    "hhi": 0.3333,
+    "n_industries": 2,
+    "top_industry_weight": 0.6667,
+    "industry_breakdown": {
+     "白酒": 0.6667,
+     "互联网": 0.3333
+    }
+   },
+   "top_n_change_pp": 0.0,
+   "max_single_change_pp": -6.67,
+   "hhi_change": -0.0117
+  },
+  "methodology_log": [
+   "Step 1 · 归一化当前权重 (3 只) + 解析目标 (等权 (1/3))",
+   "Step 2 · 计算漂移 · 阈值 5pp · 2 只超标 (最大 8.3pp)",
+   "Step 3 · 生成交易清单 2 笔 (已估金额/股数)",
+   "Step 4 · 换手成本估算 ¥154 (占交易额 0.103%)",
+   "Step 5 · 集中度变化 · 前3大 100.0% → 100.0% · HHI -0.012",
+   "Step 6 · A 股无资本利得税 → 不做 TLH；纯 A/港股，无税损议题"
+  ]
+ },
+ "rebalance_no_value": {
+  "method": "Portfolio Rebalance (A股适配 · 去TLH)",
+  "summary": {
+   "n_holdings": 2,
+   "target_mode": "等权 (1/2)",
+   "drift_threshold_pp": 5.0,
+   "any_breach": true,
+   "n_breached": 2,
+   "max_drift_pp": 10.0,
+   "n_trades": 2,
+   "estimated_cost": null,
+   "verdict": "🟡 建议再平衡 · 2 只超阈值 (最大漂移 10.0pp) · 2 笔交易",
+   "tlh_note": "持仓含美股：美股有资本利得税，卖出端可另议税损收割 (TLH) 与持有期 (短期/长期)；A 股 / 港股个人无资本利得税，本工具不做 TLH。"
+  },
+  "drift_table": [
+   {
+    "ticker": "AAPL",
+    "market": "US",
+    "industry": "Tech",
+    "current_weight": 0.6,
+    "target_weight": 0.5,
+    "drift_pp": 10.0,
+    "abs_drift_pp": 10.0,
+    "breached": true,
+    "direction": "超配→卖",
+    "delta_value": null
+   },
+   {
+    "ticker": "MSFT",
+    "market": "US",
+    "industry": "Tech",
+    "current_weight": 0.4,
+    "target_weight": 0.5,
+    "drift_pp": -10.0,
+    "abs_drift_pp": 10.0,
+    "breached": true,
+    "direction": "低配→买",
+    "delta_value": null
+   }
+  ],
+  "trades": [
+   {
+    "ticker": "AAPL",
+    "market": "US",
+    "action": "SELL",
+    "action_cn": "卖出",
+    "weight_change_pp": -10.0,
+    "amount": null,
+    "est_shares": null,
+    "reason": "漂移 +10.0pp 超阈值 5pp"
+   },
+   {
+    "ticker": "MSFT",
+    "market": "US",
+    "action": "BUY",
+    "action_cn": "买入",
+    "weight_change_pp": 10.0,
+    "amount": null,
+    "est_shares": null,
+    "reason": "漂移 -10.0pp 超阈值 5pp"
+   }
+  ],
+  "turnover_cost": {
+   "has_value_input": false,
+   "total_turnover": 0.0,
+   "total_cost": 0.0,
+   "cost_pct_of_turnover": 0.0,
+   "by_market": {},
+   "note": "未提供组合市值 (value/price)，仅给出权重漂移与交易方向，无法估算金额/成本。"
+  },
+  "concentration": {
+   "before": {
+    "top_n": 3,
+    "top_n_weight": 1.0,
+    "max_single_weight": 0.6,
+    "hhi": 0.52,
+    "n_industries": 1,
+    "top_industry_weight": 1.0,
+    "industry_breakdown": {
+     "Tech": 1.0
+    }
+   },
+   "after": {
+    "top_n": 3,
+    "top_n_weight": 1.0,
+    "max_single_weight": 0.5,
+    "hhi": 0.5,
+    "n_industries": 1,
+    "top_industry_weight": 1.0,
+    "industry_breakdown": {
+     "Tech": 1.0
+    }
+   },
+   "top_n_change_pp": 0.0,
+   "max_single_change_pp": -10.0,
+   "hhi_change": -0.02
+  },
+  "methodology_log": [
+   "Step 1 · 归一化当前权重 (2 只) + 解析目标 (等权 (1/2))",
+   "Step 2 · 计算漂移 · 阈值 5pp · 2 只超标 (最大 10.0pp)",
+   "Step 3 · 生成交易清单 2 笔 (仅方向，缺市值)",
+   "Step 4 · 换手成本估算 跳过 (无市值输入)",
+   "Step 5 · 集中度变化 · 前3大 100.0% → 100.0% · HHI -0.020",
+   "Step 6 · A 股无资本利得税 → 不做 TLH；美股部分可另议税损"
+  ]
+ },
+ "rebalance_empty": {
+  "error": "holdings 为空",
+  "method": "Portfolio Rebalance"
+ },
+ "returns": {
+  "method": "Returns Attribution (二级市场组合)",
+  "source": "改编自 anthropics/financial-services · private-equity/returns-analysis",
+  "n_holdings": 5,
+  "n_missing_return": 1,
+  "missing_return_tickers": [
+   "AAPL"
+  ],
+  "total_return": 10.9,
+  "contribution_table": [
+   {
+    "ticker": "600519.SH",
+    "name": "贵州茅台",
+    "industry": "白酒",
+    "school": null,
+    "weight": 0.3,
+    "return_pct": 12.0,
+    "contribution_pct": 3.6,
+    "needs_price": false,
+    "note": ""
+   },
+   {
+    "ticker": "000858.SZ",
+    "name": "五粮液",
+    "industry": "白酒",
+    "school": null,
+    "weight": 0.15,
+    "return_pct": -8.0,
+    "contribution_pct": -1.2,
+    "needs_price": false,
+    "note": ""
+   },
+   {
+    "ticker": "002594.SZ",
+    "name": "比亚迪",
+    "industry": "电动车",
+    "school": null,
+    "weight": 0.25,
+    "return_pct": 30.0,
+    "contribution_pct": 7.5,
+    "needs_price": false,
+    "note": ""
+   },
+   {
+    "ticker": "300750.SZ",
+    "name": "宁德时代",
+    "industry": "电动车",
+    "school": null,
+    "weight": 0.2,
+    "return_pct": 5.0,
+    "contribution_pct": 1.0,
+    "needs_price": false,
+    "note": ""
+   },
+   {
+    "ticker": "AAPL",
+    "name": "Apple",
+    "industry": "科技",
+    "school": null,
+    "weight": 0.1,
+    "return_pct": null,
+    "contribution_pct": 0.0,
+    "needs_price": true,
+    "note": "需补价格区间"
+   }
+  ],
+  "sector_attribution": [
+   {
+    "industry": "电动车",
+    "weight": 0.45,
+    "contribution_pct": 8.5,
+    "n": 2,
+    "needs_price_n": 0
+   },
+   {
+    "industry": "白酒",
+    "weight": 0.45,
+    "contribution_pct": 2.4,
+    "n": 2,
+    "needs_price_n": 0
+   },
+   {
+    "industry": "科技",
+    "weight": 0.1,
+    "contribution_pct": 0.0,
+    "n": 1,
+    "needs_price_n": 1
+   }
+  ],
+  "school_attribution": [],
+  "top_contributors": [
+   {
+    "ticker": "002594.SZ",
+    "name": "比亚迪",
+    "industry": "电动车",
+    "school": null,
+    "weight": 0.25,
+    "return_pct": 30.0,
+    "contribution_pct": 7.5,
+    "needs_price": false,
+    "note": ""
+   },
+   {
+    "ticker": "600519.SH",
+    "name": "贵州茅台",
+    "industry": "白酒",
+    "school": null,
+    "weight": 0.3,
+    "return_pct": 12.0,
+    "contribution_pct": 3.6,
+    "needs_price": false,
+    "note": ""
+   },
+   {
+    "ticker": "300750.SZ",
+    "name": "宁德时代",
+    "industry": "电动车",
+    "school": null,
+    "weight": 0.2,
+    "return_pct": 5.0,
+    "contribution_pct": 1.0,
+    "needs_price": false,
+    "note": ""
+   }
+  ],
+  "top_detractors": [
+   {
+    "ticker": "000858.SZ",
+    "name": "五粮液",
+    "industry": "白酒",
+    "school": null,
+    "weight": 0.15,
+    "return_pct": -8.0,
+    "contribution_pct": -1.2,
+    "needs_price": false,
+    "note": ""
+   }
+  ],
+  "benchmark": {
+   "benchmark_return_pct": 6.0,
+   "excess_return_pct": 4.9,
+   "outperform": true
+  },
+  "verdict": "组合区间总收益 +10.90%，主升由 比亚迪 贡献 +7.50pp，主要拖累 五粮液 -1.20pp，跑赢基准 +4.90pp，⚠️ 1 只缺区间收益需补价格。",
+  "methodology_log": [
+   "Step 1 · 权重归一化 · 5/5 只带权重 · 0 只均分剩余",
+   "Step 2 · 逐持仓贡献 Σ(权重×收益) = +10.90pp · 1 只缺区间收益(按0计)",
+   "Step 3 · 行业归因 · 3 个行业 · 贡献分组加总 = +10.90pp",
+   "Step 4 · Top 3 贡献 / Top 1 拖累",
+   "Step 5 · vs 基准 +6.00% → 超额 +4.90pp (跑赢)"
+  ]
+ },
+ "returns_empty": {
+  "method": "Returns Attribution (二级市场组合)",
+  "error": "holdings 为空",
+  "total_return": 0.0,
+  "contribution_table": [],
+  "sector_attribution": [],
+  "school_attribution": [],
+  "top_contributors": [],
+  "top_detractors": [],
+  "benchmark": null,
+  "methodology_log": [
+   "Step 0 · holdings 为空，无法归因"
+  ]
+ },
+ "returns_no_weights": {
+  "method": "Returns Attribution (二级市场组合)",
+  "source": "改编自 anthropics/financial-services · private-equity/returns-analysis",
+  "n_holdings": 2,
+  "n_missing_return": 0,
+  "missing_return_tickers": [],
+  "total_return": 1.5,
+  "contribution_table": [
+   {
+    "ticker": "A",
+    "name": "A",
+    "industry": "未分类",
+    "school": "价值",
+    "weight": 0.5,
+    "return_pct": 5.0,
+    "contribution_pct": 2.5,
+    "needs_price": false,
+    "note": ""
+   },
+   {
+    "ticker": "B",
+    "name": "B",
+    "industry": "未分类",
+    "school": "成长",
+    "weight": 0.5,
+    "return_pct": -2.0,
+    "contribution_pct": -1.0,
+    "needs_price": false,
+    "note": ""
+   }
+  ],
+  "sector_attribution": [
+   {
+    "industry": "未分类",
+    "weight": 1.0,
+    "contribution_pct": 1.5,
+    "n": 2,
+    "needs_price_n": 0
+   }
+  ],
+  "school_attribution": [
+   {
+    "school": "价值",
+    "weight": 0.5,
+    "contribution_pct": 2.5,
+    "n": 1,
+    "needs_price_n": 0
+   },
+   {
+    "school": "成长",
+    "weight": 0.5,
+    "contribution_pct": -1.0,
+    "n": 1,
+    "needs_price_n": 0
+   }
+  ],
+  "top_contributors": [
+   {
+    "ticker": "A",
+    "name": "A",
+    "industry": "未分类",
+    "school": "价值",
+    "weight": 0.5,
+    "return_pct": 5.0,
+    "contribution_pct": 2.5,
+    "needs_price": false,
+    "note": ""
+   }
+  ],
+  "top_detractors": [
+   {
+    "ticker": "B",
+    "name": "B",
+    "industry": "未分类",
+    "school": "成长",
+    "weight": 0.5,
+    "return_pct": -2.0,
+    "contribution_pct": -1.0,
+    "needs_price": false,
+    "note": ""
+   }
+  ],
+  "benchmark": null,
+  "verdict": "组合区间总收益 +1.50%，主升由 A 贡献 +2.50pp，主要拖累 B -1.00pp。",
+  "methodology_log": [
+   "Step 1 · 全部 2 只无权重 → 等权 0.500",
+   "Step 2 · 逐持仓贡献 Σ(权重×收益) = +1.50pp",
+   "Step 3 · 行业归因 · 1 个行业 · 贡献分组加总 = +1.50pp",
+   "Step 3b · 流派归因 · 2 个流派",
+   "Step 4 · Top 1 贡献 / Top 1 拖累"
+  ]
+ },
+ "ic_memo": {
+  "method": "Investment Committee Memo",
+  "sections": {
+   "I_exec_summary": {
+    "headline": "⚪ 观望 (HOLD)",
+    "recommendation": "暂不建议建仓，等待估值回落或信号强化",
+    "top_3_risks": []
+   },
+   "II_company_overview": {
+    "name": "—",
+    "industry": "—",
+    "business_model": "—",
+    "market_cap_yi": 260.0,
+    "revenue_last_yi": 52.0
+   },
+   "III_industry_market": {
+    "industry_name": "—",
+    "tam": "—",
+    "growth": "—",
+    "lifecycle": "—"
+   },
+   "IV_financial_analysis": {
+    "roe_5yr": [],
+    "revenue_hist_yi": [],
+    "net_profit_hist_yi": [],
+    "net_margin": 12.5,
+    "debt_ratio": 30,
+    "fcf_positive": true
+   },
+   "V_valuation": {},
+   "VI_risks_mitigants": [],
+   "VII_returns_scenarios": [],
+   "VIII_recommendation": "暂不建议建仓，等待估值回落或信号强化"
+  },
+  "methodology_log": [
+   "Step 1 · 汇总公司/行业/财务快照",
+   "Step 2 · 结合 DCF/Comps 形成估值结论",
+   "Step 3 · 构建三情景回报",
+   "Step 4 · 出具建议: 暂不建议建仓，等待估值回落或信号强化"
+  ]
+ },
+ "unit_econ": {
+  "method": "Margin Decomposition",
+  "business_type": "non-recurring",
+  "revenue_yi": 52.0,
+  "gross_margin_pct": 35.0,
+  "opex_pct_of_rev": 22.5,
+  "net_margin_pct": 12.5,
+  "waterfall": [
+   {
+    "stage": "收入",
+    "value": 100,
+    "label": "100%"
+   },
+   {
+    "stage": "毛利",
+    "value": 35.0,
+    "label": "35%"
+   },
+   {
+    "stage": "税前",
+    "value": 16.666666666666668,
+    "label": "17%"
+   },
+   {
+    "stage": "净利",
+    "value": 12.5,
+    "label": "12%"
+   }
+  ],
+  "methodology_log": [
+   "Step 1 · 营收 52.0 亿",
+   "Step 2 · 毛利率 35% · 运营费率 22% · 净利率 12%"
+  ]
+ },
+ "unit_econ_recurring": {
+  "method": "Unit Economics (SaaS/recurring)",
+  "business_type": "recurring",
+  "metrics": {
+   "arpu_yi": 0.52,
+   "gross_margin_pct": 35.0,
+   "churn_rate_pct": 15.0,
+   "ltv_yi": 1.213,
+   "cac_yi": 0.26,
+   "ltv_cac_ratio": 4.67,
+   "payback_months": 17.1
+  },
+  "healthy": true,
+  "verdict": "🟢 健康",
+  "methodology_log": [
+   "Step 1 · ARPU 0.520 亿 · 毛利率 35%",
+   "Step 2 · LTV 1.21 / CAC 0.26 = 4.7x",
+   "Step 3 · 回本周期 17 个月"
+  ]
+ },
+ "vcp": {
+  "method": "Value Creation Plan (EBITDA Bridge)",
+  "current_ebitda_yi": 10.0,
+  "current_margin_pct": 19.2,
+  "levers": [
+   {
+    "category": "Revenue · Organic Growth",
+    "lever": "现有市场渗透率提升",
+    "current_state": "市场份额 ~—%",
+    "target_state": "5 年内提升 3pp",
+    "ebitda_impact_yi": 0.39,
+    "timeline": "Y1-Y5",
+    "confidence": "Medium"
+   },
+   {
+    "category": "Revenue · Cross-Sell",
+    "lever": "新产品交叉销售",
+    "current_state": "核心产品",
+    "target_state": "5 年新增 20% 营收占比",
+    "ebitda_impact_yi": 2.08,
+    "timeline": "Y2-Y5",
+    "confidence": "Medium"
+   },
+   {
+    "category": "Margin · Pricing Power",
+    "lever": "定价优化",
+    "current_state": "毛利率 35%",
+    "target_state": "+300bps",
+    "ebitda_impact_yi": 1.56,
+    "timeline": "Y1-Y3",
+    "confidence": "High"
+   },
+   {
+    "category": "Margin · COGS",
+    "lever": "采购集中 + 供应链优化",
+    "current_state": "多点采购",
+    "target_state": "−200bps COGS",
+    "ebitda_impact_yi": 1.04,
+    "timeline": "Y1-Y2",
+    "confidence": "High"
+   },
+   {
+    "category": "Capital Efficiency",
+    "lever": "营运资本优化",
+    "current_state": "存货周转 —",
+    "target_state": "存货周转 +20%",
+    "ebitda_impact_yi": 0.52,
+    "timeline": "Y1-Y3",
+    "confidence": "Medium"
+   }
+  ],
+  "total_uplift_yi": 5.59,
+  "target_ebitda_yi": 15.59,
+  "target_margin_pct": 30.0,
+  "hundred_day_priorities": [
+   "Day 30 · 财务 QoE 验证",
+   "Day 60 · 新管理层招募",
+   "Day 90 · 季度 KPI 仪表盘上线"
+  ],
+  "methodology_log": [
+   "Step 1 · 现 EBITDA 10.0 亿 (19% 利润率)",
+   "Step 2 · 5 大杠杆合计加厚 5.6 亿",
+   "Step 3 · 目标 EBITDA 15.6 亿 (30%)"
+  ]
+ },
+ "dd": {
+  "method": "Due Diligence Checklist",
+  "workstreams": [
+   {
+    "workstream": "财务尽调 (Financial DD)",
+    "items": [
+     {
+      "item": "5 年营收 / 净利历史",
+      "status": "❌ 缺失"
+     },
+     {
+      "item": "ROE / 毛利 / 净利率",
+      "status": "✅ 已有数据"
+     },
+     {
+      "item": "资产负债率",
+      "status": "✅ 已有数据"
+     },
+     {
+      "item": "自由现金流",
+      "status": "❌ 缺失"
+     },
+     {
+      "item": "审计意见 / 会计政策",
+      "status": "⚪ 需人工核查"
+     }
+    ]
+   },
+   {
+    "workstream": "商业尽调 (Commercial DD)",
+    "items": [
+     {
+      "item": "市场规模 (TAM)",
+      "status": "❌ 缺失"
+     },
+     {
+      "item": "竞争格局",
+      "status": "❌ 缺失"
+     },
+     {
+      "item": "客户集中度",
+      "status": "⚪ 需年报披露"
+     },
+     {
+      "item": "上下游分析",
+      "status": "❌ 缺失"
+     }
+    ]
+   },
+   {
+    "workstream": "法律尽调 (Legal DD)",
+    "items": [
+     {
+      "item": "股权结构",
+      "status": "❌ 缺失"
+     },
+     {
+      "item": "重大诉讼",
+      "status": "⚪ 需披露核查"
+     },
+     {
+      "item": "关联交易",
+      "status": "⚪ 需年报披露"
+     },
+     {
+      "item": "股权质押 / 内部交易",
+      "status": "❌ 缺失"
+     }
+    ]
+   },
+   {
+    "workstream": "运营尽调 (Operational DD)",
+    "items": [
+     {
+      "item": "护城河评估",
+      "status": "❌ 缺失"
+     },
+     {
+      "item": "研发投入",
+      "status": "⚪ 需年报披露"
+     },
+     {
+      "item": "管理层背景",
+      "status": "⚪ 需人工核查"
+     },
+     {
+      "item": "ESG 评级",
+      "status": "⚪ 需第三方数据"
+     }
+    ]
+   },
+   {
+    "workstream": "市场尽调 (Market DD)",
+    "items": [
+     {
+      "item": "政策环境",
+      "status": "❌ 缺失"
+     },
+     {
+      "item": "舆情扫描",
+      "status": "❌ 缺失"
+     },
+     {
+      "item": "事件驱动监控",
+      "status": "❌ 缺失"
+     },
+     {
+      "item": "杀猪盘排查",
+      "status": "❌ 缺失"
+     }
+    ]
+   }
+  ],
+  "total_items": 21,
+  "items_auto_verified": 2,
+  "completion_pct": 10.0,
+  "manual_review_required": 19,
+  "methodology_log": [
+   "Step 1 · 生成 5 大工作流 21 条清单",
+   "Step 2 · 自动命中 2 条 (10.0%)",
+   "Step 3 · 剩余 19 条需人工复核"
+  ]
+ },
+ "competitive": {
+  "method": "Competitive Analysis (Porter + BCG)",
+  "porter_five_forces": {
+   "new_entrants_threat": {
+    "score": 4,
+    "rationale": "进入壁垒分 5/10 (无形资产)"
+   },
+   "substitutes_threat": {
+    "score": 4,
+    "rationale": "转换成本分 5/10"
+   },
+   "supplier_power": {
+    "score": 3,
+    "rationale": "中性（未细分）"
+   },
+   "buyer_power": {
+    "score": 3,
+    "rationale": "中性（未细分）"
+   },
+   "rivalry_intensity": {
+    "score": 4,
+    "rationale": "规模优势分 5/10"
+   }
+  },
+  "industry_attractiveness_pct": 35.0,
+  "bcg_position": {
+   "category": "Cash Cow (现金牛)",
+   "market_share_pct": 12.0,
+   "market_growth_pct": 14.0,
+   "strategic_action": "维持运营，最大化现金回收"
+  },
+  "methodology_log": [
+   "Step 1 · Porter 5 力合计威胁分 18/25，行业吸引力 35.0%",
+   "Step 2 · BCG 定位 Cash Cow (现金牛) — 维持运营，最大化现金回收"
+  ]
+ },
+ "rebalance_dm": {
+  "method": "Portfolio Rebalance Analysis",
+  "portfolio_total_yuan": 10000.0,
+  "drift_rows": [
+   {
+    "asset_class": "A股蓝筹",
+    "target_pct": 30,
+    "current_pct": 0.0,
+    "drift_pct": -30.0,
+    "dollar_drift_yuan": -3000.0,
+    "action": "买入"
+   },
+   {
+    "asset_class": "A股成长",
+    "target_pct": 25,
+    "current_pct": 100.0,
+    "drift_pct": 75.0,
+    "dollar_drift_yuan": 7500.0,
+    "action": "减持"
+   },
+   {
+    "asset_class": "港股",
+    "target_pct": 15,
+    "current_pct": 0.0,
+    "drift_pct": -15.0,
+    "dollar_drift_yuan": -1500.0,
+    "action": "买入"
+   },
+   {
+    "asset_class": "美股",
+    "target_pct": 10,
+    "current_pct": 0.0,
+    "drift_pct": -10.0,
+    "dollar_drift_yuan": -1000.0,
+    "action": "买入"
+   },
+   {
+    "asset_class": "债券/货币",
+    "target_pct": 15,
+    "current_pct": 0.0,
+    "drift_pct": -15.0,
+    "dollar_drift_yuan": -1500.0,
+    "action": "买入"
+   },
+   {
+    "asset_class": "现金",
+    "target_pct": 5,
+    "current_pct": 0.0,
+    "drift_pct": -5.0,
+    "dollar_drift_yuan": -500.0,
+    "action": "维持"
+   }
+  ],
+  "needs_rebalance": true,
+  "rebalance_trades": [
+   {
+    "asset_class": "A股蓝筹",
+    "target_pct": 30,
+    "current_pct": 0.0,
+    "drift_pct": -30.0,
+    "dollar_drift_yuan": -3000.0,
+    "action": "买入"
+   },
+   {
+    "asset_class": "A股成长",
+    "target_pct": 25,
+    "current_pct": 100.0,
+    "drift_pct": 75.0,
+    "dollar_drift_yuan": 7500.0,
+    "action": "减持"
+   },
+   {
+    "asset_class": "港股",
+    "target_pct": 15,
+    "current_pct": 0.0,
+    "drift_pct": -15.0,
+    "dollar_drift_yuan": -1500.0,
+    "action": "买入"
+   },
+   {
+    "asset_class": "美股",
+    "target_pct": 10,
+    "current_pct": 0.0,
+    "drift_pct": -10.0,
+    "dollar_drift_yuan": -1000.0,
+    "action": "买入"
+   },
+   {
+    "asset_class": "债券/货币",
+    "target_pct": 15,
+    "current_pct": 0.0,
+    "drift_pct": -15.0,
+    "dollar_drift_yuan": -1500.0,
+    "action": "买入"
+   }
+  ],
+  "methodology_log": [
+   "Step 1 · 组合总值 ¥10,000",
+   "Step 2 · 6 个资产类别漂移检查",
+   "Step 3 · 需再平衡: True"
+  ]
+ },
+ "rebalance_dm_empty": {
+  "error": "no positions provided"
+ }
+}

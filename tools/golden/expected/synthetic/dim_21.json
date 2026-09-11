@@ -1,0 +1,471 @@
+{
+  "data": {
+    "initiating_coverage": {
+      "method": "Initiating Coverage (JPM/GS/MS style)",
+      "company": {
+        "name": "水晶光电",
+        "code": "002273",
+        "industry": "光学光电子"
+      },
+      "headline": {
+        "rating": "减持 (Underperform)",
+        "target_price": 12.17,
+        "current_price": 23.45,
+        "upside_pct": -48.1,
+        "report_date": "2026-09-11"
+      },
+      "executive_summary": "我们首次覆盖水晶光电（002273），给予「减持 (Underperform)」评级，目标价 ¥12.17，较现价 ¥23.45 空间 -48.1%。公司属于光学光电子行业，最新 ROE 11.2%。",
+      "investment_thesis": [
+        {
+          "pillar": "（暂未发现明确支柱）",
+          "evidence": "基本面数据不足以支撑看多论点",
+          "weight": "Low"
+        }
+      ],
+      "key_risks": [
+        {
+          "risk": "ROE 波动大",
+          "severity": "Medium",
+          "detail": "5 年 ROE 最低点 -2.3%"
+        },
+        {
+          "risk": "宏观 / 行业需求下行",
+          "severity": "Medium",
+          "detail": "景气周期风险"
+        }
+      ],
+      "valuation_bridge": [
+        {
+          "method": "DCF",
+          "value": 10.86,
+          "rationale": "WACC 7.0% + 终值 g 2.5%"
+        },
+        {
+          "method": "Comps (via_median_pe)",
+          "value": 13.48,
+          "rationale": "同行中位数估值法"
+        },
+        {
+          "method": "Blended",
+          "value": 12.17,
+          "rationale": "平均 2 种估值方法"
+        }
+      ],
+      "financial_snapshot": {
+        "revenue_history_yi": [
+          32.1,
+          38.6,
+          41.2,
+          45.7,
+          52.3
+        ],
+        "net_profit_history_yi": [
+          2.9,
+          3.6,
+          3.1,
+          -0.8,
+          5.4
+        ],
+        "roe_history": [
+          9.1,
+          10.4,
+          8.7,
+          -2.3,
+          11.2
+        ]
+      },
+      "coverage_universe_pos": {
+        "analyst_count": 18.0,
+        "ratings": {
+          "买入": 11,
+          "增持": 5,
+          "中性": 2
+        },
+        "consensus": "—"
+      },
+      "methodology_log": [
+        "Task 1 · 公司研究 — 业务/管理层/行业扫描 ✓",
+        "Task 2 · 财务模型 — 5 年历史 + 3 年预测 ✓",
+        "Task 3 · 估值分析 — 3 种方法混合 ✓",
+        "Task 4 · 综合评级 — 减持 (Underperform)，目标价 ¥12.17"
+      ]
+    },
+    "earnings_analysis": {
+      "method": "Post-Earnings Analysis",
+      "headline": "双超预期：营收 +5.3% / 净利 +5.3%",
+      "latest": {
+        "revenue_yi": 52.3,
+        "net_profit_yi": 5.4,
+        "revenue_yoy_pct": 14.4,
+        "net_profit_yoy_pct": 0
+      },
+      "consensus": {
+        "rev": 49.684999999999995,
+        "ni": 5.13
+      },
+      "beat_miss": {
+        "revenue_vs_consensus_pct": 5.3,
+        "revenue_tag": "🟢 大幅超预期",
+        "net_profit_vs_consensus_pct": 5.3,
+        "net_profit_tag": "🟢 大幅超预期"
+      },
+      "thesis_impact": "💪 强化看多",
+      "methodology_log": [
+        "Step 1 · 最新季度营收 52.3 亿 vs 共识 49.7 → 🟢 大幅超预期",
+        "Step 2 · 最新季度净利 5.4 亿 vs 共识 5.1 → 🟢 大幅超预期",
+        "Step 3 · 同比：营收 +14.4% · 净利 +0.0%",
+        "Step 4 · 结论：双超预期：营收 +5.3% / 净利 +5.3%"
+      ]
+    },
+    "catalyst_calendar": {
+      "method": "Catalyst Calendar",
+      "generated_at": "2026-09-11",
+      "events": [
+        {
+          "date": "—",
+          "event": "新品发布 增长",
+          "category": "past",
+          "impact": "medium"
+        },
+        {
+          "date": "—",
+          "event": "大订单 合作",
+          "category": "past",
+          "impact": "medium"
+        },
+        {
+          "date": "—",
+          "event": "2026 半年报",
+          "category": "past",
+          "impact": "low"
+        },
+        {
+          "date": "2026-10-11",
+          "event": "股东大会 / 投资者关系活动",
+          "category": "corporate",
+          "impact": "medium"
+        },
+        {
+          "date": "2026-10-23",
+          "event": "美联储 FOMC 会议 (参考)",
+          "category": "macro",
+          "impact": "low"
+        },
+        {
+          "date": "2026-10-31",
+          "event": "季报披露（预计 2026 Q4）",
+          "category": "earnings",
+          "impact": "high",
+          "expectation": "关注营收/净利超预期与否"
+        },
+        {
+          "date": "2026-11-10",
+          "event": "行业展会 / 新品发布窗口",
+          "category": "industry",
+          "impact": "medium"
+        }
+      ],
+      "high_impact_count": 1,
+      "past_event_count": 3,
+      "forward_event_count": 0,
+      "next_30d": [
+        {
+          "date": "—",
+          "event": "新品发布 增长",
+          "category": "past",
+          "impact": "medium"
+        },
+        {
+          "date": "—",
+          "event": "大订单 合作",
+          "category": "past",
+          "impact": "medium"
+        },
+        {
+          "date": "—",
+          "event": "2026 半年报",
+          "category": "past",
+          "impact": "low"
+        },
+        {
+          "date": "2026-10-11",
+          "event": "股东大会 / 投资者关系活动",
+          "category": "corporate",
+          "impact": "medium"
+        }
+      ],
+      "methodology_log": [
+        "Step 1 · 从 15_events 提取 3 条历史事件",
+        "Step 2 · 预排 0 个未来节点（季报/股东会/展会/FOMC）",
+        "Step 3 · 共 7 个节点，其中 1 个高影响"
+      ]
+    },
+    "thesis_tracker": {
+      "method": "Thesis Tracker",
+      "direction": "long",
+      "pillars": [
+        {
+          "pillar": "营收增速 > 15%",
+          "original_target": "维持 15%+",
+          "current_status": "10.7%",
+          "trend": "concerning",
+          "verdict": "⚠️"
+        },
+        {
+          "pillar": "ROE > 15%",
+          "original_target": "15%+",
+          "current_status": "0.0%",
+          "trend": "concerning",
+          "verdict": "⚠️"
+        },
+        {
+          "pillar": "技术面处于 Stage 2",
+          "original_target": "Stage 2 上升",
+          "current_status": "Stage 2 · 上升期",
+          "trend": "stable",
+          "verdict": "✅"
+        },
+        {
+          "pillar": "估值合理 (PE < 40)",
+          "original_target": "< 40",
+          "current_status": "34",
+          "trend": "stable",
+          "verdict": "✅"
+        },
+        {
+          "pillar": "FCF 为正",
+          "original_target": "持续正 FCF",
+          "current_status": "负",
+          "trend": "concerning",
+          "verdict": "⚠️"
+        }
+      ],
+      "pillars_passed": 2,
+      "pillars_total": 5,
+      "thesis_intact_pct": 40.0,
+      "conviction": "Low",
+      "recommended_action": "Trim / Review",
+      "methodology_log": [
+        "Step 1 · 构建 5 条核心假设支柱",
+        "Step 2 · 当前命中 2/5，完好率 40.0%",
+        "Step 3 · 信念度 Low，建议 Trim / Review"
+      ]
+    },
+    "morning_note": {
+      "method": "Morning Note",
+      "date": "2026-09-11",
+      "top_call": "水晶光电 · Stage 2 上升，PE 34 合理 → 关注",
+      "recommendation": "关注仓位建立",
+      "bullets": [
+        "【价格】¥23.45 · PE 34x",
+        "【技术面】Stage 2 · 上升期 · 均线 多头排列",
+        "【资金面】龙虎榜 4 次 · 主力资金 —",
+        "【舆情】热度 72 · 偏乐观"
+      ],
+      "methodology_log": [
+        "Step 1 · 扫描技术面 + 资金面 + 舆情",
+        "Step 2 · Top Call: 水晶光电 · Stage 2 上升，PE 34 合理 → 关注"
+      ]
+    },
+    "idea_screens": {
+      "value": {
+        "method": "Idea Screen (value)",
+        "checks": [
+          {
+            "criterion": "PE < 15",
+            "pass": false
+          },
+          {
+            "criterion": "PB < 1.5",
+            "pass": false
+          },
+          {
+            "criterion": "股息率 > 3%",
+            "pass": false
+          },
+          {
+            "criterion": "FCF > 0",
+            "pass": false
+          },
+          {
+            "criterion": "资产负债率 < 50%",
+            "pass": true
+          }
+        ],
+        "passed": 1,
+        "total": 5,
+        "pass_rate_pct": 20.0,
+        "fits_screen": false,
+        "verdict": "🟡 部分命中 (1/5)",
+        "methodology_log": [
+          "Step 1 · value 筛选 — 5 条标准",
+          "Step 2 · 命中 1/5 (20.0%)"
+        ]
+      },
+      "growth": {
+        "method": "Idea Screen (growth)",
+        "checks": [
+          {
+            "criterion": "营收增速 > 15%",
+            "pass": false
+          },
+          {
+            "criterion": "净利增速 > 20%",
+            "pass": false
+          },
+          {
+            "criterion": "毛利率扩张",
+            "pass": false
+          },
+          {
+            "criterion": "ROE > 15%",
+            "pass": false
+          }
+        ],
+        "passed": 0,
+        "total": 4,
+        "pass_rate_pct": 0.0,
+        "fits_screen": false,
+        "verdict": "🟡 部分命中 (0/4)",
+        "methodology_log": [
+          "Step 1 · growth 筛选 — 4 条标准",
+          "Step 2 · 命中 0/4 (0.0%)"
+        ]
+      },
+      "quality": {
+        "method": "Idea Screen (quality)",
+        "checks": [
+          {
+            "criterion": "ROE 连续 5 年 > 15%",
+            "pass": false
+          },
+          {
+            "criterion": "净利率 > 15%",
+            "pass": false
+          },
+          {
+            "criterion": "FCF 持续为正",
+            "pass": false
+          },
+          {
+            "criterion": "资产负债率 < 50%",
+            "pass": true
+          },
+          {
+            "criterion": "护城河 ≥ 28/40",
+            "pass": false
+          }
+        ],
+        "passed": 1,
+        "total": 5,
+        "pass_rate_pct": 20.0,
+        "fits_screen": false,
+        "verdict": "🟡 部分命中 (1/5)",
+        "methodology_log": [
+          "Step 1 · quality 筛选 — 5 条标准",
+          "Step 2 · 命中 1/5 (20.0%)"
+        ]
+      },
+      "gulp": {
+        "method": "Idea Screen (gulp)",
+        "checks": [
+          {
+            "criterion": "PEG < 1.5",
+            "pass": false
+          },
+          {
+            "criterion": "营收增速 > 15%",
+            "pass": false
+          },
+          {
+            "criterion": "ROE > 15%",
+            "pass": false
+          },
+          {
+            "criterion": "Stage 2",
+            "pass": true
+          }
+        ],
+        "passed": 1,
+        "total": 4,
+        "pass_rate_pct": 25.0,
+        "fits_screen": false,
+        "verdict": "🟡 部分命中 (1/4)",
+        "methodology_log": [
+          "Step 1 · gulp 筛选 — 4 条标准",
+          "Step 2 · 命中 1/4 (25.0%)"
+        ]
+      }
+    },
+    "sector_overview": {
+      "method": "Sector Overview",
+      "industry": "光学光电子",
+      "market_size": {
+        "tam": "—",
+        "growth": 12.5,
+        "lifecycle": "成长期"
+      },
+      "value_chain": {
+        "upstream": [
+          "光学玻璃",
+          "树脂"
+        ],
+        "company": [
+          {
+            "name": "光学元器件",
+            "revenue_pct": 62.5
+          },
+          {
+            "name": "半导体材料",
+            "revenue_pct": 24.1
+          },
+          {
+            "name": "其他",
+            "revenue_pct": 13.4
+          }
+        ],
+        "downstream": [
+          "消费电子",
+          "汽车电子"
+        ]
+      },
+      "competitive_map": [
+        {
+          "code": "002273",
+          "name": "水晶光电",
+          "pe": 34.2,
+          "is_self": true
+        },
+        {
+          "code": "002241",
+          "name": "歌尔股份",
+          "pe": 28.5,
+          "is_self": false
+        },
+        {
+          "code": "300433",
+          "name": "蓝思科技",
+          "pe": 41.0,
+          "is_self": false
+        }
+      ],
+      "peer_count": 3,
+      "methodology_log": [
+        "Step 1 · 行业=光学光电子，生命周期=成长期",
+        "Step 2 · TAM — · 增速 12.5",
+        "Step 3 · 识别同行 3 家"
+      ]
+    },
+    "summary": {
+      "rec_rating": "减持 (Underperform)",
+      "target_price": 12.17,
+      "upside_pct": -48.1,
+      "thesis_intact_pct": 40.0,
+      "next_high_impact_event": "新品发布 增长",
+      "earnings_headline": "双超预期：营收 +5.3% / 净利 +5.3%",
+      "screens_passed": 0
+    }
+  },
+  "source": "compute:research_workflow (7 research products)",
+  "fallback": false
+}

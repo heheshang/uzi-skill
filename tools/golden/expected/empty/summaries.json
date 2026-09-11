@@ -1,0 +1,22 @@
+{
+  "0_basic": "基础信息：未拉取到数据（fetcher 失败或返回空）。",
+  "1_financials": "财报：未拉取到数据（fetcher 失败或返回空）。",
+  "2_kline": "K线技术面：未拉取到数据（fetcher 失败或返回空）。",
+  "3_macro": "宏观环境：未拉取到数据（fetcher 失败或返回空）。",
+  "4_peers": "同行对比：未拉取到数据（fetcher 失败或返回空）。",
+  "5_chain": "产业链：未拉取到数据（fetcher 失败或返回空）。",
+  "6_research": "券商研报：未拉取到数据（fetcher 失败或返回空）。",
+  "7_industry": "行业景气：未拉取到数据（fetcher 失败或返回空）。",
+  "8_materials": "原材料：未拉取到数据（fetcher 失败或返回空）。",
+  "9_futures": "期货关联：未拉取到数据（fetcher 失败或返回空）。",
+  "10_valuation": "估值分位：未拉取到数据（fetcher 失败或返回空）。",
+  "11_governance": "治理/减持：未拉取到数据（fetcher 失败或返回空）。",
+  "12_capital_flow": "资金面：未拉取到数据（fetcher 失败或返回空）。",
+  "13_policy": "政策与监管：未拉取到数据（fetcher 失败或返回空）。",
+  "14_moat": "护城河：未拉取到数据（fetcher 失败或返回空）。",
+  "15_events": "事件驱动：未拉取到数据（fetcher 失败或返回空）。",
+  "16_lhb": "龙虎榜：未拉取到数据（fetcher 失败或返回空）。",
+  "17_sentiment": "舆情：未拉取到数据（fetcher 失败或返回空）。",
+  "18_trap": "杀猪盘：未拉取到数据（fetcher 失败或返回空）。",
+  "19_contests": "实盘比赛：未拉取到数据（fetcher 失败或返回空）。"
+}

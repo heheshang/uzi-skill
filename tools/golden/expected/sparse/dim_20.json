@@ -1,0 +1,107 @@
+{
+  "data": {
+    "dcf": {
+      "method": "DCF (2-stage + Gordon Growth terminal)",
+      "verdict": "⛔ 数据不足 · 无法 DCF",
+      "intrinsic_per_share": null,
+      "safety_margin_pct": null,
+      "error": "FCF / 营收 / 净利率均缺失",
+      "methodology_log": [
+        "DCF 跳过 · FCF、营收、净利率均无数据"
+      ],
+      "assumptions": {
+        "stage1_growth": 0.1,
+        "stage2_growth": 0.05,
+        "stage1_years": 5,
+        "stage2_years": 5,
+        "terminal_g": 0.025,
+        "beta": 1.0,
+        "tax": 0.25,
+        "target_debt_ratio": 0.3
+      }
+    },
+    "comps": {
+      "method": "Comparable Company Analysis (peer multiples)",
+      "target": {
+        "name": "Apple Inc.",
+        "ticker": "AAPL",
+        "pe": 0.0,
+        "pb": 0.0,
+        "ps": 0,
+        "roe": null,
+        "net_margin": null,
+        "revenue_growth": 0,
+        "market_cap_yi": 0.0,
+        "price": 0.0,
+        "eps": 0,
+        "bvps": 0
+      },
+      "peers": [],
+      "peer_count": 0,
+      "peer_stats": {},
+      "target_percentile": {},
+      "implied_price": {},
+      "current_price": 0.0,
+      "valuation_verdict": "⚪ 同行样本不足 · 无法对标",
+      "methodology_log": [
+        "Step 1 · 有效同行池 n=0（已剔除目标公司自身）",
+        "Step 2 · 有效同行少于 2 家，跳过分位数与估值结论"
+      ]
+    },
+    "three_statement": {
+      "error": "no base revenue",
+      "methodology_log": [
+        "缺少基期营收"
+      ]
+    },
+    "lbo": {
+      "method": "Quick LBO Test",
+      "entry_ebitda_yi": 0.0,
+      "entry_multiple": 8.0,
+      "entry_ev_yi": 0.0,
+      "entry_debt_yi": 0.0,
+      "entry_equity_yi": 0.0,
+      "leverage_turns": 5.0,
+      "ebitda_path": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "debt_schedule": [
+        0.0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "exit_ebitda_yi": 0.0,
+      "exit_multiple": 8.0,
+      "exit_ev_yi": 0.0,
+      "exit_equity_yi": 0.0,
+      "moic": 0,
+      "irr_pct": 0,
+      "pass_pe_test": false,
+      "verdict": "🔴 低于 PE 收益门槛",
+      "methodology_log": [
+        "Step 1 · 入场 EBITDA 0.0 亿 × 8.0x = EV 0.0 亿",
+        "Step 2 · 5.0x 杠杆 → 债 0.0 亿 + 股本 0.0 亿",
+        "Step 3 · 5 年 8% 成长 → Y5 EBITDA 0.0 亿",
+        "Step 4 · 退出 8.0x × 0.0 = 0.0 亿 EV",
+        "Step 5 · 退出股权 0.0 亿 / 入场股权 0.0 亿 = 0.00x MOIC (0.0% IRR)"
+      ]
+    },
+    "summary": {
+      "dcf_intrinsic": null,
+      "dcf_safety_margin_pct": null,
+      "dcf_verdict": "⛔ 数据不足 · 无法 DCF",
+      "lbo_irr_pct": 0,
+      "lbo_verdict": "🔴 低于 PE 收益门槛",
+      "comps_verdict": "⚪ 同行样本不足 · 无法对标"
+    }
+  },
+  "source": "compute:fin_models (DCF/Comps/3-stmt/LBO)",
+  "fallback": false
+}
