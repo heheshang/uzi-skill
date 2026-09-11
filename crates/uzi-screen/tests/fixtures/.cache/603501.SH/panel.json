@@ -1,9 +1,0 @@
-{
-  "signal_distribution": {
-    "bullish": 25,
-    "bearish": 8,
-    "neutral": 12,
-    "skip": 6
-  },
-  "panel_consensus": 70.0
-}
