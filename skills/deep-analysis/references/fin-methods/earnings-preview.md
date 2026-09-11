@@ -12,8 +12,14 @@
   + `methodology_log` 风格，纯函数、无外部 IO。
 - DCF / Comps 是估值方法；本方法是**事件前定位**方法，输出可喂给交易/仓位决策。
 
-实现：`uzi_models::tier1::earnings_preview` · 入口 `build_earnings_preview(&features, &raw_data) -> Value`
-（库函数，无 CLI 入口）
+实现：`uzi_models::tier1::earnings_preview` · 入口 `build_earnings_preview(&features, &raw_data) -> Value`。
+
+调用（CLI · **无需 Rust 源码**）：
+
+```bash
+uzi <ticker> --stage1                   # 先建缓存
+uzi <ticker> --method earnings-preview  # stdout 纯 JSON
+```
 
 ---
 
@@ -97,7 +103,7 @@
 
 ---
 
-## 测试
+## 测试（源码仓库）
 
 `crates/uzi-models/tests/aux_methods.rs`：断言三情景齐全 + 增速/EPS 单调、
 行业指标映射、一致预期缺失标注、A 股 vs 美股隐含波动分支、空输入鲁棒性。

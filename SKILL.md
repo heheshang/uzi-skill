@@ -57,11 +57,17 @@ uzi --portfolio p.csv --method rebalance
 
 ## 默认执行
 
-```bash
-cargo build --release -p uzi-cli          # 产物: target/release/uzi
-```
+**运行前提 · 不需要 Rust 源码**：仓库自带预编译二进制 **`./uzi`**（macOS arm64，随仓库分发）。
+下文命令一律写 `uzi` —— 指**从仓库根目录**执行 `./uzi`，或已装进 `PATH` 的同名二进制。
+`assets/`（报告模板 / 头像）与 `skills/deep-analysis/personas/`（51 份 persona）都按 **cwd**
+解析，所以要在仓库根目录运行；换目录跑时用 `UZI_ASSETS_DIR` / `UZI_PERSONAS_DIR`
+（或 `UZI_REPO_ROOT`）指回仓库。其他平台 / 要改代码 → 源码构建见 [`README.md`](README.md)
+与 [`AGENTS.md`](AGENTS.md)。
 
 ```bash
+./uzi --version        # 冒烟：应打印 uzi 3.9.4
+./uzi --preview        # 离线出 mock 报告（验证报告层，不联网）
+
 uzi 600519.SH                             # 一把跑完（快速模式，评委为规则引擎输出）
 uzi 贵州茅台 --no-browser                  # 中文名会自动解析
 uzi 600519.SH --stage1                    # 停下等 agent 介入（deep 档必须走这条）
@@ -91,12 +97,16 @@ skills/
   investor-panel/SKILL.md
   lhb-analyzer/SKILL.md
   trap-detector/SKILL.md
-assets/                           # 报告模板 / 头像 / 免责声明 / 数据契约
-crates/                           # uzi-core · uzi-data · uzi-features · uzi-investors
+assets/                           # 报告模板 / 头像 / 免责声明 / 数据契约（运行时按 cwd 读取）
+crates/                           # Rust 源码 —— 只有构建 / 改代码时才需要，运行 uzi 不读它
+                                  # uzi-core · uzi-data · uzi-features · uzi-investors
                                   # uzi-models · uzi-pipeline · uzi-report · uzi-review
                                   # uzi-screen · uzi-cli
-tools/golden/                     # 对照上游 Python 的差分测试与 golden 产物
+tools/golden/                     # 源码仓库的差分测试与 golden 产物（仅维护者）
 ```
+
+文档里出现的 `crates/…` 路径与 `uzi_` 模块路径是**移植出处**（供源码维护者对照实现），
+不是运行依赖 —— 所有数据都由 `uzi` 二进制采集并写入 `.cache/{ticker}/`，运行时不读源码。
 
 `personas/` 是**功能性资产**，不是文档：`uzi_investors::persona_yaml::personas_dir()`
 默认解析 `skills/deep-analysis/personas`（相对 cwd），因此**从仓库根目录运行 `uzi`**

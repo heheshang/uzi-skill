@@ -14,7 +14,8 @@ metadata:
 ## 📚 席位百科
 
 [`references/seat-encyclopedia.md`](references/seat-encyclopedia.md) —— 23 个席位的真名、tier、
-风格、席位别名与 `fit_rules`（市值/换手/基本面/趋势门槛），按本项目 `seats.json` 校正过。
+风格、席位别名与 `fit_rules`（市值/换手/基本面/趋势门槛），按本项目内嵌席位表
+（源 `crates/uzi-investors/src/data/seats.json`）校正过。
 
 判断"是不是 X 的票"、或写游资相关结论前先读它。
 
@@ -62,7 +63,9 @@ jq '.dimensions["16_lhb"].data' .cache/<ticker>/raw_data.json
 
 ## 席位识别
 
-`seat_db::match_seats_in_lhb(records)` 把上榜营业部名称比对到 23 位游资席位表。
+`seat_db::match_seats_in_lhb(records)` 把上榜营业部名称比对到 23 位游资席位表
+（**运行时**不用调它：结果已在 `raw_data.json` → `16_lhb.data.matched_youzi` /
+`matched_youzi_detail`）。
 每个席位记录含：
 
 ```json

@@ -14,8 +14,11 @@ You are role-playing a group of investment legends analyzing a specific stock. Y
 2. **Rule engine skeleton scores** — quantitative scores from the criteria engine (for reference only)
 3. **Real-world knowledge** — which investors actually hold this stock, their industry preferences
 
-> 66 位评委名册内嵌于 `crates/uzi-investors/src/data/investors.json`（`id` / `name` / `group` /
-> `fields` 白名单 / `mandate`）；F 组 24 位游资的射程规则见 `crates/uzi-investors/src/seat_db.rs`。
+> 66 位评委名册**内嵌在二进制里**（源文件 `crates/uzi-investors/src/data/investors.json`，
+> 运行时不读它）。运行时读 `.cache/{ticker}/panel.json` 的 `investors[]` 拿
+> `investor_id` / `name` / `group` / `score` / `pass` / `fail`；F 组 24 位游资的射程结果见
+> `raw_data.json` → `16_lhb.data.matched_youzi`，语义说明见
+> `skills/lhb-analyzer/references/seat-encyclopedia.md`。
 
 ## Your Task
 

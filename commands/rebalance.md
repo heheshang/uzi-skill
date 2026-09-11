@@ -31,7 +31,7 @@ uzi --portfolio <csv> --method rebalance
 
 > 补齐前提：每只持仓先跑过 `uzi <ticker> --stage1`。未缓存的持仓不会被编造数据。
 
-- **targets / threshold 当前 CLI 未暴露为 flag**：运行时目标权重默认**等权 (1/N)**、漂移阈值默认 **5pp**（偏离 >5pp 才动）。自定义目标需在外层算好后走库函数入口。
+- **targets / threshold 当前 CLI 未暴露为 flag**：运行时目标权重默认**等权 (1/N)**、漂移阈值默认 **5pp**（偏离 >5pp 才动）。自定义目标权重属于源码侧用法 —— CLI 不提供该入口，默认等权口径下无需它。
 
 ## 工作流
 

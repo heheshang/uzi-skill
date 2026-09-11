@@ -78,6 +78,11 @@ uzi <ticker> --method <NAME>       # stdout 纯 JSON，可直接 jq
 
 ## 🖥 入口 · `uzi` CLI
 
+**运行不需要 Rust 源码**：仓库自带预编译二进制 `./uzi`。下文命令里的 `uzi` 都指
+**从仓库根目录**执行 `./uzi`（或已加入 `PATH` 的同名二进制）——`assets/` 与
+`skills/deep-analysis/personas/` 按 cwd 解析，换目录时用 `UZI_ASSETS_DIR` /
+`UZI_PERSONAS_DIR` 指回仓库。源码构建（仅改代码 / 非 macOS-arm64 平台需要）：
+
 ```bash
 cargo build --release -p uzi-cli      # 产物: target/release/uzi
 ```
@@ -160,7 +165,8 @@ cargo build --release -p uzi-cli      # 产物: target/release/uzi
 
 ### HARD-GATE-PERSONA · 评委 role-play
 
-评委名册内嵌于 `crates/uzi-investors/src/data/investors.json`（**66 位**，9 大流派）：
+评委名册内嵌于二进制（源 `crates/uzi-investors/src/data/investors.json`，**运行时不读它**；
+名单直接读 `.cache/{ticker}/panel.json` 的 `investors[]`）（**66 位**，9 大流派）：
 A 经典价值 6 · B 成长 9 · C 宏观对冲 7 · D 技术趋势 4 · E 中国价投 7 ·
 F 游资 24 · G 量化 4 · H 科技领袖 4 · I Serenity 1。
 
@@ -418,6 +424,9 @@ reports/{ticker}_{YYYYMMDD}/
 每个维度是 `{data, source, fallback, _pipeline}`。
 
 ## 🧪 开发与验证
+
+> 本节及下方「文档结构」中提到 `crates/…` / `tools/golden/` 的地方**只有源码维护者需要**。
+> 只运行分析的使用者用仓库自带二进制即可：`uzi <ticker> --stage1|--stage2`、`uzi --preview`。
 
 ```bash
 cargo test --workspace                    # 全量测试（含对照上游 Python 的 golden 差分）

@@ -28,19 +28,21 @@
 ## Tier-1 续引入（v3.8.0 · `uzi_models::tier1` 模块）
 
 > 2026-06-04 第二批从 `anthropics/financial-services` 续引入的 5 个与个股研究强相关的方法，
-> 各自有方法论文档（本目录）+ 纯函数模块（`uzi_models::tier1`）+ Rust 单测
-> （`crates/uzi-models/tests/aux_methods.rs`）。
+> 各自有方法论文档（本目录）+ 纯函数模块（`uzi_models::tier1`）。
 >
-> **移植说明**：本移植**未提供**上游的 slash 命令（`commands/`）与 CLI 入口——这 5 个方法
-> 目前都是**库函数**，报告侧也尚未接线到 22 维管线。要调用只能从 Rust 代码引用下述模块。
+> **调用方式**：5 个方法**都已接到 CLI**，随单二进制 `uzi` 分发，**不需要 Rust 源码**。
+> 它们不在 22 维管线里预计算，而是由 `--method` 现场读缓存算：单票走
+> `uzi <ticker> --method <NAME>`，组合走 `uzi --portfolio <csv> --method <NAME>`
+> （`--stage1` 仍要先跑过一次建缓存）。下表 `uzi_models::tier1::*` 是**移植出处**，
+> 供源码维护者对照 —— 运行时不读源码。
 
-| 方法 | Rust 模块 / 函数 | 命令 | 源 SKILL |
+| 方法 | CLI 入口 | Rust 模块 / 函数（移植出处） | 源 SKILL |
 |---|---|---|---|
-| AI 就绪度/卡位评估 | `uzi_models::tier1::ai_readiness :: build_ai_readiness` | 无 CLI 入口（库函数） | private-equity/ai-readiness（适配单票 + 复用 `ai_chokepoint_score`） |
-| 财报前预览 | `uzi_models::tier1::earnings_preview :: build_earnings_preview` | 无 CLI 入口（库函数） | equity-research/earnings-preview |
-| 模型增量更新 | `uzi_models::tier1::model_update :: build_model_update` | 无 CLI 入口（库函数） | equity-research/model-update |
-| 组合收益归因 | `uzi_models::tier1::returns_attrib :: build_returns_attribution` | 无 CLI 入口（库函数） | private-equity/returns-analysis（适配二级市场组合） |
-| 组合再平衡（逐持仓+换手成本） | `uzi_models::tier1::rebalance :: build_rebalance` | 无 CLI 入口（库函数） | wealth-management/portfolio-rebalance（A 股适配：去 TLH + 印花税/佣金本地化） |
+| AI 就绪度/卡位评估 | `uzi <ticker> --method ai-readiness` | `uzi_models::tier1::ai_readiness :: build_ai_readiness` | private-equity/ai-readiness（适配单票 + 复用 `ai_chokepoint_score`） |
+| 财报前预览 | `uzi <ticker> --method earnings-preview` | `uzi_models::tier1::earnings_preview :: build_earnings_preview` | equity-research/earnings-preview |
+| 模型增量更新 | `uzi <ticker> --method model-update` | `uzi_models::tier1::model_update :: build_model_update` | equity-research/model-update |
+| 组合收益归因 | `uzi --portfolio <csv> --method returns` | `uzi_models::tier1::returns_attrib :: build_returns_attribution` | private-equity/returns-analysis（适配二级市场组合） |
+| 组合再平衡（逐持仓+换手成本） | `uzi --portfolio <csv> --method rebalance` | `uzi_models::tier1::rebalance :: build_rebalance` | wealth-management/portfolio-rebalance（A 股适配：去 TLH + 印花税/佣金本地化） |
 
 说明：Tier-1 的 `uzi_models::tier1::rebalance :: build_rebalance`（逐持仓 + A 股印花税/佣金换手成本）与既有 `uzi_models::deep_methods :: build_portfolio_rebalance`（资产大类配置漂移）分工互补，前者出**调仓交易清单**、后者看**大类配置偏离**。
 

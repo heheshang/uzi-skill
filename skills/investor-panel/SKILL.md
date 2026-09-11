@@ -50,12 +50,19 @@ uzi <ticker> --stage1      # 产出 panel.json（Task 3）
 
 > 只要投票、不想要整份报告时：仍走 `--stage1`，然后直接读 `panel.json`，不必跑 `--stage2`。
 
-## 输入
+## 输入（全部可从缓存与 `skills/` 资产取得，不需要 Rust 源码）
 
 - `.cache/{ticker}/dimensions.json` — 22 维评分
 - `.cache/{ticker}/raw_data.json` — 原始数据
-- `investors.json` — 66 位元数据（`id` / `name` / `group` / `fields` 白名单 / `mandate`）
-- `seats.json` — 23 位游资席位与射程规则
+- `.cache/{ticker}/panel.json` → `investors[]` — **运行时的名册来源**：66 份 Signal，
+  含 `investor_id` / `name` / `group` / `score` / `pass` / `fail`
+- `skills/deep-analysis/personas/*.yaml` — 51 份 persona 档案（flagship 的语言与判据）
+- `references/group-*.md` + `references/quotes-knowledge-base.md` — 流派方法论与真实语录
+
+> 名册全量元数据（`fields` 白名单 / `mandate`）与席位表**内嵌在二进制里**，源文件是
+> `crates/uzi-investors/src/data/investors.json` / `seats.json` —— **运行时不读源码**，
+> 别去找这两个文件；需要 `group` 分组就读 `panel.json`，需要席位语义就读
+> `references/seat-encyclopedia.md`（`../lhb-analyzer/references/`）。
 
 ## 输出 · `panel.json`
 

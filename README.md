@@ -44,7 +44,7 @@ A 股 / 港股 / 美股 · 个股深度分析引擎 · **66 位评审团 × 9 �
 | **Gemini CLI** | `gemini extensions install https://github.com/heheshang/uzi-skill` |
 | **Hermes** | `hermes skills install heheshang/uzi-skill/skills/deep-analysis`（若被 Skills Guard 误判，改用下面的源码编译方式） |
 | **OpenClaw / 龙虾** | "装 https://github.com/heheshang/uzi-skill 这个股票分析技能" |
-| **CLI 直用** | `cargo build --release -p uzi-cli` 然后 `./target/release/uzi 贵州茅台 --no-browser` |
+| **CLI 直用** | clone 后直接 `./uzi 贵州茅台 --no-browser`（仓库自带预编译二进制，无需编译；其他平台见[安装](#安装)） |
 
 装好后最常用 4 条命令（任何 agent 里直接说）：
 
@@ -180,15 +180,23 @@ gemini extensions install https://github.com/heheshang/uzi-skill
 
 ### 🦀 CLI 直用（Rust 单二进制）
 
-本项目不需要任何 Python 环境、不需要装依赖——编译出的是一个自包含二进制：
+本项目不需要任何 Python 环境、不需要装依赖，**也不需要自己编译**——仓库根目录自带
+预编译二进制 `./uzi`（macOS arm64），clone 后即可运行：
 
 ```bash
-cargo build --release -p uzi-cli     # 产物 target/release/uzi
-./target/release/uzi 贵州茅台 --no-browser
+./uzi 贵州茅台 --no-browser
 ```
 
-从仓库根目录运行 `uzi`，`skills/deep-analysis/personas/` 下的 51 份 persona 才会被默认加载；
-换目录跑时用 `export UZI_PERSONAS_DIR=<repo>/skills/deep-analysis/personas` 指回去。
+> 其它平台（Linux / Windows / Intel Mac）或要改代码时再自行构建：
+>
+> ```bash
+> cargo build --release -p uzi-cli     # 产物 target/release/uzi
+> ./target/release/uzi 贵州茅台 --no-browser
+> ```
+
+从仓库根目录运行 `uzi`，`assets/` 与 `skills/deep-analysis/personas/` 下的 51 份 persona
+才会被默认加载；换目录跑时用 `export UZI_ASSETS_DIR=<repo>/assets` 与
+`export UZI_PERSONAS_DIR=<repo>/skills/deep-analysis/personas` 指回去。
 
 ### 📱 不在电脑前？
 
@@ -783,7 +791,7 @@ UZI-Skill/
 ├── assets/                             # report-template.html · avatars/ · data-contracts.md
 │                                       # disclaimer.md · quality-checklist.md
 ├── tools/golden/                       # 对照上游 Python 的差分测试与 golden 产物
-├── tools/skills/verify_docs.py         # 文档守卫（Rust 路径 / 链接 / CLI flags / 无 Python）
+├── tools/skills/verify_docs.py         # 文档守卫（Rust 路径 / 链接 / CLI flags / 无 Python / 免源码运行）
 ├── .claude-plugin / .cursor-plugin / .codex / .opencode / gemini-extension.json   # 各平台 manifest
 └── LICENSE
 ```
@@ -912,7 +920,7 @@ loop:
 A: 5-8 分钟，主要是数据采集慢（22 个维度要调十几个 HTTP 端点）。纯计算的机构建模部分 < 1 秒。也可以直接选 `--depth lite` 走 1-2 分钟的快速档。
 
 **Q: 需要装 Python 吗？**
-A: **不需要。** 本项目是单一 Rust 二进制，没有任何 Python 运行时依赖，也没有依赖清单 / 虚拟环境 / 安装脚本。`cargo build --release -p uzi-cli` 出来的 `target/release/uzi` 直接跑。
+A: **不需要。** 本项目是单一 Rust 二进制，没有任何 Python 运行时依赖，也没有依赖清单 / 虚拟环境 / 安装脚本。仓库自带预编译的 `./uzi`（macOS arm64）可直接运行；其它平台用 `cargo build --release -p uzi-cli` 产出的 `target/release/uzi`。
 
 **Q: 需要付费数据源吗？**
 A: 不需要。全部免费源（东方财富 / 腾讯 / 新浪 / 巨潮 / 雪球 / Yahoo / DuckDuckGo），零 API key。可选 `MX_APIKEY`（妙想 API）增强 A 股行情，也是免费的。
@@ -937,7 +945,7 @@ A: 会。每次启动 CLI 或 agent 会话都会后台检测 GitHub 最新 relea
 - 有新版本 → 弹三选一提示（是 / 跳过本版 / 否）+ 改动摘要
 - 选"是"→ 按你装的方式执行对应命令：
   - Claude Code: `/plugin update stock-deep-analyzer`
-  - 源码用户: 重新 `git pull` 并 `cargo build --release -p uzi-cli`
+  - CLI / 源码用户: 重新 `git pull`（仓库自带二进制会一并更新）；自编译用户再跑 `cargo build --release -p uzi-cli`
   - Hermes: `hermes skills update heheshang/uzi-skill/skills/deep-analysis`
 - 选"跳过本版"→ 该版本不再提示，下一个新版本出来时才再弹
 - 选"否"→ 下次启动再问

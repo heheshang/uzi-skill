@@ -4,8 +4,10 @@
 
 ```bash
 git clone https://github.com/heheshang/uzi-skill.git && cd UZI-Skill
-cargo build --release -p uzi-cli
+./uzi --version                 # 仓库自带预编译二进制（macOS arm64），无需编译
 ```
+
+> 非 macOS-arm64 平台（或要改代码）才需要 `cargo build --release -p uzi-cli`。
 
 ## 使用
 
@@ -16,7 +18,7 @@ cargo build --release -p uzi-cli
 或直接执行：
 
 ```bash
-./target/release/uzi 600519.SH --no-browser
+./uzi 600519.SH --no-browser
 ```
 
 ## 两段式深度分析

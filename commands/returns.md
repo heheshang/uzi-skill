@@ -38,11 +38,11 @@ ticker,weight,note
 
   因此**每只持仓都要先跑过 `uzi <ticker> --stage1`**，否则该只会被标
   「需补价格区间」并按 0 计入 —— 这是有意的：宁可显式报缺，也不编一个收益率。
-- `school`（流派归因）CLI 不补齐，需要时用库函数
-  `uzi_models::tier1::returns_attrib` 自行构造 holdings。
+- `school`（流派归因）CLI 不补齐（CSV 只有三列），需要时由源码侧构造 holdings 传入库函数
+  `uzi_models::tier1::returns_attrib`。
 - **benchmark 当前 CLI 未暴露为 flag**：`--method returns` 按 `benchmark=None` 调用，输出的
   `benchmark` 字段为 `null`，此时**不做基准超额对比**（`verdict` 只报组合自身收益）。
-  需要基准时用同一个库函数显式传参。
+  需要基准时由源码侧调用同一个库函数显式传参（CLI 不暴露该 flag）。
 
 ## 工作流
 

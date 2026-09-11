@@ -12,6 +12,11 @@
 上游的 Python 入口（`run.py`）、`scripts/` 业务目录、`lib/` 模块与 `fetch_*` 采集脚本在这里
 **全部不存在** —— 对应逻辑在 `crates/` 里，入口只有 `uzi` 一个。
 
+**运行时不需要 Rust 源码**：仓库根目录自带预编译二进制 **`./uzi`**（macOS arm64），
+直接执行即可；`crates/` 只在改代码 / 重新编译时才需要。`assets/` 与
+`skills/deep-analysis/personas/` 按 **cwd** 解析，所以要从仓库根目录跑；换目录用
+`UZI_ASSETS_DIR` / `UZI_PERSONAS_DIR` / `UZI_REPO_ROOT` 指回仓库。
+
 ```
 UZI-Skill/                                  # ← 你 cwd 应该是这里
 ├── Cargo.toml                              # Rust workspace 根（10 个成员 crate）
@@ -58,7 +63,8 @@ UZI-Skill/                                  # ← 你 cwd 应该是这里
 | 单个方法 · stdout 纯 JSON | `uzi <ticker> --method <NAME>` |
 | 锁定单一流派 | `uzi <ticker> --school A..I` |
 | 自检（exit 1=critical / 2=warning / 0=通过） | `uzi <ticker> --stage-review` |
-| 构建二进制 | `cargo build --release -p uzi-cli`（产物 `target/release/uzi`） |
+| 运行二进制（仓库自带，免编译） | `./uzi <ticker>` |
+| 构建二进制（改代码 / 非 macOS-arm64） | `cargo build --release -p uzi-cli`（产物 `target/release/uzi`） |
 | 跑全量测试 | `cargo test --workspace`（父 agent 统一跑；子任务别抢跑） |
 
 ### crate 调用约定
@@ -155,7 +161,10 @@ SCHOOL LOCK banner · 你 role-play 时**只 role-play 该派成员** · `panel_
 
 用户明确要深度分析（估值 / DCF / IC memo），按下面 Step 1-5 走。
 
-### Step 1 · 构建（首次）
+### Step 1 · 构建（仅首次 · 且仅在需要时）
+
+仓库根目录**已自带预编译二进制 `./uzi`**（macOS arm64），clone 后可直接跳到 Step 2。
+只有**改代码**或**本机平台不是 macOS-arm64** 时才需要构建：
 
 ```bash
 cargo build --release -p uzi-cli          # 产物: target/release/uzi

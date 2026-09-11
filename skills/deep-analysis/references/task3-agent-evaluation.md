@@ -35,16 +35,27 @@
                     └───────────────────┘
 ```
 
-名册共 66 位、9 大流派，内嵌于 `crates/uzi-investors/src/data/investors.json`
-（A 经典价值 6 · B 成长 9 · C 宏观对冲 7 · D 技术趋势 4 · E 中国价投 7 ·
-F 游资 24 · G 量化 4 · H 科技领袖 4 · I Serenity 1）。
+名册共 66 位、9 大流派，**内嵌在二进制里**（源文件 `crates/uzi-investors/src/data/investors.json`，
+运行时不读它）：
+A 经典价值 6 · B 成长 9 · C 宏观对冲 7 · D 技术趋势 4 · E 中国价投 7 ·
+F 游资 24 · G 量化 4 · H 科技领袖 4 · I Serenity 1。
 
-**每个 sub-agent 的输入**：
-- raw_data.json（或关键摘要）
-- features dict（标准化特征，`uzi_core::features`）
-- 规则引擎输出（每个人的 pass/fail rules + score — 来自 `uzi_investors::criteria` + `uzi_investors::evaluator`，作为参考）
-- investor_knowledge（持仓 / 市场 / 亲和度，`uzi_investors::knowledge`）
-- investor_personas（语言风格，`uzi_investors::personas`；flagship persona 若存在 YAML 档案则由 `uzi_investors::persona_yaml` 优先）
+**每个 sub-agent 的输入 —— 全部来自缓存与 `skills/` 资产，不需要 Rust 源码**：
+
+| 输入 | 运行时来源 |
+|---|---|
+| 原始数据 | `.cache/{ticker}/raw_data.json` |
+| 22 维评分 | `.cache/{ticker}/dimensions.json` |
+| 规则引擎骨架（pass/fail + score，仅参考，可覆盖） | `.cache/{ticker}/panel.json` → `investors[]` |
+| 语言风格 | `skills/deep-analysis/personas/{id}.yaml`（51 份；仅 flagship 有） + 参考 `panel.json` 的 `comment` |
+| 方法论 / 流派关注点 | `skills/investor-panel/references/group-*.md` |
+| 真实语录与持仓风格 | `skills/investor-panel/references/quotes-knowledge-base.md` |
+| 席位 / 射程（F 组） | `.cache/{ticker}/raw_data.json` → `16_lhb.data.matched_youzi` + `skills/lhb-analyzer/references/seat-encyclopedia.md` |
+
+> `features` 与 `investor_knowledge` 是二进制内部派生量，**不落盘**（源码落点
+> `uzi_features::stock_features` / `uzi_investors::knowledge`，仅供维护者对照）。
+> 你要的等价信息直接从上表的 `raw_data.json` / `dimensions.json` 取，或用自己的公开知识补，
+> 不要去找这两个不存在的缓存文件。
 
 **每个 sub-agent 的输出**：
 - 每个投资者一个 `{signal, score, headline, reasoning}`
@@ -81,7 +92,7 @@ F 游资 24 · G 量化 4 · H 科技领袖 4 · I Serenity 1）。
 欧奈尔的投资哲学：CANSLIM 7 要素，动量 + 基本面
 蒂尔的投资哲学：0 到 1，垄断，秘密
 木头姐的投资哲学：颠覆式创新 5 平台，S 曲线拐点，5 年改变游戏规则
-（其余成员见 investors.json 的 B 组名册：马克·安德森 / 比尔·格利 / 纳瓦尔 / 布拉德·格斯特纳 / 查马斯）
+（其余成员见 `panel.json` 中 `group == "B"` 的条目：马克·安德森 / 比尔·格利 / 纳瓦尔 / 布拉德·格斯特纳 / 查马斯）
 
 对每个人，输出格式：
 {

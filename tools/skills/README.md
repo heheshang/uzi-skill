@@ -11,7 +11,7 @@ python3 tools/skills/verify_docs.py              # check (exit 1 on findings)
 python3 tools/skills/verify_docs.py --inventory   # list every Python-ish mention
 ```
 
-Checks four things across `SKILL.md`, `skills/**/*.md`, and `commands/*.md`:
+Checks six things across `SKILL.md`, `skills/**/*.md`, and `commands/*.md`:
 
 1. **Every `uzi_<crate>::<path>` token resolves** — the longest module prefix must
    exist under `crates/`, and any trailing segment must be a real symbol in the
@@ -28,6 +28,16 @@ Checks four things across `SKILL.md`, `skills/**/*.md`, and `commands/*.md`:
    `pip install`, `playwright install`. This project is a Rust binary; telling a
    reader to run Python is a defect. Prose that *compares* against upstream is
    fine, so the check matches invocation shapes rather than the word "python".
+5. **No doc makes a build step the entry point** — the repo ships a prebuilt
+   `./uzi`, so a `cargo build` / `target/release/uzi` line inside the run surface
+   (`SKILL.md`, `skills/**`, `commands/**`, `agents/**`, the two `INSTALL.md`
+   files, `hooks/README.md`) must sit next to a source-scope caveat ("仅改代码 /
+   其他平台 / 无需编译" …). Maintainer docs — release notes, PR/issue templates,
+   dev guides — are exempt, since they discuss `cargo test` legitimately.
+6. **No stale `无 CLI 入口` claim** — every ported method has a CLI path. The
+   phrase sent readers hunting for the Rust source instead of running `uzi`;
+   capabilities the CLI genuinely does not expose are described as "CLI 未暴露…"
+   plus the source-side call.
 
 `--inventory` prints every `lib/*.py` / `akshare` / `.py` mention per file for
 human review — useful after a bulk rewrite, since a legitimate contrast

@@ -15,13 +15,13 @@
 
 ## 安装
 
-1. 先构建二进制 —— 后台更新检查会用到它，构建一次即可（二进制缺失时 hook 会静默跳过）：
+**无需源码构建**：仓库根目录自带预编译 `uzi`（macOS arm64），后台更新检查直接用它。
+
+1. 确认二进制可用（缺失 / 非本机平台时 hook 会静默跳过，不报错）：
 
    ```bash
-   cargo build --release -p uzi-cli
+   ./uzi --version        # 仓库自带；或 cargo build --release -p uzi-cli 产出 target/release/uzi
    ```
-
-   产物为 `target/release/uzi`。
 
 2. 给 `session-start` 可执行权限：
 
@@ -43,7 +43,7 @@ chmod +x hooks/session-start
 uzi --update-prompt-file .cache/_global/update_prompt.md
 ```
 
-- 二进制解析顺序：优先 `$PLUGIN_ROOT/target/release/uzi`，其次 `command -v uzi`；两者都找不到则**静默跳过**，hook 不报错。
+- 二进制解析顺序：优先 `$PLUGIN_ROOT/target/release/uzi`（源码构建产物），其次 `command -v uzi`（含仓库根自带的预编译二进制已加入 `PATH` 的情形）；两者都找不到则**静默跳过**，hook 不报错。
 - 有新版 → 写入提示文件；无新版 → **删除**该文件。**文件存在即表示要提示 agent**，`SKILL.md` 的 HARD-GATE-UPDATE-PROMPT 负责读取并展示。
 - 用户回答后用 `uzi --update-answer <y|s|n> <版本>` 处理。
 

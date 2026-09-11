@@ -1,6 +1,8 @@
 # 23 位 A 股游资席位百科
 
-> 详细数据由 `uzi_investors::seat_db` 维护（席位表内嵌 `crates/uzi-investors/src/data/seats.json`，共 **23 个席位**）。本文档是给 Claude 阅读的"语义说明"，方便在分析时引用。
+> 详细数据由 `uzi_investors::seat_db` 维护（席位表内嵌 `crates/uzi-investors/src/data/seats.json`，共 **23 个席位**）。
+> 运行时不用读源码：某只票命中了哪些席位见 `.cache/{ticker}/raw_data.json` → `16_lhb.data.matched_youzi`。
+> 本文档是给 Claude 阅读的"语义说明"，方便在分析时引用。
 
 ## 殿堂级 (5 人)
 

@@ -1,7 +1,10 @@
 # Model Update · 增量更新财务模型
 
 > 改编自 **anthropics/financial-services** `equity-research/model-update`，A 股 / 港股 / 美股适配。
-> 实现：`uzi_models::tier1::model_update` · 入口 `build_model_update`（库函数，无 CLI 入口）。
+>
+> 调用（CLI · **无需 Rust 源码**）：`uzi <ticker> --method model-update`。
+> CLI 不接收外部假设 payload，以 `updates=None` 的**推断模式**运行（从缓存 features 推「最新 vs 上期」）。
+> 实现（移植出处，仅源码维护者需要）：`uzi_models::tier1::model_update` · 入口 `build_model_update`。
 
 ## 这是什么
 

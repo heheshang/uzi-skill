@@ -17,9 +17,11 @@ gemini extensions update stock-deep-analyzer
 对 Gemini 说"分析 贵州茅台"，或直接执行：
 
 ```bash
-cargo build --release -p uzi-cli
-./target/release/uzi 贵州茅台 --no-browser
+./uzi 贵州茅台 --no-browser
 ```
+
+> 仓库根目录自带预编译 `./uzi`（macOS arm64），无需构建；改代码 / 其他平台才需
+> `cargo build --release -p uzi-cli`（产物 `target/release/uzi`）。
 
 > 本项目零外部依赖（Rust 单一二进制 `uzi`）：不需要 `pip install`，也没有 `requirements.txt`。
 

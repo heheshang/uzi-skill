@@ -50,12 +50,17 @@ uzi <ticker> --stage1      # 产出 .cache/{ticker}/panel.json（Task 3）
 | I | AI 卡位猎手（Serenity） | 1 | `uzi_investors::criteria` |
 | **共** | | **66** | |
 
-> 名册内嵌于 `crates/uzi-investors/src/data/investors.json`（`id` / `name` / `group` / `fields` 白名单 / `mandate`）；
-> F 组含章盟主、赵老哥、佛山无影脚、北京炒家等 24 位；席位与射程规则内嵌于 `crates/uzi-investors/src/data/seats.json`。
+> 名册**内嵌在二进制里**（源文件 `crates/uzi-investors/src/data/investors.json`，运行时不读它）——
+> 运行时要拿 `id` / `name` / `group` 直接读 `.cache/{ticker}/panel.json` 的 `investors[]`（66 条）。
+> F 组含章盟主、赵老哥、佛山无影脚、北京炒家等 24 位；席位与射程规则同样内嵌
+> （源文件 `crates/uzi-investors/src/data/seats.json`），运行时命中结果见
+> `raw_data.json` → `16_lhb.data.matched_youzi`。
 
 ## 字段白名单（per-persona 抄 ai-hedge-fund）
 
-每位投资者只看自己关心的维度，避免噪音（白名单在 `uzi_investors::criteria`）：
+每位投资者只看自己关心的维度，避免噪音。白名单**内嵌在二进制里**（源 `uzi_investors::criteria`），
+运行时你不需要复现它 —— 骨架分 `panel.json → investors[].pass / fail` 已经是白名单过滤后的结果。
+下表是源码口径的对照（供维护者 / 想理解某位评委为何只看某几维时阅读）：
 
 ```rust
 // persona id → 允许读取的维度 key

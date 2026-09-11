@@ -53,12 +53,12 @@ holdings = [
 
 ## 调用
 
-```rust
-use uzi_models::tier1::returns_attrib::build_returns_attribution;
-
-// 库函数，无 CLI 入口；benchmark_return 可选
-let result = build_returns_attribution(&holdings, Some(6.0));
+```bash
+uzi --portfolio holdings.csv --method returns   # CLI · 无需源码，stdout 纯 JSON
 ```
+
+> `benchmark_return` 当前 **CLI 未暴露为 flag**（输出 `benchmark: null`，不做超额对比）；
+> 需要基准时由源码调用 `uzi_models::tier1::returns_attrib :: build_returns_attribution(&holdings, Some(6.0))`。
 
 ### 返回结构
 

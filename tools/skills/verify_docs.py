@@ -15,7 +15,15 @@ What is checked:
   2. every relative markdown link between docs resolves on disk;
   3. no executable Python invocation survives (`python -c`, `python3 run.py`,
      `pip install`, `python -m lib.…`), while allowing prose that explains the
-     upstream-vs-Rust difference.
+     upstream-vs-Rust difference;
+  4. no doc tells the reader to *build* in order to *run* — the repo ships a
+     prebuilt `./uzi`, so a `cargo build` / `target/release/uzi` line must be
+     explicitly scoped to "changing code / other platforms" (see
+     `SOURCE_DISCLAIMERS`). A doc whose entry point is a build step sends a
+     reader with no toolchain (or an agent in a read-only checkout) into a wall;
+  5. no doc claims a ported method has **no CLI entry** (`无 CLI 入口`). They all
+     have one — the claim goes stale the moment the method is wired up, and it
+     tells the reader to go find the Rust source instead of running `uzi`.
 
 Exit code 0 = clean, 1 = findings.
 """
@@ -57,18 +65,6 @@ DOC_GLOBS = [
 MODULE_RE = re.compile(r"\buzi_[a-z_]+(?:::[a-z_0-9]+)*")
 LINK_RE = re.compile(r"\]\((\.{1,2}/[^)#\s]+\.md)\)")
 
-# Every flag the CLI actually accepts. A doc naming a flag outside this set is
-# describing an entry point that does not exist. Sourced from `uzi --help`;
-# `--help` itself is excluded (it is provided by clap).
-KNOWN_FLAGS = {
-    "--browser-check", "--check-update", "--depth", "--enable-xueqiu-login",
-    "--force-name", "--from-modeling", "--install-cloudflared", "--markets",
-    "--max-workers", "--method", "--min-turnover", "--mode", "--no-browser",
-    "--no-resume", "--no-update-check", "--output-dir", "--port", "--portfolio",
-    "--preview", "--prewarm", "--remote", "--school", "--schools", "--screen",
-    "--segmental", "--snapshot-only", "--stage-review", "--stage1", "--stage2",
-    "--top", "--versus", "--xueqiu-login", "--xueqiu-status",
-}
 # A glob (`--stage*`) is not a flag claim. The boundary must be part of the
 # trailing class rather than a lookahead: with `(?!\*)` the greedy body
 # backtracks and happily reports `--stag` for `--stage*`.
@@ -79,9 +75,19 @@ UZI_CMD_RE = re.compile(r"(?:^|[|;&]\s*|\$\s+)uzi\s")
 
 
 def cli_flags() -> set[str]:
-    """Flags scraped from the CLI's own `--help`, when the binary is built."""
-    for profile in ("debug", "release"):
-        exe = REPO / "target" / profile / "uzi"
+    """Flags scraped from the CLI's own `--help`.
+
+    The flag set lives in the binary, never in a hand-maintained list here — a
+    copy of it goes stale the moment a flag is added. A local build wins (it
+    matches the source being edited); the prebuilt binary shipped at the repo
+    root is the fallback, so the check still runs in a fresh clone with no
+    `target/`.
+    """
+    for exe in (
+        REPO / "target" / "release" / "uzi",
+        REPO / "target" / "debug" / "uzi",
+        REPO / "uzi",
+    ):
         if not exe.is_file():
             continue
         try:
@@ -110,6 +116,37 @@ PY_EXEC_PATTERNS = [
     (re.compile(r"\bpip\s+install\b"), "pip install"),
     (re.compile(r"\bplaywright\s+install\b"), "playwright install"),
 ]
+
+# A build step is not a run step. The repo ships a prebuilt `./uzi`, so any
+# `cargo build` / `target/release/uzi` line must be scoped to source work.
+BUILD_CMD_RE = re.compile(r"\bcargo\s+(?:build|run|test)\b|target/release/uzi")
+# Judged only on the surface an agent/reader follows to *run* an analysis.
+# Maintainer docs (release notes, PR/issue templates, dev guides) discuss
+# `cargo test` legitimately and are not entry points for a user.
+RUN_SURFACE_GLOBS = [
+    "SKILL.md",
+    "skills/*/SKILL.md",
+    "skills/*/references/*.md",
+    "skills/*/references/*/*.md",
+    "commands/*.md",
+    "agents/*.md",
+    ".codex/INSTALL.md",
+    ".opencode/INSTALL.md",
+    "hooks/README.md",
+]
+# Proximity window: a fence header and the command inside it can be a few lines
+# apart, and the disclaimer is usually the sentence right before/after the block.
+BUILD_SCOPE_WINDOW = 8
+SOURCE_DISCLAIMERS = (
+    "无需编译", "不需要编译", "无需构建", "不需要构建", "无需源码", "不需要 Rust 源码",
+    "预编译", "源码构建", "源码维护", "源码仓库", "仅改代码", "仅维护", "改代码",
+    "非 macOS", "其他平台", "其它平台", "自编译", "源码用户", "开发与验证",
+    "维护者", "冒烟",
+)
+# Every ported method has a CLI entry; the stale phrasing told readers to go read
+# Rust source instead. Capabilities the CLI genuinely does not expose are
+# described as `CLI 未暴露…` plus the source-side call.
+NO_CLI_CLAIM_RE = re.compile(r"无\s*CLI\s*入口")
 
 
 def rust_index() -> tuple[set[str], str]:
@@ -210,6 +247,10 @@ def main() -> int:
         print("no skill docs found", file=sys.stderr)
         return 1
 
+    run_surface: set[Path] = set()
+    for pattern in RUN_SURFACE_GLOBS:
+        run_surface.update(REPO.glob(pattern))
+
     total_tokens = 0
     checked: set[str] = set()
     for doc in targets:
@@ -263,6 +304,31 @@ def main() -> int:
                     continue
                 findings.append(f"{rel}:{line_no}: {label} — {line.strip()[:100]}")
 
+        # 5 · a build command presented as the way to run. The repo ships a
+        # prebuilt `./uzi`; a reader without a toolchain (or an agent in a
+        # read-only checkout) must not be told to compile first.
+        lines = text.splitlines()
+        if doc in run_surface:
+            for line_no, line in enumerate(lines, 1):
+                if not BUILD_CMD_RE.search(line):
+                    continue
+                lo = max(0, line_no - 1 - BUILD_SCOPE_WINDOW)
+                hi = min(len(lines), line_no + BUILD_SCOPE_WINDOW)
+                if any(m in "\n".join(lines[lo:hi]) for m in SOURCE_DISCLAIMERS):
+                    continue
+                findings.append(
+                    f"{rel}:{line_no}: build command with no source-scope caveat — "
+                    f"{line.strip()[:90]}"
+                )
+
+        # 6 · "no CLI entry" claims. Every ported method has a CLI path; the
+        # stale wording points readers at the Rust source instead of `uzi`.
+        for line_no, line in enumerate(lines, 1):
+            if NO_CLI_CLAIM_RE.search(line):
+                findings.append(
+                    f"{rel}:{line_no}: stale `无 CLI 入口` claim — {line.strip()[:90]}"
+                )
+
     print(f"checked {len(targets)} docs · {total_tokens} rust path mentions ({len(checked)} unique)")
     if findings:
         print(f"\n{len(findings)} finding(s):\n")
@@ -271,7 +337,8 @@ def main() -> int:
         return 1
     print(
         "✓ all rust paths resolve · all links resolve · "
-        "all CLI flags known · no executable python"
+        "all CLI flags known · no executable python · "
+        "run paths need no build · no stale `无 CLI 入口` claims"
     )
     return 0
 

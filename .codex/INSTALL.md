@@ -6,11 +6,14 @@
 
 ```bash
 git clone https://github.com/heheshang/uzi-skill.git && cd UZI-Skill
-cargo build --release -p uzi-cli
-./target/release/uzi 600519.SH --no-browser
+./uzi --version                 # 仓库自带预编译二进制（macOS arm64），无需编译
+./uzi 600519.SH --no-browser
 ```
 
 安装完成。直接对 Codex 说"分析 贵州茅台"即可。
+
+> 非 macOS-arm64 平台（或要改代码）才需要自行构建：
+> `cargo build --release -p uzi-cli && ./target/release/uzi 600519.SH --no-browser`
 
 ## 工作原理
 
@@ -59,9 +62,11 @@ uzi 600519.SH --remote
 
 ## 依赖
 
-- Rust 工具链（`cargo build --release -p uzi-cli` 产出 `target/release/uzi`）
+- **无**（仓库自带预编译 `./uzi`，macOS arm64）
 - 零 API key、零外部依赖（无任何运行时包安装步骤）
 - 报告渲染首选系统已装的 Chromium 系浏览器（Chrome/Chromium/Edge/Brave），可用 `uzi --browser-check` 确认
+- 仅当改代码 / 非 macOS-arm64 平台时需要 Rust 工具链：
+  `cargo build --release -p uzi-cli` 产出 `target/release/uzi`
 
 ## 目录结构
 
@@ -80,8 +85,9 @@ UZI-Skill/
 **Q: 跑完看不到报告？**
 A: 报告在 `reports/{ticker}_{YYYYMMDD}/full-report-standalone.html`，用 `--remote` 可以生成公网链接。
 
-**Q: 依赖安装失败？**
-A: 确保 Rust 工具链可用（`cargo --version`）。本项目零外部依赖，`uzi` 不会在运行时联网安装任何东西。
+**Q: 二进制跑不起来？**
+A: 仓库自带的 `./uzi` 是 macOS arm64 构建。其它平台请自行 `cargo build --release -p uzi-cli`
+（需要 Rust 工具链，`cargo --version` 可确认）。本项目零外部依赖，`uzi` 不会在运行时联网安装任何东西。
 
 **Q: 中文名识别不了？**
 A: 直接用代码：`600519.SH`（上海）、`002273.SZ`（深圳）、`00700.HK`（港股）、`AAPL`（美股）。

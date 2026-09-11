@@ -76,7 +76,7 @@ uzi <ticker> --stage2
 > `share-card.png` / `war-report.png`。本移植**不做截图**（零浏览器依赖）：
 > `uzi_report::cards`（`main_share` / `main_war`）把报告的 **HTML 源码**写到
 > `share-card.html` / `war-report.html`，需要图片时由使用者自行在浏览器里导出。
-> 该模块目前**无 CLI 入口**（库函数），`--stage2` 不会自动产出这两个文件。
+> 该模块在 CLI **未暴露入口**（源码侧库函数），`--stage2` 不会自动产出这两个文件。
 
 ## 4 段 Dashboard 模板（大众视图，最重要）
 

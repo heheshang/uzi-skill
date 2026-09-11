@@ -9,11 +9,11 @@
 ## 🚨 必读前 60 秒
 
 1. **入口是 `uzi` 二进制 · 不是某个 `crates/*/src/main.rs` 里的 main**
-   - ✅ 先构建，再直接运行：
+   - ✅ 仓库根目录自带预编译二进制，直接跑（**不需要先构建**）：
      ```bash
-     cargo build --release -p uzi-cli
-     ./target/release/uzi <ticker>
+     ./uzi <ticker>
      ```
+   - 只有改代码 / 非 macOS-arm64 平台才需要 `cargo build --release -p uzi-cli`，产物 `target/release/uzi`
    - ❌ 不要找 `run.py` 之类的 Python 入口（本项目没有）
    - ❌ `cargo run -p uzi-investors`（库 crate 没有 `main` · 别找）
    - ❌ 不要找 `skills/deep-analysis/scripts/`（没有 `scripts/` 目录）
@@ -86,12 +86,13 @@ crates/uzi-cli/src/stages.rs
 ```bash
 cd <repo-root>
 
-# 1. 先构建，不要找 scripts/ 或 Python 入口
-cargo build --release -p uzi-cli                 # ✅ 产物: target/release/uzi
+# 1. 直接跑仓库自带二进制，不要找 scripts/ 或 Python 入口（改代码才重新构建）
+./uzi --version                                  # 冒烟 · 应打印 uzi 3.9.4
+cargo build --release -p uzi-cli                 # 仅源码改动后需要 · 产物 target/release/uzi
 
 # 2. 验证入口 + 离线报告模板
-./target/release/uzi --help
-./target/release/uzi --preview                   # 内置 mock fixture，不联网也能出报告
+./uzi --help
+./uzi --preview                   # 内置 mock fixture，不联网也能出报告
 
 # 3. 全量测试（workspace，从仓库根跑）
 cargo test --workspace

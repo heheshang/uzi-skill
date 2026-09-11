@@ -53,7 +53,7 @@ So yes — this plugin helps you understand Chinese names like **Alibaba** (`BAB
 | **Gemini CLI** | `gemini extensions install https://github.com/heheshang/uzi-skill` |
 | **Hermes** | `hermes skills install heheshang/uzi-skill/skills/deep-analysis` (if Skills Guard false-positives, build from source instead) |
 | **OpenClaw** | "Install https://github.com/heheshang/uzi-skill and analyze Tencent (00700.HK)" |
-| **CLI only** | `cargo build --release -p uzi-cli` then `./target/release/uzi 贵州茅台 --no-browser` |
+| **CLI only** | after cloning, run `./uzi 贵州茅台 --no-browser` (prebuilt binary ships with the repo — no build step; other platforms see [Install](#install)) |
 
 The four commands you'll use most (say them to any agent):
 
@@ -178,14 +178,23 @@ Paste this:
 
 ### 🦀 CLI Only (single Rust binary)
 
-No Python environment, no dependency install — you build one self-contained binary:
+No Python environment, no dependency install, and **no build step on macOS arm64** — the repo
+ships a prebuilt `./uzi` at its root:
 
 ```bash
-cargo build --release -p uzi-cli     # produces target/release/uzi
-./target/release/uzi 贵州茅台 --no-browser
+./uzi 贵州茅台 --no-browser
 ```
 
-Run `uzi` from the repository root so the 51 persona files under `skills/deep-analysis/personas/` are picked up by default; from another directory, point back with `export UZI_PERSONAS_DIR=<repo>/skills/deep-analysis/personas`.
+> For other platforms (Linux / Windows / Intel Mac) or if you are changing the code:
+>
+> ```bash
+> cargo build --release -p uzi-cli     # produces target/release/uzi
+> ./target/release/uzi 贵州茅台 --no-browser
+> ```
+
+Run `uzi` from the repository root so `assets/` and the 51 persona files under
+`skills/deep-analysis/personas/` are picked up by default; from another directory point back with
+`export UZI_ASSETS_DIR=<repo>/assets` and `export UZI_PERSONAS_DIR=<repo>/skills/deep-analysis/personas`.
 
 ### 📱 Not at your desk?
 
@@ -874,7 +883,7 @@ Every fixed BUG adds a matching rule, so the same class is **caught automaticall
 A: 5-8 minutes per stock; most of it is fetching (22 dims across a dozen HTTP endpoints). Modeling itself is <1 second. `--depth lite` gives a 1-2 minute quick read.
 
 **Q: Do I need Python?**
-A: **No.** This is a single Rust binary with no Python runtime dependency, no dependency manifest, no venv, no installer. `cargo build --release -p uzi-cli` produces `target/release/uzi` and you run it.
+A: **No.** This is a single Rust binary with no Python runtime dependency, no dependency manifest, no venv, no installer. The repo ships a prebuilt `./uzi` (macOS arm64) you can run directly; on other platforms `cargo build --release -p uzi-cli` produces `target/release/uzi`.
 
 **Q: Do I need paid data sources?**
 A: No. All free (Eastmoney / Tencent / Sina / CNInfo / XueQiu / Yahoo / DuckDuckGo), zero API keys. The optional `MX_APIKEY` (妙想 API) enhances A-share quotes and is free too.

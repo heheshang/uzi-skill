@@ -5,12 +5,15 @@
 
 | 项 | 值 |
 |---|---|
-| Rust 模块 | `uzi_models::tier1::rebalance :: build_rebalance` |
-| 命令 | 无 CLI 入口（库函数） |
+| 命令（无需源码） | `uzi --portfolio <csv> --method rebalance` |
+| Rust 模块（移植出处） | `uzi_models::tier1::rebalance :: build_rebalance` |
 | 源 SKILL | wealth-management/portfolio-rebalance |
 | 配合 | UZI 已有 `--portfolio`（组合体检）→ 本方法（调仓建议） |
 
 ## 函数签名
+
+> 下面是**源码口径**（供维护者对照）。运行时用上表/下方工作流的
+> `uzi --portfolio <csv> --method rebalance`，不需要也不该调用 Rust 函数。
 
 ```rust
 pub fn build_rebalance(
@@ -88,4 +91,7 @@ A 股散户场景下，这些税优账户体系与资本利得税都不存在，
 
 典型流程：
 1. `uzi --portfolio holdings.csv` — 组合体检（加权评分 + 集中度）
-2. `build_rebalance(&holdings, targets, threshold)` — 看漂移、出调仓清单、算换手成本
+2. `uzi --portfolio holdings.csv --method rebalance` — 漂移 + 调仓清单 + 换手成本
+
+> `targets` / `drift_threshold` 当前 **CLI 未暴露为 flag**：默认等权 (1/N) + 阈值 5pp。
+> 只有需要自定义目标权重时，才需要源码调用 `build_rebalance(&holdings, targets, threshold)`。

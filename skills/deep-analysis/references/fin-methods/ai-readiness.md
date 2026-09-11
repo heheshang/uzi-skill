@@ -89,14 +89,15 @@
 5. **一句话结论**
 6. **组合维度**：跨公司排序 / replays / 组合 EBITDA → **N/A**（单票不适用，注明而非删空）
 
-调用（库函数，无 CLI 入口）：
+调用（CLI · 随 `uzi` 二进制分发，**无需 Rust 源码**）：
 
-```rust
-use uzi_models::tier1::ai_readiness::build_ai_readiness;
-
-// features 来自 `uzi_features::stock_features` 的 extract_features；raw 为 19 维原始快照
-let result = build_ai_readiness(&features, &raw);
+```bash
+uzi <ticker> --stage1                # 先建缓存
+uzi <ticker> --method ai-readiness   # stdout 纯 JSON，可直接 jq
 ```
+
+库函数入口（仅源码维护者需要）：`uzi_models::tier1::ai_readiness :: build_ai_readiness`，
+吃 `features`（`uzi_features::stock_features` 的 `extract_features` 输出）+ 19 维原始快照。
 
 返回 JSON 对象含：`rating / rating_note / ai_chokepoint_score / gates / gates_passed /
 verdict / gaps / leverage_points / conclusion / methodology_log`，
