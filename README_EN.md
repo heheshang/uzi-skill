@@ -979,6 +979,8 @@ A: If you analyzed "industrial metals / machine tools / industrial machinery" st
 | **v2.0–v2.3** | 2026-04-16 | 17 institutional methods, 51-judge / 180-rule panel, two-stage pipeline, MX API, multi-platform. |
 | **v1.0** | 2026-04-14 | Initial release: 19 dims + 50 judges + trap detection. |
 
+Full changelog: [RELEASE-NOTES.md](RELEASE-NOTES.md)
+
 ---
 
 ## ⭐ Star History
