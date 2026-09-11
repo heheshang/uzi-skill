@@ -273,6 +273,20 @@ Stage 1 检测到缺口会写 `.cache/{ticker}/_data_gaps.json`。对其中每�
 （浏览器 → MX API → WebSearch → 逻辑推导）；确实拿不到的，在 `agent_analysis.json` 的
 `data_gap_acknowledged` 里显式标注。报告会对这些字段显示 ⚠️ 橙色徽章而非假数据。
 
+### HARD-GATE-NO-SOURCE-READ · 不读源码，也不去网上拉源码
+
+`uzi` 是**预编译二进制**，运行时**不读任何 Rust 源码**；本 skill 需要的全部契约（字段校验规则、
+维度语义、评委名册、缓存结构）都写在 `SKILL.md` / `references/` 与 `.cache/{ticker}/` 产物里。
+
+1. **禁止**为理解运行时行为去读 `crates/**/*.rs`，或**从网络拉源码**
+   （`curl` / `wget` / `raw.githubusercontent.com` / GitHub 网页 / `git clone`）
+2. 需要回答"这字段谁产的 / 校验为什么不过 / 报告为什么没渲染"→ 查：
+   本文档的 `agent_analysis.json` 契约、`references/task*.md`、
+   `.cache/{ticker}/` 的 `raw_data.json` · `panel.json` · `_review_issues.json` · `_data_gaps.json`
+3. 自查结论用命令取，不读源码：`uzi <ticker> --stage-review`
+4. 文档里的 `crates/…` 路径与 `uzi_*::*` 模块是**移植出处**（维护者对照），不是给你的待办
+5. **唯一例外**：用户明确要求改代码 / 修 bug 时，才按 `AGENTS.md` 的落点表读 `crates/`
+
 ## 📋 6 Task 概览
 
 | Task | 名称 | 产物 | 角色 |
@@ -317,9 +331,8 @@ Stage 2 读取你更新后的 `panel.json` + `agent_analysis.json`，合并生�
 
 ## 🧠 `agent_analysis.json` 契约
 
-写入 `.cache/{ticker}/agent_analysis.json`。`--stage2` 会用下列规则校验
-（`crates/uzi-review/src/validator.rs`），**有 error 会回退到脚本骨架并写
-`_agent_analysis_errors.json`**：
+写入 `.cache/{ticker}/agent_analysis.json`。`--stage2` 会用下表规则校验，
+**有 error 会回退到脚本骨架并写 `_agent_analysis_errors.json`**：
 
 > **`analysis_input_hash` 必须来自 `.cache/{ticker}/_agent_review_context.json`**（Stage 1 写入）。
 > 它是「你分析的是哪一版数据」的指纹：

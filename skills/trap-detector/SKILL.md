@@ -15,6 +15,9 @@ metadata:
 
 杀猪盘检测是**维度 `18_trap`**，随 Stage 1 一起产出；真实 web search 扫描 8 个信号。
 
+> 下表是**上游 → 本仓库源码落点**的维护者对照；运行时不需要读源码 —— 数据读
+> `raw_data.json` 的 `18_trap.data`。
+
 | 上游 | 本仓库实现 |
 |---|---|
 | `fetch_trap_signals.py` | `crates/uzi-data/src/fetch/trap_signals.rs` |

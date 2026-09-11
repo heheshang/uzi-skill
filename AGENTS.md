@@ -17,6 +17,10 @@
 `skills/deep-analysis/personas/` 按 **cwd** 解析，所以要从仓库根目录跑；换目录用
 `UZI_ASSETS_DIR` / `UZI_PERSONAS_DIR` / `UZI_REPO_ROOT` 指回仓库。
 
+> ⛔ 这条是硬门控 **`HARD-GATE-NO-SOURCE-READ`**：为理解校验规则 / 字段语义**不要**读
+> `crates/**/*.rs`，也不要从网络拉源码（`curl` / `raw.githubusercontent.com`）—— 契约在
+> skill 文档，自查结论用 `uzi <ticker> --stage-review`。
+
 ```
 UZI-Skill/                                  # ← 你 cwd 应该是这里
 ├── Cargo.toml                              # Rust workspace 根（10 个成员 crate）
@@ -68,6 +72,8 @@ UZI-Skill/                                  # ← 你 cwd 应该是这里
 | 跑全量测试 | `cargo test --workspace`（父 agent 统一跑；子任务别抢跑） |
 
 ### crate 调用约定
+
+> 以下是**源码落点**（仅维护者 / 改代码时需要）；运行时只跑 `uzi` 二进制，不读源码。
 
 - 依赖方向单向，不要反向引用：
   `uzi-core` ← `uzi-data` ← `uzi-features` ← `uzi-models` / `uzi-investors` ← `uzi-pipeline`
@@ -296,8 +302,8 @@ reasoning（2-3 句话）。
 > `raw_data.json` 不符）→ 判为过期，**不会被复用**。取指纹：
 > `jq -r .analysis_input_hash .cache/<ticker>/_agent_review_context.json`
 
-字段校验规则（`crates/uzi-review/src/validator.rs`）与完整示例见
-`skills/deep-analysis/SKILL.md` 的「🧠 `agent_analysis.json` 契约」。要点：
+字段校验规则与完整示例见 `skills/deep-analysis/SKILL.md` 的
+「🧠 `agent_analysis.json` 契约」。要点：
 `dim_commentary` 每条 ≥ 20 字并引用具体数字；`panel_insights` ≥ 30 字；
 `great_divide_override` 多空各 ≥ 3 轮；`narrative_override.risks` ≥ 3 条、
 `buy_zones` 必须含 `value`/`growth`/`technical`/`youzi` 四 key；`qualitative_deep_dive`
@@ -400,6 +406,9 @@ uzi --xueqiu-status     # 雪球登录 / 连通状态
 
 ## 📚 数据源速查表
 
+> 下表是**运行时可用的** dim → 源路径；源选择由二进制内置 registry 完成，其**源码落点**
+> `crates/uzi-data/src/registry.rs` 只是维护者对照（**运行时不读源码**）。
+
 完整源清单在 `crates/uzi-data/src/registry.rs` + `src/sources.rs`（40+ 源 · 3 tier），
 人类可读总表在 `skills/deep-analysis/references/data-sources.md`。常见 dim 推荐路径如下，
 `--stage1` 的采集器按"主源 → 备源 → 浏览器源"顺序，失败自动 fallthrough：
@@ -437,6 +446,7 @@ fallthrough —— agent **不需要**自己写代码调源。当你需要判断
 | 编造事实（药明康德↔Apple） | HARD-GATE-FACTCHECK | 每条 commentary cite `raw_data` 出处，不确定的不要肯定语气 |
 | 分析过期 | `analysis_input_hash` 与 `raw_data.json` 不符 → 判定过期不复用 | deep 档必填 hash；数据变了就重跑 `--stage1` |
 | 报告未含你的判断 | 无 `agent_analysis.json` → 纯脚本模式 | deep 档必须写 `agent_analysis.json` 再 `--stage2` |
+| 跑去读 Rust 源码 / 从 GitHub 拉源码 | `HARD-GATE-NO-SOURCE-READ` | 契约读 skill 文档，自查结论用 `uzi <ticker> --stage-review`；**不要** `curl` raw.githubusercontent.com |
 
 ## 注意
 

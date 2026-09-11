@@ -40,9 +40,13 @@ lite/medium 档 `agent_analysis.json` 缺失自动降级 warning，照样出 HTM
 
 详细流程见 `AGENTS.md` / `skills/deep-analysis/SKILL.md`。
 
+> ⛔ **不要读源码**（`HARD-GATE-NO-SOURCE-READ`）：运行时不需要 Rust 源码 —— 不要为理解校验规则 /
+> 字段语义去读 `crates/**/*.rs`，也不要从 GitHub 拉源码；契约读 skill 文档，自查结论用
+> `uzi <ticker> --stage-review`。
+
 ## 重要文件
 
 - `AGENTS.md` — 完整 agent 指令
 - `skills/deep-analysis/SKILL.md` — 深度分析工作流
-- `crates/uzi-cli/src/stages.rs` — 主引擎（`stage1` / `stage2` 编排；上游 rrt 引擎的落点）
+- `crates/uzi-cli/src/stages.rs` — 主引擎（`stage1` / `stage2` 编排；上游 rrt 引擎的落点 —— **仅源码维护者需要，运行时读的是二进制**）
 - `commands/analyze-stock.md` — `/analyze-stock` 命令

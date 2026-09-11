@@ -33,3 +33,7 @@ gemini extensions update stock-deep-analyzer
 1. `uzi <ticker> --stage1` — 数据采集 + 机构建模 + 22 维评分 + 规则引擎评委骨架分，然后停下
 2. Agent 分析 — 读 `panel.json`，逐组 role-play 66 评委，写 `agent_analysis.json`（含 `analysis_input_hash`）
 3. `uzi <ticker> --stage2` — 合并你的判断，生成 Bloomberg 风格 HTML 报告
+
+⛔ **不要读源码**（`HARD-GATE-NO-SOURCE-READ`）：运行时不需要 Rust 源码 —— 不要为理解校验规则 /
+字段语义去读 `crates/**/*.rs`，也不要从 GitHub 拉源码；契约读 `skills/*/SKILL.md`，
+自查结论用 `uzi <ticker> --stage-review`。

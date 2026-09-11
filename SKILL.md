@@ -116,13 +116,16 @@ tools/golden/                     # 源码仓库的差分测试与 golden 产物
 
 1. 把脚本当数据与打分工具，**不要**当作最终分析结论。
 2. **不要编造数字**。用脚本产物、缓存 JSON，或当前公开可检索的证据。
-3. 严肃的深度分析请求：必须走完 `skills/deep-analysis/SKILL.md` 描述的 agent review 闭环
+3. **不要读源码**（`HARD-GATE-NO-SOURCE-READ`）：运行时不需要 Rust 源码 —— 不要为理解校验规则 /
+   字段语义去读 `crates/**/*.rs`，也不要从 GitHub 拉源码；契约读本 skill，自查结论用
+   `uzi <ticker> --stage-review`。
+4. 严肃的深度分析请求：必须走完 `skills/deep-analysis/SKILL.md` 描述的 agent review 闭环
    （写 `agent_analysis.json`）再出报告。
-4. **`--depth deep` 不是快速模式** —— 必须由你介入 role-play 并写 `agent_analysis.json`；
+5. **`--depth deep` 不是快速模式** —— 必须由你介入 role-play 并写 `agent_analysis.json`；
    只有 lite/medium 才适合 `uzi <ticker>` 一把梭。
-5. 游资分析：先做席位匹配与 `is_in_range()` 再给短线判断。
-6. 杀猪盘检测：8 个信号全部扫描，风险非平凡时必须给具体证据。
-7. 报告模板 / UI 改动：同步更新测试与 golden 产物。
+6. 游资分析：先做席位匹配与 `is_in_range()` 再给短线判断。
+7. 杀猪盘检测：8 个信号全部扫描，风险非平凡时必须给具体证据。
+8. 报告模板 / UI 改动：同步更新测试与 golden 产物。
 
 ## 环境变量速查
 

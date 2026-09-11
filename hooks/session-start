@@ -56,6 +56,12 @@ CONTEXT="$(cat <<'SKILLS_CONTEXT'
 3. `uzi <ticker> --stage2` 合并你的分析生成报告
 
 ⚠️ 不要跳过 agent 分析步骤直接出报告（除非用户明确要快速模式）。
+
+## ⛔ 不要读源码（HARD-GATE-NO-SOURCE-READ）
+
+运行时不需要 Rust 源码：不要为理解校验规则 / 字段语义去读 `crates/**/*.rs`，也不要从网络拉源码
+（`curl` / `raw.githubusercontent.com`）。契约都在 `skills/*/SKILL.md`；自查结论用
+`uzi <ticker> --stage-review` 取，`_review_issues.json` 就是结论。
 SKILLS_CONTEXT
 )"
 

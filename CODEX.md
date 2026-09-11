@@ -8,6 +8,9 @@
 
 ## 🚨 必读前 60 秒
 
+> 本节提到的 `crates/` 路径是**源码落点**（仅维护者定位代码用）；跑分析只需 `./uzi`，
+> **运行时不需要源码**。
+
 1. **入口是 `uzi` 二进制 · 不是某个 `crates/*/src/main.rs` 里的 main**
    - ✅ 仓库根目录自带预编译二进制，直接跑（**不需要先构建**）：
      ```bash
@@ -17,6 +20,9 @@
    - ❌ 不要找 `run.py` 之类的 Python 入口（本项目没有）
    - ❌ `cargo run -p uzi-investors`（库 crate 没有 `main` · 别找）
    - ❌ 不要找 `skills/deep-analysis/scripts/`（没有 `scripts/` 目录）
+   - ❌ 不要为搞懂运行时行为去读 `crates/**/*.rs`，更不要从 GitHub 拉源码
+     （`HARD-GATE-NO-SOURCE-READ`）—— 运行时不需要源码，契约在 `skills/*/SKILL.md`，
+     自查结论用 `uzi <ticker> --stage-review`
 
 2. **所有 Rust 业务代码在 `crates/`**（workspace 共 10 个成员）
    - `uzi-data` — 22 维 fetcher + 数据源 registry + CDP 浏览器兜底
@@ -51,6 +57,8 @@ uzi <ticker> --stage2       # 合并 agent_analysis.json 出报告
 **不要**去找 `rrt.collect_raw_data` / `UZI_LEGACY` 这类旧开关。
 
 ### Pipeline 数据流
+
+（下图是**源码落点**；运行时按 `.cache/<ticker>/` 产物走，**运行时不读源码**）
 
 ```
 crates/uzi-cli/src/stages.rs
@@ -105,6 +113,8 @@ cargo test --workspace
 
 ## 常见 codex 误判避坑
 
+> 下表是**维护者**视角的排错对照（涉及源码落点）；运行时判断一律看 `--stage1` / `--stage2` 产物。
+
 | 误判 | 真相 |
 |---|---|
 | "`run.py` / `scripts/` 目录缺失 · 结构有问题" | 本项目是 Rust 重实现，入口是 `uzi` 二进制；业务代码在 `crates/` |
@@ -119,6 +129,8 @@ cargo test --workspace
 ---
 
 ## 文件大小红线
+
+> 下表是**源码维护**红线（仅改代码时需要），与运行时无关。
 
 | 文件 | 当前 | 上限（触发 refactor 信号） |
 |---|---|---|

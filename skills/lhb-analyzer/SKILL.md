@@ -23,6 +23,9 @@ metadata:
 
 龙虎榜是**维度 `16_lhb`**，随 Stage 1 一起产出。
 
+> 下表是**上游 → 本仓库源码落点**的维护者对照；运行时不需要读源码 —— 数据读
+> `raw_data.json` 的 `16_lhb.data`。
+
 | 上游 | 本仓库实现 |
 |---|---|
 | `fetch_lhb.py` | `crates/uzi-data/src/fetch/lhb.rs` |

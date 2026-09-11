@@ -33,6 +33,9 @@ metadata:
 评委不单独成命令，而是**流水线 Task 3** 的产物：跑一次 Stage 1 就会写出
 `.cache/{ticker}/panel.json`。
 
+> 下表是**上游 → 本仓库源码落点**的维护者对照；运行时不需要读源码 —— 名册直接读
+> `panel.json` 的 `investors[]`。
+
 | 上游 | 本仓库实现 |
 |---|---|
 | `lib/investor_db.py` | `crates/uzi-investors/src/db.rs` + `src/data/investors.json`（66 位，内嵌） |

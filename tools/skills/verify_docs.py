@@ -23,7 +23,12 @@ What is checked:
      reader with no toolchain (or an agent in a read-only checkout) into a wall;
   5. no doc claims a ported method has **no CLI entry** (`无 CLI 入口`). They all
      have one — the claim goes stale the moment the method is wired up, and it
-     tells the reader to go find the Rust source instead of running `uzi`.
+     tells the reader to go find the Rust source instead of running `uzi`;
+  6. no run-surface doc cites a `.rs` file as the thing to read. Check 1 only
+     resolves `uzi_crate::module` tokens, so a path like
+     `crates/uzi-review/src/validator.rs` used to advertise "the rules live in
+     the source" to an agent installed without one. A pointer inside a
+     provenance-marked section is fine; the contract itself belongs in the doc.
 
 Exit code 0 = clean, 1 = findings.
 """
@@ -162,6 +167,43 @@ SOURCE_POINTER_MARKERS = (
 # fenced block can separate them by a line or two).
 SOURCE_POINTER_WINDOW = 2
 
+# A concrete `.rs` file, e.g. `` `crates/uzi-review/src/validator.rs` ``. Check 1
+# only resolves `uzi_crate::module` tokens, so a file path was never inspected —
+# and a run-surface doc naming the *validation rules* as living in
+# `validator.rs` tells an agent installed without `crates/` to go fetch the
+# source over the network. The contract belongs in the doc; the path may stay
+# only where it reads as provenance.
+SOURCE_PATH_RE = re.compile(r"`?crates/[A-Za-z0-9_./{},*\-]+\.rs`?")
+SOURCE_PATH_MARKERS = SOURCE_POINTER_MARKERS + (
+    "上游", "落点", "移植", "内嵌", "内联", "对照", "维护者", "开发与验证",
+)
+# A `.rs` mention is judged against its whole enclosing section: a maintainer
+# section carries one disclaimer up top and then cites paths freely, while a
+# skill section must not cite one at all without saying why.
+SECTION_HEADING_RE = re.compile(r"^#{1,4} ")
+
+# Check 8's surface is wider than the run surface: the per-platform instruction
+# files (`AGENTS.md` / `CLAUDE.md` / `CODEX.md` / `GEMINI.md`) are read by an
+# agent as its project instructions and double as a source map, but `AGENTS.md`
+# and `CODEX.md` also carry maintainer sections that legitimately discuss
+# `cargo build` / `cargo test` — so checks 5 and 7 (which demand run-only
+# framing) stay off them.
+AGENT_INSTRUCTION_DOCS = ["AGENTS.md", "CLAUDE.md", "CODEX.md", "GEMINI.md"]
+SOURCE_CITATION_GLOBS = RUN_SURFACE_GLOBS + AGENT_INSTRUCTION_DOCS
+
+
+def section_starts(lines: list[str]) -> list[int]:
+    """0-based indices of headings. A `#` comment inside a fenced block is not one."""
+    out: list[int] = []
+    in_fence = False
+    for i, line in enumerate(lines):
+        if line.lstrip().startswith("```"):
+            in_fence = not in_fence
+            continue
+        if not in_fence and SECTION_HEADING_RE.match(line):
+            out.append(i)
+    return out
+
 
 def rust_index() -> tuple[set[str], str]:
     """Every module path and the concatenated source (for symbol lookup)."""
@@ -265,6 +307,10 @@ def main() -> int:
     for pattern in RUN_SURFACE_GLOBS:
         run_surface.update(REPO.glob(pattern))
 
+    source_citation: set[Path] = set()
+    for pattern in SOURCE_CITATION_GLOBS:
+        source_citation.update(REPO.glob(pattern))
+
     total_tokens = 0
     checked: set[str] = set()
     for doc in targets:
@@ -361,6 +407,28 @@ def main() -> int:
                     f"provenance marker — {line.strip()[:80]}"
                 )
 
+        # 8 · a source *file* cited on the run surface. Check 1 resolves
+        # `uzi_crate::module` tokens only, so `crates/…/validator.rs` slid
+        # through — and that is the shape that sends an agent installed without
+        # the source tree off to fetch it. Provenance is fine; the spec itself
+        # must be in the doc.
+        if doc in source_citation:
+            starts = section_starts(lines)
+            head = 0
+            for line_no, line in enumerate(lines, 1):
+                m = SOURCE_PATH_RE.search(line)
+                while head < len(starts) and starts[head] <= line_no - 1:
+                    head += 1
+                if not m:
+                    continue
+                section = "\n".join(lines[starts[head - 1] : line_no])
+                if any(mk in section for mk in SOURCE_PATH_MARKERS):
+                    continue
+                findings.append(
+                    f"{rel}:{line_no}: {m.group(0)} cited with no provenance marker "
+                    f"in its section — {line.strip()[:80]}"
+                )
+
     print(f"checked {len(targets)} docs · {total_tokens} rust path mentions ({len(checked)} unique)")
     if findings:
         print(f"\n{len(findings)} finding(s):\n")
@@ -371,7 +439,7 @@ def main() -> int:
         "✓ all rust paths resolve · all links resolve · "
         "all CLI flags known · no executable python · "
         "run paths need no build · no stale `无 CLI 入口` claims · "
-        "source pointers declare provenance"
+        "source pointers declare provenance · no bare `.rs` pointers"
     )
     return 0
 

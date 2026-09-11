@@ -5,7 +5,7 @@
 | 文件 | 用途 |
 |---|---|
 | `hooks.json` | Claude Code 的 SessionStart hook 配置（直接调 `session-start`，不走 polyglot 中转） |
-| `session-start` | bash 脚本 · 在 SessionStart 时打印 skill 列表 + 工作流提醒，输出到 Claude `additionalContext` |
+| `session-start` | bash 脚本 · 在 SessionStart 时打印 skill 列表 + 工作流提醒 + `HARD-GATE-NO-SOURCE-READ` 提醒（不要读 / 不要拉 Rust 源码），输出到 Claude `additionalContext` |
 | `hooks-cursor.json` | Cursor IDE 用的 hook 配置（`sessionStart` → `./hooks/session-start`） |
 | `README.md` | 本说明 |
 
