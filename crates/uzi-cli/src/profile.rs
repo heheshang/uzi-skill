@@ -86,6 +86,7 @@ fn all_fetchers() -> BTreeSet<String> {
         "3_macro",
         "4_peers",
         "5_chain",
+        "6_fund_holders",
         "6_research",
         "7_industry",
         "8_materials",
@@ -304,7 +305,7 @@ mod tests {
     #[test]
     fn deep_profile_has_debate_and_segmental() {
         let p = get_profile(Some("deep")).unwrap();
-        assert_eq!(p.fetchers_enabled.len(), 20);
+        assert_eq!(p.fetchers_enabled.len(), 21);
         assert!(p.enable_bull_bear_debate);
         assert!(p.enable_segmental_model);
         assert!(p.self_review_block_warnings);
@@ -335,7 +336,7 @@ mod tests {
         let lines: Vec<&str> = banner.lines().collect();
         assert_eq!(lines.len(), 6);
         assert!(lines[0].starts_with("⚡ 速判模式 · depth=lite"));
-        assert!(lines[1].contains("fetchers: 7/20 维"));
+        assert!(lines[1].contains("fetchers: 7/21 维"));
         assert!(lines[4].contains("ddgs 预算: 0"));
     }
 }

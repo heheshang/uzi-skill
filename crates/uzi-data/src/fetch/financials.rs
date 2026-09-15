@@ -5,11 +5,16 @@
 //! The base data comes from [`crate::sources::fetch_financials`] (EastMoney F10
 //! `RPT_F10_FINANCE_MAINFINADATA`, the endpoint behind AkShare's
 //! `stock_financial_abstract`). Upstream's second indicator source
-//! (`stock_financial_analysis_indicator`, Sina) plus the balance-sheet /
-//! cash-flow / dividend / baostock calls are Python-library-only: each degrades
-//! to the failure key upstream records, and the metrics those sources carry
+//! (`stock_financial_analysis_indicator`, Sina) plus the balance-sheet and
+//! baostock calls are Python-library-only: each degrades to the failure key
+//! upstream records, and the metrics those sources carry
 //! (加权ROE / 流动比率 / 资产负债率 / 总资产净利率 / 销售净利率 / 总资产周转率) are read
 //! from the F10 fields that expose the same values. No number is invented.
+//!
+//! 现金流与分红**不走**降级路径：两者都能由 AkShare 所用的同一批公开 HTTP 端点
+//! 直接取回（`em::cash_flow_report` / `em::dividend_history`），因此真实取数 ——
+//! `dividend_years` 是 `uzi-features` 的 `consecutive_dividend_years` 的唯一来源，
+//! 恒空会让巴菲特/格雷厄姆的 `dividend_history` 规则永远判负。
 
 use std::collections::BTreeMap;
 use std::sync::LazyLock;
@@ -150,6 +155,54 @@ fn apply_operating_cash_flow(out: &mut Map<String, Value>, rows: &[Value]) {
             obj.insert("fcf_margin".into(), nf(round(ratio * 100.0, 1)));
         }
     }
+}
+
+// ─────────────────────────────────────────────────────────────
+// Dividend history
+// ─────────────────────────────────────────────────────────────
+
+/// `_dividend_series(rows)` — `(dividend_years, dividend_amounts)`.
+///
+/// Rows are the 分红送配 plans behind `ak.stock_history_dividend_detail`. Only
+/// implemented plans count (进度 contains 实施), so a cancelled or still-draft
+/// plan never registers as a dividend year. A fiscal year carrying both an
+/// interim and a final plan is summed into one entry — `dividend_amounts` is
+/// 元/10股 for the whole year.
+///
+/// The result is the **unbroken run ending at the most recent payout year**,
+/// oldest → newest: `consecutive_dividend_years` is `dividend_years.len()` in
+/// `uzi-features`, so the array must already be consecutive and must not be
+/// truncated (capping at 5 would report "连续 5 年分红" for a 19-year payer).
+fn dividend_series(rows: &Value) -> (Vec<String>, Vec<f64>) {
+    let mut per_year: BTreeMap<i64, f64> = BTreeMap::new();
+    for row in rows.as_array().map(Vec::as_slice).unwrap_or_default() {
+        let progress = row.get("ASSIGN_PROGRESS").map(py_str).unwrap_or_default();
+        if !progress.contains("实施") {
+            continue;
+        }
+        let period = row.get("REPORT_DATE").map(py_str).unwrap_or_default();
+        let Ok(year) = period.chars().take(4).collect::<String>().parse::<i64>() else {
+            continue;
+        };
+        let amount = to_float(row.get("PRETAX_BONUS_RMB"));
+        if amount == 0.0 {
+            continue;
+        }
+        *per_year.entry(year).or_insert(0.0) += amount;
+    }
+
+    let Some(&newest) = per_year.keys().next_back() else {
+        return (Vec::new(), Vec::new());
+    };
+    let mut years: Vec<i64> = Vec::new();
+    let mut year = newest;
+    while per_year.contains_key(&year) {
+        years.push(year);
+        year -= 1;
+    }
+    years.reverse();
+    let amounts: Vec<f64> = years.iter().map(|y| round(per_year[y], 2)).collect();
+    (years.iter().map(|y| y.to_string()).collect(), amounts)
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -364,10 +417,16 @@ pub fn fetch_a_share(ti: &TickerInfo) -> Value {
             .unwrap_or_default(),
     };
 
+    // Annual report periods, newest first — filled in below from the F10 rows.
+    let mut annual_dates: Vec<String> = Vec::new();
+
     if !rows.is_empty() {
         // ─── 1. 历年关键指标 — recent 6 annual periods, oldest → newest.
         let mut cols: Vec<&Value> = rows.iter().filter(|r| is_annual(r)).take(6).collect();
         cols.sort_by(|a, b| date_of(a).cmp(&date_of(b)));
+        // Newest-first report periods, reused as the `dates` argument for the
+        // cash-flow endpoint (it answers with an error page for an empty list).
+        annual_dates = cols.iter().rev().map(|r| date10(r)).collect();
         let revenue_history: Vec<f64> = cols.iter().map(|r| to_yi(r.get("TOTALOPERATEREVE"))).collect();
         let net_profit_history: Vec<f64> = cols.iter().map(|r| to_yi(r.get("PARENTNETPROFIT"))).collect();
         let financial_years: Vec<String> = cols.iter().map(|r| date_of(r).chars().take(4).collect()).collect();
@@ -541,18 +600,31 @@ pub fn fetch_a_share(ti: &TickerInfo) -> Value {
         }
     }
 
-    // ─── 4. 现金流 — `stock_cash_flow_sheet_by_report_em` is AkShare-only.
-    out.insert(
-        "_cash_flow_error".into(),
-        json!("ImportError: akshare not installed"),
-    );
-    apply_operating_cash_flow(&mut out, &[]);
+    // ─── 4. 现金流 — `stock_cash_flow_sheet_by_report_em`.
+    // Rows come back newest-first, which is the order `apply_operating_cash_flow`
+    // reads (`ocf_history[0]` is the latest period). The report periods are the
+    // annual ones already in hand; without them the endpoint cannot be queried.
+    let cash_flow_rows: Vec<Value> = if annual_dates.is_empty() {
+        Vec::new()
+    } else {
+        crate::sources::fetch_cash_flow(ti, &annual_dates.join(","))
+            .as_array()
+            .cloned()
+            .unwrap_or_default()
+    };
+    if cash_flow_rows.is_empty() {
+        out.insert("_cash_flow_error".into(), json!("cash flow endpoint empty"));
+    }
+    apply_operating_cash_flow(&mut out, &cash_flow_rows);
 
-    // ─── 5. 分红历史 — `stock_history_dividend_detail` is AkShare-only.
-    out.insert(
-        "_dividend_error".into(),
-        json!("ImportError: akshare not installed"),
-    );
+    // ─── 5. 分红历史 — `stock_history_dividend_detail`.
+    let (div_years, div_amounts) = dividend_series(&crate::sources::fetch_dividend(ti));
+    if div_years.is_empty() {
+        out.insert("_dividend_error".into(), json!("dividend endpoint empty"));
+    } else {
+        out.insert("dividend_years".into(), json!(div_years));
+        out.insert("dividend_amounts".into(), json!(div_amounts));
+    }
 
     // v3.4.2 · BaoStock 兜底.
     let needs_fallback = !truthy(out.get("roe").unwrap_or(&Value::Null))

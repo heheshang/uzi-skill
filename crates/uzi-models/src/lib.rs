@@ -236,7 +236,13 @@ pub(crate) mod clock {
     use chrono::{Local, NaiveDateTime};
 
     /// `datetime.now()` (local, naive).
+    /// Overridable via `UZI_TEST_DATE=YYYY-MM-DD` for deterministic tests.
     pub fn now() -> NaiveDateTime {
+        if let Ok(s) = std::env::var("UZI_TEST_DATE") {
+            if let Ok(dt) = NaiveDateTime::parse_from_str(&format!("{s} 00:00:00"), "%Y-%m-%d %H:%M:%S") {
+                return dt;
+            }
+        }
         Local::now().naive_local()
     }
 

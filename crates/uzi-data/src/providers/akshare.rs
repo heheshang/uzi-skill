@@ -44,6 +44,21 @@ pub fn fetch_financials_a(code: &str) -> Result<Value, ProviderError> {
     Ok(json!({"ok": true, "raw": rows}))
 }
 
+/// `fetch_cash_flow_a` — `ak.stock_cash_flow_sheet_by_report_em` endpoint.
+pub fn fetch_cash_flow_a(code: &str, dates: &str) -> Result<Value, ProviderError> {
+    let full = format!("{code}.{}", uzi_core::ticker::a_share_suffix(code));
+    let rows = em::cash_flow_report(code, &full, dates, 12)
+        .map_err(|e| ProviderError(format!("akshare.stock_cash_flow_sheet_by_report_em: {e}")))?;
+    Ok(json!({"ok": true, "raw": rows}))
+}
+
+/// `fetch_dividend_a` — `ak.stock_history_dividend_detail` endpoint.
+pub fn fetch_dividend_a(code: &str) -> Result<Value, ProviderError> {
+    let rows = em::dividend_history(code, 12)
+        .map_err(|e| ProviderError(format!("akshare.stock_history_dividend_detail: {e}")))?;
+    Ok(json!({"ok": true, "raw": rows}))
+}
+
 /// `fetch_kline_a` — `ak.stock_zh_a_hist` endpoint (EastMoney push2his).
 pub fn fetch_kline_a(
     code: &str,

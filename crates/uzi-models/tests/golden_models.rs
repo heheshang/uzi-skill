@@ -23,6 +23,9 @@ fn check(actual: &Value, expected: &Value, label: &str) {
 }
 
 fn run_case(case: &str) {
+    // Golden fixtures were baked on 2026-09-11; freeze the clock so date fields match.
+    std::env::set_var("UZI_TEST_DATE", "2026-09-11");
+
     let raw = load_fixture(&format!("raw_data_{}", case));
     // The golden `features_sanitized.json` is the exact input upstream used; using
     // it here isolates the modeling modules from uzi-features.
@@ -63,6 +66,7 @@ fn empty_models_match_upstream() {
 /// from the full dict, so DCF wiring would silently drop.
 #[test]
 fn full_dimension_dict_yields_no_dcf_wiring() {
+    std::env::set_var("UZI_TEST_DATE", "2026-09-11");
     let raw = load_fixture("raw_data_synthetic");
     let features = load_golden("synthetic", "features_sanitized");
     let d20 = compute_dim_20(&features, &raw);
@@ -238,6 +242,7 @@ fn dim_20_summary_dcf_intrinsic_matches_independent_formula() {
 /// Sparse / empty inputs must degrade to the documented shapes without panicking.
 #[test]
 fn sparse_and_empty_return_documented_keys() {
+    std::env::set_var("UZI_TEST_DATE", "2026-09-11");
     let d20_keys = ["dcf", "comps", "three_statement", "lbo", "summary"];
     let d22_keys = [
         "ic_memo",

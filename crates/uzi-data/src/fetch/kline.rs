@@ -2,11 +2,11 @@
 //!
 //! Dimension 2 · K线 (OHLCV + 均线 + MACD + RSI + 筹码分布 + 简单形态).
 //!
-//! Raw rows come from [`crate::sources::fetch_kline`] (upstream's 7-layer chain,
-//! including the `[{"_kline_fetch_error": ...}]` failure row). Every indicator is
-//! computed locally from those rows; the only AkShare-only branch is the
-//! `stock_cyq_em` chip distribution, which degrades to upstream's exception
-//! payload.
+//! Raw rows come from [`crate::sources::fetch_kline`] (upstream's 7-layer
+//! chain, including the `[{"_kline_fetch_error": ...}]` failure row). Every
+//! indicator is computed locally from those rows; chip distribution is also
+//! computed locally from OHLCV and turnover because EastMoney's former
+//! `cyq/get` endpoint is retired.
 
 use serde_json::{Map, Value};
 
@@ -92,14 +92,22 @@ fn rsi(closes: &[f64], n: usize) -> Option<f64> {
 }
 
 /// `_kdj(closes, highs, lows, n=9)` — the last K/D/J.
-fn kdj(closes: &[f64], highs: &[f64], lows: &[f64], n: usize) -> (Option<f64>, Option<f64>, Option<f64>) {
+fn kdj(
+    closes: &[f64],
+    highs: &[f64],
+    lows: &[f64],
+    n: usize,
+) -> (Option<f64>, Option<f64>, Option<f64>) {
     if closes.len() < n {
         return (None, None, None);
     }
     let (mut k, mut d) = (50.0_f64, 50.0_f64);
     for i in (n - 1)..closes.len() {
         let lo = i + 1 - n;
-        let hh = highs[lo..=i].iter().cloned().fold(f64::NEG_INFINITY, f64::max);
+        let hh = highs[lo..=i]
+            .iter()
+            .cloned()
+            .fold(f64::NEG_INFINITY, f64::max);
         let ll = lows[lo..=i].iter().cloned().fold(f64::INFINITY, f64::min);
         let rsv = if hh > ll {
             (closes[i] - ll) / (hh - ll) * 100.0
@@ -143,12 +151,21 @@ fn williams_r(closes: &[f64], highs: &[f64], lows: &[f64], n: usize) -> Option<f
     if closes.len() < n {
         return None;
     }
-    let hh = highs[highs.len() - n..].iter().cloned().fold(f64::NEG_INFINITY, f64::max);
-    let ll = lows[lows.len() - n..].iter().cloned().fold(f64::INFINITY, f64::min);
+    let hh = highs[highs.len() - n..]
+        .iter()
+        .cloned()
+        .fold(f64::NEG_INFINITY, f64::max);
+    let ll = lows[lows.len() - n..]
+        .iter()
+        .cloned()
+        .fold(f64::INFINITY, f64::min);
     if hh <= ll {
         return Some(-50.0);
     }
-    Some(round((hh - closes[closes.len() - 1]) / (hh - ll) * -100.0, 1))
+    Some(round(
+        (hh - closes[closes.len() - 1]) / (hh - ll) * -100.0,
+        1,
+    ))
 }
 
 /// `_stage(closes, ma200)` — Weinstein stage 1/2/3/4 (0 = undecided).
@@ -216,10 +233,22 @@ pub fn compute_indicators(klines: &[Value]) -> Value {
     if klines.is_empty() {
         return Value::Object(Map::new());
     }
-    let closes: Vec<f64> = klines.iter().map(|r| num_or_keys(r, &["收盘", "Close"])).collect();
-    let highs: Vec<f64> = klines.iter().map(|r| num_or_keys(r, &["最高", "High"])).collect();
-    let lows: Vec<f64> = klines.iter().map(|r| num_or_keys(r, &["最低", "Low"])).collect();
-    let vols: Vec<f64> = klines.iter().map(|r| num_or_keys(r, &["成交量", "Volume"])).collect();
+    let closes: Vec<f64> = klines
+        .iter()
+        .map(|r| num_or_keys(r, &["收盘", "Close"]))
+        .collect();
+    let highs: Vec<f64> = klines
+        .iter()
+        .map(|r| num_or_keys(r, &["最高", "High"]))
+        .collect();
+    let lows: Vec<f64> = klines
+        .iter()
+        .map(|r| num_or_keys(r, &["最低", "Low"]))
+        .collect();
+    let vols: Vec<f64> = klines
+        .iter()
+        .map(|r| num_or_keys(r, &["成交量", "Volume"]))
+        .collect();
     if closes.is_empty() || closes.iter().all(|c| *c == 0.0) {
         return Value::Object(Map::new());
     }
@@ -234,7 +263,11 @@ pub fn compute_indicators(klines: &[Value]) -> Value {
     let ema26 = ema(&closes, 26);
     let dif: Vec<f64> = ema12.iter().zip(ema26.iter()).map(|(a, b)| a - b).collect();
     let dea = ema(&dif, 9);
-    let macd_hist: Vec<f64> = dif.iter().zip(dea.iter()).map(|(d, e)| (d - e) * 2.0).collect();
+    let macd_hist: Vec<f64> = dif
+        .iter()
+        .zip(dea.iter())
+        .map(|(d, e)| (d - e) * 2.0)
+        .collect();
 
     let last = closes[closes.len() - 1];
     let avg_vol_5 = if vols.len() >= 5 {
@@ -250,12 +283,18 @@ pub fn compute_indicators(klines: &[Value]) -> Value {
 
     let ma200_last = ma200.last().copied();
     let year_high = if closes.len() >= 250 {
-        closes[closes.len() - 250..].iter().cloned().fold(f64::NEG_INFINITY, f64::max)
+        closes[closes.len() - 250..]
+            .iter()
+            .cloned()
+            .fold(f64::NEG_INFINITY, f64::max)
     } else {
         closes.iter().cloned().fold(f64::NEG_INFINITY, f64::max)
     };
     let year_low = if closes.len() >= 250 {
-        closes[closes.len() - 250..].iter().cloned().fold(f64::INFINITY, f64::min)
+        closes[closes.len() - 250..]
+            .iter()
+            .cloned()
+            .fold(f64::INFINITY, f64::min)
     } else {
         closes.iter().cloned().fold(f64::INFINITY, f64::min)
     };
@@ -279,11 +318,19 @@ pub fn compute_indicators(klines: &[Value]) -> Value {
     out.insert("ma20".into(), json_f64(ma20[ma20.len() - 1]));
     out.insert("ma60".into(), json_f64(ma60[ma60.len() - 1]));
     out.insert("ma120".into(), json_f64(ma120[ma120.len() - 1]));
-    out.insert("ma200".into(), ma200_last.map(json_f64).unwrap_or(Value::Null));
-    out.insert("above_ma20".into(), Value::Bool(last > ma20[ma20.len() - 1]));
+    out.insert(
+        "ma200".into(),
+        ma200_last.map(json_f64).unwrap_or(Value::Null),
+    );
+    out.insert(
+        "above_ma20".into(),
+        Value::Bool(last > ma20[ma20.len() - 1]),
+    );
     out.insert(
         "above_ma200".into(),
-        ma200_last.map(|m| Value::Bool(last > m)).unwrap_or(Value::Null),
+        ma200_last
+            .map(|m| Value::Bool(last > m))
+            .unwrap_or(Value::Null),
     );
     out.insert(
         "ma_bull_alignment".into(),
@@ -298,15 +345,23 @@ pub fn compute_indicators(klines: &[Value]) -> Value {
     out.insert("macd_dea".into(), json_f64(dea[dea.len() - 1]));
     out.insert("macd_hist".into(), json_f64(macd_hist[macd_hist.len() - 1]));
     out.insert("macd_golden_cross".into(), Value::Bool(golden_cross));
-    out.insert("rsi_14".into(), rsi(&closes, 14).map(json_f64).unwrap_or(Value::Null));
+    out.insert(
+        "rsi_14".into(),
+        rsi(&closes, 14).map(json_f64).unwrap_or(Value::Null),
+    );
     out.insert("kdj_k".into(), kdj_k.map(json_f64).unwrap_or(Value::Null));
     out.insert("kdj_d".into(), kdj_d.map(json_f64).unwrap_or(Value::Null));
     out.insert("kdj_j".into(), kdj_j.map(json_f64).unwrap_or(Value::Null));
     out.insert("obv".into(), obv_last.map(json_f64).unwrap_or(Value::Null));
-    out.insert("obv_trend_up".into(), obv_trend_up.map(Value::Bool).unwrap_or(Value::Null));
+    out.insert(
+        "obv_trend_up".into(),
+        obv_trend_up.map(Value::Bool).unwrap_or(Value::Null),
+    );
     out.insert(
         "williams_r".into(),
-        williams_r(&closes, &highs, &lows, 14).map(json_f64).unwrap_or(Value::Null),
+        williams_r(&closes, &highs, &lows, 14)
+            .map(json_f64)
+            .unwrap_or(Value::Null),
     );
     out.insert("year_high".into(), json_f64(year_high));
     out.insert("year_low".into(), json_f64(year_low));
@@ -325,20 +380,135 @@ pub fn compute_indicators(klines: &[Value]) -> Value {
 }
 
 fn json_f64(x: f64) -> Value {
-    serde_json::Number::from_f64(x).map(Value::Number).unwrap_or(Value::Null)
+    serde_json::Number::from_f64(x)
+        .map(Value::Number)
+        .unwrap_or(Value::Null)
 }
 
 // ─────────────────────────────────────────────────────────────
 // Chip distribution
 // ─────────────────────────────────────────────────────────────
 
-/// `fetch_chip_distribution(ti)` — `ak.stock_cyq_em` is AkShare-only; upstream
-/// returns `{"error": str(e)}` when the call raises.
-pub fn fetch_chip_distribution(ti: &uzi_core::ticker::TickerInfo) -> Value {
-    if ti.market != "A" {
-        return Value::Object(Map::new());
+/// Calculate the chart-side chip distribution from daily K-lines.
+///
+/// EastMoney retired the public `cyq/get` payload used by the old AkShare
+/// wrapper. The chart still computes the distribution client-side from OHLCV
+/// and turnover, so keep that calculation local and deterministic.
+pub fn chip_distribution_from_klines(klines: &[Value]) -> Value {
+    const BINS: usize = 150;
+    let rows: Vec<(&Value, f64, f64, f64, f64, f64)> = klines
+        .iter()
+        .filter_map(|row| {
+            let open = num_or_keys(row, &["开盘", "Open"]);
+            let close = num_or_keys(row, &["收盘", "Close"]);
+            let high = num_or_keys(row, &["最高", "High"]);
+            let low = num_or_keys(row, &["最低", "Low"]);
+            if high <= 0.0 || low <= 0.0 || high < low {
+                return None;
+            }
+            let turnover = num_or_keys(row, &["换手率", "turnover_rate", "turnover"])
+                .clamp(0.0, 100.0)
+                / 100.0;
+            Some((row, open, close, high, low, turnover))
+        })
+        .collect();
+    if rows.is_empty() {
+        return Value::Array(Vec::new());
     }
-    serde_json::json!({"error": "ImportError: akshare not installed"})
+
+    let price_high = rows.iter().map(|r| r.3).fold(f64::MIN, f64::max);
+    let price_low = rows.iter().map(|r| r.4).fold(f64::MAX, f64::min);
+    let step = 0.01_f64.max((price_high - price_low) / (BINS as f64 - 1.0));
+    let prices: Vec<f64> = (0..BINS).map(|i| price_low + step * i as f64).collect();
+    let mut chips = vec![0.0_f64; BINS];
+    let mut out = Vec::with_capacity(rows.len());
+
+    for (row, open, close, bar_high, bar_low, turnover) in rows {
+        let mid = ((open + close + bar_high + bar_low) / 4.0).clamp(bar_low, bar_high);
+        let upper = ((bar_high - price_low) / step)
+            .floor()
+            .clamp(0.0, (BINS - 1) as f64) as usize;
+        let lower = ((bar_low - price_low) / step)
+            .ceil()
+            .clamp(0.0, upper as f64) as usize;
+        for value in &mut chips {
+            *value *= 1.0 - turnover;
+        }
+
+        if turnover > 0.0 {
+            let weight = |price: f64| {
+                if (bar_high - bar_low).abs() < f64::EPSILON {
+                    1.0
+                } else if price <= mid {
+                    (price - bar_low) / (mid - bar_low).max(f64::EPSILON)
+                } else {
+                    (bar_high - price) / (bar_high - mid).max(f64::EPSILON)
+                }
+                .max(0.0)
+            };
+            let weight_sum: f64 = prices[lower..=upper].iter().map(|p| weight(*p)).sum();
+            if weight_sum > 0.0 {
+                for (i, price) in prices.iter().enumerate().take(upper + 1).skip(lower) {
+                    chips[i] += turnover * weight(*price) / weight_sum;
+                }
+            }
+        }
+
+        let total: f64 = chips.iter().sum();
+        if total <= 0.0 {
+            continue;
+        }
+
+        let quantile = |p: f64| -> f64 {
+            if total <= 0.0 {
+                return price_low;
+            }
+            let target = total * p;
+            let mut cumulative = 0.0;
+            for (i, value) in chips.iter().enumerate() {
+                cumulative += *value;
+                if cumulative >= target {
+                    return prices[i];
+                }
+            }
+            *prices.last().unwrap_or(&price_low)
+        };
+        let q05 = quantile(0.05);
+        let q95 = quantile(0.95);
+        let q15 = quantile(0.15);
+        let q85 = quantile(0.85);
+        let concentration = |lo: f64, hi: f64| {
+            if (hi + lo).abs() < f64::EPSILON {
+                0.0
+            } else {
+                (hi - lo) / (hi + lo)
+            }
+        };
+        let benefit = if total <= 0.0 {
+            0.0
+        } else {
+            chips
+                .iter()
+                .enumerate()
+                .filter(|(i, _)| prices[*i] <= close)
+                .map(|(_, v)| *v)
+                .sum::<f64>()
+                / total
+        };
+        let date = row.get("日期").cloned().unwrap_or(Value::Null);
+        out.push(serde_json::json!({
+            "日期": date,
+            "获利比例": benefit * 100.0,
+            "平均成本": quantile(0.5),
+            "90%成本-低": q05,
+            "90%成本-高": q95,
+            "90%集中度": concentration(q05, q95) * 100.0,
+            "70%成本-低": q15,
+            "70%成本-高": q85,
+            "70%集中度": concentration(q15, q85) * 100.0,
+        }));
+    }
+    Value::Array(out)
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -376,10 +546,22 @@ pub fn extract_for_viz(klines: &[Value]) -> Value {
     if klines.is_empty() {
         return Value::Object(Map::new());
     }
-    let closes: Vec<f64> = klines.iter().map(|r| viz_num(r, &["收盘", "Close"])).collect();
-    let opens: Vec<f64> = klines.iter().map(|r| viz_num(r, &["开盘", "Open"])).collect();
-    let highs: Vec<f64> = klines.iter().map(|r| viz_num(r, &["最高", "High"])).collect();
-    let lows: Vec<f64> = klines.iter().map(|r| viz_num(r, &["最低", "Low"])).collect();
+    let closes: Vec<f64> = klines
+        .iter()
+        .map(|r| viz_num(r, &["收盘", "Close"]))
+        .collect();
+    let opens: Vec<f64> = klines
+        .iter()
+        .map(|r| viz_num(r, &["开盘", "Open"]))
+        .collect();
+    let highs: Vec<f64> = klines
+        .iter()
+        .map(|r| viz_num(r, &["最高", "High"]))
+        .collect();
+    let lows: Vec<f64> = klines
+        .iter()
+        .map(|r| viz_num(r, &["最低", "Low"]))
+        .collect();
 
     let dates: Vec<String> = klines
         .iter()
@@ -412,13 +594,25 @@ pub fn extract_for_viz(klines: &[Value]) -> Value {
     let ma20_60d: Vec<Value> = ma20_full
         .iter()
         .enumerate()
-        .map(|(i, v)| if i >= 19 { json_f64(round(*v, 2)) } else { Value::Null })
+        .map(|(i, v)| {
+            if i >= 19 {
+                json_f64(round(*v, 2))
+            } else {
+                Value::Null
+            }
+        })
         .collect::<Vec<_>>()[start_i..]
         .to_vec();
     let ma60_60d: Vec<Value> = ma60_full
         .iter()
         .enumerate()
-        .map(|(i, v)| if i >= 59 { json_f64(round(*v, 2)) } else { Value::Null })
+        .map(|(i, v)| {
+            if i >= 59 {
+                json_f64(round(*v, 2))
+            } else {
+                Value::Null
+            }
+        })
         .collect::<Vec<_>>()[start_i..]
         .to_vec();
 
@@ -426,12 +620,21 @@ pub fn extract_for_viz(klines: &[Value]) -> Value {
     if closes.len() >= 252 {
         let ytd_idx = closes.len() - 252;
         let ytd_return = (closes[closes.len() - 1] - closes[ytd_idx]) / closes[ytd_idx] * 100.0;
-        stats.insert("ytd_return".into(), Value::String(format!("{ytd_return:+.1}%")));
+        stats.insert(
+            "ytd_return".into(),
+            Value::String(format!("{ytd_return:+.1}%")),
+        );
     }
     if closes.len() >= 20 {
-        let rets: Vec<f64> = (1..closes.len()).map(|i| closes[i] / closes[i - 1] - 1.0).collect();
+        let rets: Vec<f64> = (1..closes.len())
+            .map(|i| closes[i] / closes[i - 1] - 1.0)
+            .collect();
         if !rets.is_empty() {
-            let window = if rets.len() >= 252 { &rets[rets.len() - 252..] } else { &rets[..] };
+            let window = if rets.len() >= 252 {
+                &rets[rets.len() - 252..]
+            } else {
+                &rets[..]
+            };
             if let Some(sd) = sample_stdev(window) {
                 let vol = sd * 252f64.sqrt() * 100.0;
                 stats.insert("volatility".into(), Value::String(format!("{vol:.1}%")));
@@ -453,10 +656,16 @@ pub fn extract_for_viz(klines: &[Value]) -> Value {
                 max_dd = dd;
             }
         }
-        stats.insert("max_drawdown".into(), Value::String(format!("{:.1}%", max_dd * 100.0)));
+        stats.insert(
+            "max_drawdown".into(),
+            Value::String(format!("{:.1}%", max_dd * 100.0)),
+        );
     }
 
-    let close_60d: Vec<Value> = closes[start_i..].iter().map(|c| json_f64(round(*c, 2))).collect();
+    let close_60d: Vec<Value> = closes[start_i..]
+        .iter()
+        .map(|c| json_f64(round(*c, 2)))
+        .collect();
 
     let mut out = Map::new();
     out.insert("candles_60d".into(), Value::Array(candles));
@@ -471,7 +680,13 @@ pub fn extract_for_viz(klines: &[Value]) -> Value {
 // main
 // ─────────────────────────────────────────────────────────────
 
-const STAGE_LABEL: [&str; 5] = ["—", "Stage 1 底部", "Stage 2 上升", "Stage 3 顶部", "Stage 4 下跌"];
+const STAGE_LABEL: [&str; 5] = [
+    "—",
+    "Stage 1 底部",
+    "Stage 2 上升",
+    "Stage 3 顶部",
+    "Stage 4 下跌",
+];
 
 /// `main(ticker)`.
 pub fn main(ticker: &str) -> Result<Value, String> {
@@ -480,12 +695,12 @@ pub fn main(ticker: &str) -> Result<Value, String> {
         .as_array()
         .cloned()
         .unwrap_or_default();
-    let chips = fetch_chip_distribution(&ti);
+    let chips = chip_distribution_from_klines(&klines);
     Ok(assemble_dim(
         &ti.full,
         &klines,
         chips,
-        "akshare:stock_zh_a_hist + stock_cyq_em (+ 6 path fallback chain)",
+        "akshare:stock_zh_a_hist + local OHLCV/turnover chip model (+ 6 path fallback chain)",
     ))
 }
 
@@ -499,7 +714,10 @@ pub fn assemble_dim(ticker: &str, klines: &[Value], chips: Value, source: &str) 
     let indicators = compute_indicators(klines);
     let viz_shape = extract_for_viz(klines);
 
-    let stage = indicators.get("stage").and_then(|v| v.as_i64()).unwrap_or(0);
+    let stage = indicators
+        .get("stage")
+        .and_then(|v| v.as_i64())
+        .unwrap_or(0);
     let stage_label = STAGE_LABEL.get(stage as usize).copied().unwrap_or("—");
     let ma_align = if truthy(indicators.get("ma_bull_alignment").unwrap_or(&Value::Null)) {
         "多头排列"
@@ -543,4 +761,45 @@ pub fn assemble_dim(ticker: &str, klines: &[Value], chips: Value, source: &str) 
         "source": source,
         "fallback": false,
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::chip_distribution_from_klines;
+    use serde_json::json;
+
+    #[test]
+    fn chip_distribution_from_klines_returns_normalized_rows() {
+        let klines = vec![
+            json!({"日期": "2026-09-14", "开盘": 10.0, "收盘": 10.5, "最高": 11.0, "最低": 9.5, "换手率": 2.0}),
+            json!({"日期": "2026-09-15", "开盘": 10.5, "收盘": 11.0, "最高": 11.5, "最低": 10.0, "换手率": 3.0}),
+        ];
+        let rows = chip_distribution_from_klines(&klines)
+            .as_array()
+            .cloned()
+            .expect("chip distribution should be an array");
+        assert_eq!(rows.len(), 2);
+        assert_eq!(rows[1]["日期"], json!("2026-09-15"));
+        for key in [
+            "获利比例",
+            "平均成本",
+            "90%成本-低",
+            "90%成本-高",
+            "90%集中度",
+            "70%成本-低",
+            "70%成本-高",
+            "70%集中度",
+        ] {
+            assert!(rows[1][key].as_f64().is_some(), "missing numeric {key}");
+        }
+        assert!((0.0..=100.0).contains(&rows[1]["获利比例"].as_f64().unwrap()));
+    }
+
+    #[test]
+    fn chip_distribution_from_klines_ignores_invalid_bars() {
+        let rows = chip_distribution_from_klines(&[
+            json!({"日期": "bad", "开盘": 0, "收盘": 0, "最高": 0, "最低": 0}),
+        ]);
+        assert_eq!(rows, json!([]));
+    }
 }

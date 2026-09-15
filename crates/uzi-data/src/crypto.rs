@@ -806,6 +806,22 @@ fn dim_basic(ti: &TickerInfo, row: Option<&Value>, q: Option<&Quote>) -> Value {
     out.insert("max_supply".into(), max_supply.map(jnum).unwrap_or(Value::Null));
     out.insert("ath".into(), ath.map(jnum).unwrap_or(Value::Null));
     out.insert("ath_change_pct".into(), ath_change.map(round2).unwrap_or(Value::Null));
+    let atl = md
+        .as_ref()
+        .and_then(|m| num_at(m, &["atl", "usd"]))
+        .or_else(|| row.and_then(|r| num_at(r, &["atl"])));
+    let atl_change = md
+        .as_ref()
+        .and_then(|m| num_at(m, &["atl_change_percentage", "usd"]))
+        .or_else(|| row.and_then(|r| num_at(r, &["atl_change_percentage"])));
+    let ath_date = md
+        .as_ref()
+        .and_then(|m| m.get("ath_date").and_then(|v| v.get("usd")).and_then(|v| v.as_str()))
+        .or_else(|| row.and_then(|r| r.get("ath_date").and_then(|v| v.as_str())))
+        .map(str::to_string);
+    out.insert("atl".into(), atl.map(jnum).unwrap_or(Value::Null));
+    out.insert("atl_change_pct".into(), atl_change.map(round2).unwrap_or(Value::Null));
+    out.insert("ath_date".into(), ath_date.map(Value::from).unwrap_or(Value::Null));
     out.insert("listed_date".into(), genesis.map(Value::from).unwrap_or(Value::Null));
     out.insert("currency".into(), json!(ti.currency));
     out.insert("asset_class".into(), json!("crypto"));
@@ -850,6 +866,11 @@ fn dim_tokenomics(_ti: &TickerInfo, row: Option<&Value>, detail: Option<&Value>)
         None if total.is_some() => "无硬顶（总量动态）",
         None => "供应模型未知",
     };
+    let block_time = detail.and_then(|d| num_at(d, &["block_time_in_minutes"]));
+    let max_infinite = md
+        .and_then(|m| m.get("max_supply_infinite"))
+        .and_then(|v| v.as_bool())
+        .unwrap_or(false);
 
     json!({
         "roe": Value::Null,
@@ -874,6 +895,8 @@ fn dim_tokenomics(_ti: &TickerInfo, row: Option<&Value>, detail: Option<&Value>)
         },
         "circulating_ratio_pct": circulating_ratio.map(jnum).unwrap_or(Value::Null),
         "supply_model": supply_model,
+        "max_supply_infinite": json!(max_infinite),
+        "block_time_minutes": block_time.map(jnum).unwrap_or(Value::Null),
         "asset_class": "crypto",
     })
 }
@@ -972,6 +995,16 @@ fn dim_chain(_ti: &TickerInfo, detail: Option<&Value>) -> Value {
         .unwrap_or_default();
     let links = detail.map(|d| obj(d, "links").clone()).unwrap_or(Value::Null);
 
+    // Crypto-native ecosystem metrics from `/coins/{id}` `market_data` (the
+    // equity `upstream/downstream/client_concentration` fields stay `null` —
+    // a public chain has no traditional supply chain, and these real on-chain
+    // numbers are the faithful substitute).
+    let md = detail.map(|d| obj(d, "market_data"));
+    let tvl = md.and_then(|m| num_at(m, &["total_value_locked"]));
+    let mcap_tvl = md.and_then(|m| num_at(m, &["mcap_to_tvl_ratio"]));
+    let fdv_tvl = md.and_then(|m| num_at(m, &["fdv_to_tvl_ratio"]));
+    let block_time = detail.and_then(|d| num_at(d, &["block_time_in_minutes"]));
+
     let breakdown: Vec<Value> = if categories.is_empty() {
         Vec::new()
     } else {
@@ -989,7 +1022,11 @@ fn dim_chain(_ti: &TickerInfo, detail: Option<&Value>) -> Value {
         "categories": categories,
         "description": desc,
         "links": links,
-        "note": "公链/协议无传统产业链 · 用生态分类与官方链接替代",
+        "total_value_locked": tvl.map(jnum).unwrap_or(Value::Null),
+        "mcap_to_tvl_ratio": mcap_tvl.map(round2).unwrap_or(Value::Null),
+        "fdv_to_tvl_ratio": fdv_tvl.map(round2).unwrap_or(Value::Null),
+        "block_time_minutes": block_time.map(jnum).unwrap_or(Value::Null),
+        "note": "公链/协议无传统产业链 · 以 TVL、Mcap/TVL、出块时间作为链上生态活性代理",
     })
 }
 
@@ -1154,6 +1191,7 @@ fn dim_futures(ti: &TickerInfo) -> Value {
 fn dim_valuation(
     _ti: &TickerInfo,
     row: Option<&Value>,
+    detail: Option<&Value>,
     mcap: Option<f64>,
     volume: Option<f64>,
     fdv: Option<f64>,
@@ -1175,6 +1213,23 @@ fn dim_valuation(
         (Some(f), Some(m)) if f > 0.0 => Some(round(m / f, 4)),
         _ => None,
     };
+    // TVL-relative valuation: the crypto analog of P/B for money-absorbing
+    // protocols. Available on `/coins/{id}` `market_data`; `None` for coins
+    // that do not report TVL (e.g. pure payment rails like BTC).
+    let md = detail.map(|d| obj(d, "market_data"));
+    let mcap_tvl = md.and_then(|m| num_at(m, &["mcap_to_tvl_ratio"]));
+    let fdv_tvl = md.and_then(|m| num_at(m, &["fdv_to_tvl_ratio"]));
+    // ROI is `{times, currency, percentage}` on `/coins/{id}` but a bare number
+    // on `/coins/markets` — normalise to a 1y-return percentage.
+    let roi_mult = detail
+        .and_then(|d| obj(d, "market_data").get("roi").map(Value::clone))
+        .or_else(|| row.and_then(|r| r.get("roi").map(Value::clone)));
+    let roi_1y_pct = match roi_mult {
+        Some(Value::Object(m)) => m.get("times").and_then(num),
+        Some(v) => num(&v),
+        _ => None,
+    }
+    .map(|t| round((t - 1.0) * 100.0, 2));
     let ath_dd = row
         .and_then(|r| num_at(r, &["ath_change_percentage"]))
         .map(round2);
@@ -1199,11 +1254,14 @@ fn dim_valuation(
         "nvt_ratio": nvt.map(jnum).unwrap_or(Value::Null),
         "turnover_ratio": turnover_ratio.map(jnum).unwrap_or(Value::Null),
         "mcap_to_fdv": mcap_to_fdv.map(jnum).unwrap_or(Value::Null),
+        "mcap_to_tvl_ratio": mcap_tvl.map(round2).unwrap_or(Value::Null),
+        "fdv_to_tvl_ratio": fdv_tvl.map(round2).unwrap_or(Value::Null),
+        "roi_1y_pct": roi_1y_pct.map(jnum).unwrap_or(Value::Null),
         "ath_drawdown_pct": ath_dd.unwrap_or(Value::Null),
         "price_range_position_pct": range_pos.map(jnum).unwrap_or(Value::Null),
         "volatility_1y_pct": kstats.get("volatility").cloned().unwrap_or(Value::Null),
         "max_drawdown_1y": kstats.get("max_drawdown").cloned().unwrap_or(Value::Null),
-        "method": "NVT / 市值-成交额 / FDV 折价 / 区间位置",
+        "method": "NVT / 市值-成交额 / FDV 折价 / MVRV近似(Mcap:FDV:TVL) / 区间位置",
     })
 }
 
@@ -1237,6 +1295,11 @@ fn dim_capital_flow(_ti: &TickerInfo, row: Option<&Value>, kl: &[Value]) -> Valu
     } else {
         None
     };
+    // Market-cap delta over 24h: the crypto proxy for "资金净流入/流出" — a
+    // rising cap with flat volume implies net buying pressure (the equity
+    // `northbound` / `margin_recent` / `main_fund_flow` fields stay `null`).
+    let mcap_chg = row.and_then(|r| num_at(r, &["market_cap_change_24h"]));
+    let mcap_chg_pct = row.and_then(|r| num_at(r, &["market_cap_change_percentage_24h"]));
     // Stablecoin float as the sector's dry-powder proxy.
     let stables = markets_for("tether,usd-coin,dai,first-digital-usd", 4);
     let stable_cap: f64 = stables.iter().filter_map(|s| num_at(s, &["market_cap"])).sum();
@@ -1251,9 +1314,11 @@ fn dim_capital_flow(_ti: &TickerInfo, row: Option<&Value>, kl: &[Value]) -> Valu
         "unlock_schedule": Value::Null,
         "volume_24h": volume.map(jnum).unwrap_or(Value::Null),
         "volume_change_7d_pct": vol_change_7d.map(jnum).unwrap_or(Value::Null),
+        "market_cap_change_24h": mcap_chg.map(jnum).unwrap_or(Value::Null),
+        "market_cap_change_24h_pct": mcap_chg_pct.map(round2).unwrap_or(Value::Null),
         "stablecoin_market_cap": if stable_cap > 0.0 { jnum(stable_cap) } else { Value::Null },
         "stablecoin_mcap_change_24h_pct": if stables.is_empty() { Value::Null } else { round2(stable_chg) },
-        "note": "加密无北向/两融 · 以成交额趋势 + 稳定币总量作为资金面代理",
+        "note": "加密无北向/两融 · 以成交额趋势 + 市值24h变化 + 稳定币总量作为资金面代理",
     })
 }
 
@@ -1585,7 +1650,7 @@ pub fn dim(dim_key: &str, ti: &TickerInfo) -> Option<CryptoDim> {
         ),
         "9_futures" => CryptoDim::new(dim_futures(ti), "okx:/public/funding-rate + open-interest"),
         "10_valuation" => CryptoDim::new(
-            dim_valuation(ti, row.as_ref(), mcap, volume, fdv, &kl, &kline_stats),
+            dim_valuation(ti, row.as_ref(), detail.as_ref(), mcap, volume, fdv, &kl, &kline_stats),
             "coingecko + local NVT/区间位置",
         ),
         "11_governance" => CryptoDim::new(

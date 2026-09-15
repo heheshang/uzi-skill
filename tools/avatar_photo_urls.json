@@ -1,0 +1,127 @@
+{
+  "buffett": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/d/d4/Warren_Buffett_at_the_2015_SelectUSA_Investment_Summit_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+    "title": "Warren Buffett",
+    "lang": "en",
+    "via": "pageimages"
+  },
+  "graham": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/2/2a/Benjamin_Graham_%281894-1976%29_portrait_on_23_March_1950.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+    "title": "Benjamin Graham",
+    "lang": "en",
+    "via": "pageimages"
+  },
+  "munger": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/5/56/Charlie_Munger_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+    "title": "Charlie Munger",
+    "lang": "en",
+    "via": "pageimages"
+  },
+  "klarman": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b8/Seth_Klarman_at_147th_Preakness_Stakes.jpg/960px-Seth_Klarman_at_147th_Preakness_Stakes.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "title": "Seth Klarman",
+    "lang": "en",
+    "via": "pageimages"
+  },
+  "thiel": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3e/Peter_Thiel_by_Gage_Skidmore.jpg/960px-Peter_Thiel_by_Gage_Skidmore.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "title": "Peter Thiel",
+    "lang": "en",
+    "via": "pageimages"
+  },
+  "wood": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/44/Cathie_Wood_ARK_Invest_Photo.jpg/960px-Cathie_Wood_ARK_Invest_Photo.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "title": "Cathie Wood",
+    "lang": "en",
+    "via": "pageimages"
+  },
+  "andreessen": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/5/57/Marc_Andreessen-9_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+    "title": "Marc Andreessen",
+    "lang": "en",
+    "via": "pageimages"
+  },
+  "gurley": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/6/65/Bill_Gurley%2C_2013.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+    "title": "Bill Gurley",
+    "lang": "en",
+    "via": "pageimages"
+  },
+  "naval": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/5/55/Naval_Ravikant_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+    "title": "Naval Ravikant",
+    "lang": "en",
+    "via": "pageimages"
+  },
+  "gerstner": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/8/8d/Brad_Gerstner_at_the_White_House_2025_%2854581192563%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+    "title": "Brad Gerstner",
+    "lang": "en",
+    "via": "pageimages"
+  },
+  "chamath": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/Chamath_Palihapitiya_in_2025.jpg/960px-Chamath_Palihapitiya_in_2025.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "title": "Chamath Palihapitiya",
+    "lang": "en",
+    "via": "pageimages"
+  },
+  "soros": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/97/George_Soros%2C_Founder_and_Chairman_of_the_Open_Society_Foundations%2C_visits_the_EC_%283x4_cropped%29.jpg/960px-George_Soros%2C_Founder_and_Chairman_of_the_Open_Society_Foundations%2C_visits_the_EC_%283x4_cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "title": "George Soros",
+    "lang": "en",
+    "via": "pageimages"
+  },
+  "dalio": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1f/Web_Summit_2018_-_Forum_-_Day_2%2C_November_7_HM1_7481_%2844858045925%29.jpg/960px-Web_Summit_2018_-_Forum_-_Day_2%2C_November_7_HM1_7481_%2844858045925%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "title": "Ray Dalio",
+    "lang": "en",
+    "via": "pageimages"
+  },
+  "livermore": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/0/0a/Press_photo_of_Jesse_Livermore_in_1940_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+    "title": "Jesse Livermore",
+    "lang": "en",
+    "via": "pageimages"
+  },
+  "simons": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Jim_Simons_at_MSRI.jpg/960px-Jim_Simons_at_MSRI.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "title": "Jim Simons",
+    "lang": "en",
+    "via": "pageimages"
+  },
+  "asness": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/8/8b/Cliff-asness-by-bill-cramer.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+    "title": "Cliff Asness",
+    "lang": "en",
+    "via": "pageimages"
+  },
+  "jensen_huang": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/e/e6/Jen-Hsun_Huang_2025.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+    "title": "Jensen Huang",
+    "lang": "en",
+    "via": "pageimages"
+  },
+  "musk": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/Elon_Musk_-_54820081119_%28cropped%29.jpg/960px-Elon_Musk_-_54820081119_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "title": "Elon Musk",
+    "lang": "en",
+    "via": "pageimages"
+  },
+  "altman": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/5/5a/Meeting_with_Masayoshi_Son_and_Sam_Altman_%28February_3%2C_2025%29_%283x4_cropped_on_Altman%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+    "title": "Sam Altman",
+    "lang": "en",
+    "via": "pageimages"
+  },
+  "saylor": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/Michael_Saylor_2022.png/960px-Michael_Saylor_2022.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "title": "Michael Saylor",
+    "lang": "en",
+    "via": "pageimages"
+  },
+  "marks": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/8/8b/Howard_Marks_2.17.12_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+    "lang": "en",
+    "via": "pageimages-retry"
+  }
+}

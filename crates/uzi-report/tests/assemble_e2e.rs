@@ -57,6 +57,8 @@ fn assemble_end_to_end_synthetic() {
     std::env::set_var("UZI_CACHE_ROOT", &cache);
     std::env::set_var("UZI_REPORTS_DIR", &reports);
     std::env::set_var("UZI_ASSETS_DIR", &assets);
+    // Bypass the self-review gate: the synthetic temp cache has no agent_analysis.json.
+    std::env::set_var("UZI_SKIP_REVIEW", "1");
 
     let out = uzi_report::assemble("002273.SZ").expect("assemble should succeed");
     let out_path = PathBuf::from(&out);

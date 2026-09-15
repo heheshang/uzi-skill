@@ -305,11 +305,11 @@ fn dim_meta(key: &str) -> Option<DimMeta> {
             title: "实盘比赛持仓",
             en: "Live Contests",
             weight: 4,
-            kpis: &["xq_cubes", "high_return_cubes", "tgb_mentions", "ths_simu"],
+            kpis: &["xq_cubes", "high_return_cubes", "tgb_mentions_count", "ths_simu"],
             kpi_labels: &[
                 ("xq_cubes", "雪球组合"),
                 ("high_return_cubes", "高收益持有"),
-                ("tgb_mentions", "淘股吧"),
+                ("tgb_mentions_count", "淘股吧"),
                 ("ths_simu", "同花顺模拟"),
             ],
         },

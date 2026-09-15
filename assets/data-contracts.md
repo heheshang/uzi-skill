@@ -129,6 +129,32 @@
 }
 ```
 
+### 1.1 加密资产（`market="C"`）字段语义
+
+`market="C"` 的行由 `crates/uzi-data/src/crypto.rs` 产出。两件事必须分清：
+
+1. **股票口径字段在本行一律为 `null`，语义 = "该口径不适用于加密资产"，不是"取数失败"。**
+   `pe_ttm`/`pb`/`eps`/`roe`/`actual_controller`/`northbound`/`margin_recent`/`pledge`/
+   `pe_quantile`/`pb_quantile`/`industry_pe`/`dcf` 等股票专属字段，对代币无对应口径，保持 `null`。
+   审计必须把这类 `null` 判为"不适用"，与 `sources` 层失败留下的 `error`/空 `data`（"取数失败"）区分开。
+   > 为什么不用 `"不适用"` 字符串：渲染层与打分层用 `is_null()`/`truthy()` 判断，字符串会让
+   > `truthy()` 误判为"有数据"（参见 §5.2 contests 的教训），故沿用上游忠实移植约定保留 `null`。
+
+2. **真实加密指标用 CoinGecko 字段填充**（同一次 `/coins/markets` + `/coins/{id}` 响应，零新增端点）：
+
+   | 维度 | 新增字段 | 来源 |
+   |---|---|---|
+   | `0_basic` | `atl` / `atl_change_pct` / `ath_date` | `market_data.atl.usd` / `row.atl` |
+   | `1_financials` | `circulating_ratio_pct` / `max_supply_infinite` / `block_time_minutes` | `market_data.*` / 顶层 `block_time_in_minutes` |
+   | `5_chain` | `total_value_locked` / `mcap_to_tvl_ratio` / `fdv_to_tvl_ratio` / `block_time_minutes` | `market_data.*` |
+   | `10_valuation` | `mcap_to_tvl_ratio` / `fdv_to_tvl_ratio` / `roi_1y_pct` | `market_data.*`（`roi` 归一化） |
+   | `12_capital_flow` | `market_cap_change_24h` / `market_cap_change_24h_pct` | `row.*` |
+
+   **已知坑**：CoinGecko `/coins/{id}` 不带 `tickers=true` 时 `total_value_locked`/`mcap_to_tvl_ratio`/
+   `fdv_to_tvl_ratio` 返回 `null`（BTC/ETH 实测均如此）——这是数据源限制，不是代码缺陷。P2 计划加
+   `tickers=true` 参数或 `global/decentralized_finance_defi` 端点补齐。审计看到这三个字段为 `null` 时
+   应判为"待补数据源"而非"不适用"。
+
 ## 2. dimensions.json (Task 2 产物)
 
 ```json

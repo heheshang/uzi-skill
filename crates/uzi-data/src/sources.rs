@@ -8,6 +8,7 @@
 //! chart v8, Stooq) or returns exactly the empty payload upstream returns on
 //! failure. No data is invented: an unreachable endpoint yields `{}` / `[]`.
 
+use chrono::{Datelike, Utc};
 use serde_json::{json, Map, Value};
 use std::sync::LazyLock;
 
@@ -745,6 +746,43 @@ fn fetch_financials_impl(ti: &TickerInfo) -> Value {
     }
 }
 
+/// `fetch_cash_flow(ti, dates)` — A-share cash-flow statement.
+///
+/// `dates` is the comma-separated list of report periods to request
+/// (`2025-12-31,2024-12-31`); the endpoint needs it explicitly. Returns `[]`
+/// when the endpoint is unreachable — no numbers are invented.
+pub fn fetch_cash_flow(ti: &TickerInfo, dates: &str) -> Value {
+    if ti.market != "A" || dates.is_empty() {
+        return json!([]);
+    }
+    let key = format!("cash_flow__{}", ti.code);
+    let ti2 = ti.clone();
+    let dates = dates.to_string();
+    cached::<_, anyhow::Error>(&ti.full, &key, TTL_QUARTERLY, move || {
+        Ok(match providers::akshare::fetch_cash_flow_a(&ti2.code, &dates) {
+            Ok(v) => v.get("raw").cloned().unwrap_or_else(|| json!([])),
+            Err(_) => json!([]),
+        })
+    })
+    .unwrap_or_else(|_| json!([]))
+}
+
+/// `fetch_dividend(ti)` — A-share dividend/distribution history.
+pub fn fetch_dividend(ti: &TickerInfo) -> Value {
+    if ti.market != "A" {
+        return json!([]);
+    }
+    let key = format!("dividend__{}", ti.code);
+    let ti2 = ti.clone();
+    cached::<_, anyhow::Error>(&ti.full, &key, TTL_QUARTERLY, move || {
+        Ok(match providers::akshare::fetch_dividend_a(&ti2.code) {
+            Ok(v) => v.get("raw").cloned().unwrap_or_else(|| json!([])),
+            Err(_) => json!([]),
+        })
+    })
+    .unwrap_or_else(|_| json!([]))
+}
+
 // ─────────────────────────────────────────────────────────────
 // 3. 龙虎榜 (A only)
 // ─────────────────────────────────────────────────────────────
@@ -850,18 +888,243 @@ fn fetch_north_impl(ti: &TickerInfo) -> Value {
 }
 
 // ─────────────────────────────────────────────────────────────
+// 6.5 Capital-flow sub-sources (block trades / holders / restricted / fund-flow)
+// ─────────────────────────────────────────────────────────────
+
+/// `fetch_block_trades(ti)` — EastMoney `RPT_BLOCKTRADE_STA`, last 90 days.
+pub fn fetch_block_trades(ti: &TickerInfo) -> Vec<Value> {
+    if ti.market != "A" {
+        return Vec::new();
+    }
+    let today = chrono::Local::now().naive_local().date();
+    let year_str = today.format("%Y").to_string();
+    let start = format!("{year_str}-01-01");
+    let end = today.format("%Y-%m-%d").to_string();
+    let code = ti.code.clone();
+    let key = format!("dzjy__{}__{}", code, end);
+    cached::<_, anyhow::Error>(&ti.full, &key, TTL_DAILY, move || {
+        let rows = em::block_trade_sta(&code, &start, &end, 12).map_err(|e| anyhow::anyhow!(e))?;
+        let mapped: Vec<Value> = rows
+            .into_iter()
+            .map(|r| {
+                let obj = r.as_object().cloned().unwrap_or_default();
+                json!({
+                    "证券代码": obj.get("SECURITY_CODE").cloned().unwrap_or(Value::Null),
+                    "证券简称": obj.get("SECURITY_NAME_ABBR").cloned().unwrap_or(Value::Null),
+                    "交易日期": obj.get("TRADE_DATE").and_then(|v| v.as_str()).map(|s| s.chars().take(10).collect::<String>()).unwrap_or_default(),
+                    "成交笔数": obj.get("DEAL_NUM").cloned().unwrap_or(Value::Null),
+                    "成交总量": obj.get("VOLUME").cloned().unwrap_or(Value::Null),
+                    "成交总额": obj.get("DEAL_AMT").cloned().unwrap_or(Value::Null),
+                    "成交均价": obj.get("AVERAGE_PRICE").cloned().unwrap_or(Value::Null),
+                    "收盘价": obj.get("CLOSE_PRICE").cloned().unwrap_or(Value::Null),
+                    "折溢率": obj.get("PREMIUM_RATIO").cloned().unwrap_or(Value::Null),
+                    "涨跌幅": obj.get("CHANGE_RATE").cloned().unwrap_or(Value::Null),
+                    "换手率": obj.get("TURNOVERRATE").cloned().unwrap_or(Value::Null),
+                })
+            })
+            .collect();
+        Ok(Value::Array(mapped))
+    })
+    .unwrap_or_else(|_| json!([]))
+    .as_array()
+    .cloned()
+    .unwrap_or_default()
+}
+
+/// `fetch_holder_counts(ti)` — EastMoney `RPT_HOLDERNUM_DET`.
+pub fn fetch_holder_counts(ti: &TickerInfo) -> Vec<Value> {
+    if ti.market != "A" {
+        return Vec::new();
+    }
+    let code = ti.code.clone();
+    let key = format!("gdhs__{}", code);
+    cached::<_, anyhow::Error>(&ti.full, &key, TTL_QUARTERLY, move || {
+        let rows = em::holder_num_det(&code, 12).map_err(|e| anyhow::anyhow!(e))?;
+        let mapped: Vec<Value> = rows
+            .into_iter()
+            .map(|r| {
+                let obj = r.as_object().cloned().unwrap_or_default();
+                json!({
+                    "股东户数": obj.get("HOLDER_NUM").cloned().unwrap_or(Value::Null),
+                    "上期股东户数": obj.get("PRE_HOLDER_NUM").cloned().unwrap_or(Value::Null),
+                    "股东户数增幅": obj.get("HOLDER_NUM_RATIO").cloned().unwrap_or(Value::Null),
+                    "变动日期": obj.get("END_DATE").and_then(|v| v.as_str()).map(|s| s.chars().take(10).collect::<String>()).unwrap_or_default(),
+                    "上期变动日期": obj.get("PRE_END_DATE").and_then(|v| v.as_str()).map(|s| s.chars().take(10).collect::<String>()).unwrap_or_default(),
+                    "区间涨跌幅": obj.get("INTERVAL_CHRATE").cloned().unwrap_or(Value::Null),
+                    "户均持股市值": obj.get("AVG_MARKET_CAP").cloned().unwrap_or(Value::Null),
+                    "户均持股数量": obj.get("AVG_HOLD_NUM").cloned().unwrap_or(Value::Null),
+                })
+            })
+            .collect();
+        Ok(Value::Array(mapped))
+    })
+    .unwrap_or_else(|_| json!([]))
+    .as_array()
+    .cloned()
+    .unwrap_or_default()
+}
+
+/// `fetch_restricted_release(ti)` — EastMoney `RPT_LIFT_STAGE`.
+pub fn fetch_restricted_release(ti: &TickerInfo) -> Vec<Value> {
+    if ti.market != "A" {
+        return Vec::new();
+    }
+    let code = ti.code.clone();
+    let key = format!("lift__{}", code);
+    cached::<_, anyhow::Error>(&ti.full, &key, TTL_QUARTERLY, move || {
+        let rows = em::lift_stage(&code, 12).map_err(|e| anyhow::anyhow!(e))?;
+        let mapped: Vec<Value> = rows
+            .into_iter()
+            .map(|r| {
+                let obj = r.as_object().cloned().unwrap_or_default();
+                json!({
+                    "代码": obj.get("SECURITY_CODE").cloned().unwrap_or(Value::Null),
+                    "名称": obj.get("SECURITY_NAME_ABBR").cloned().unwrap_or(Value::Null),
+                    "解禁日期": obj.get("FREE_DATE").and_then(|v| v.as_str()).map(|s| s.chars().take(10).collect::<String>()).unwrap_or_default(),
+                    "解禁股份数量": obj.get("CURRENT_FREE_SHARES").cloned().unwrap_or(Value::Null),
+                    "解禁数量": obj.get("ABLE_FREE_SHARES").cloned().unwrap_or(Value::Null),
+                    "解禁市值": obj.get("LIFT_MARKET_CAP").cloned().unwrap_or(Value::Null),
+                    "占解禁前流通市值比例": obj.get("FREE_RATIO").cloned().unwrap_or(Value::Null),
+                    "解禁前一交易日收盘价": obj.get("NEW").cloned().unwrap_or(Value::Null),
+                    "限售股类型": obj.get("FREE_SHARES_TYPE").cloned().unwrap_or(Value::Null),
+                    "解禁前20日涨跌幅": obj.get("B20_ADJCHRATE").cloned().unwrap_or(Value::Null),
+                    "解禁后20日涨跌幅": obj.get("A20_ADJCHRATE").cloned().unwrap_or(Value::Null),
+                    "占总市值比例": obj.get("TOTAL_RATIO").cloned().unwrap_or(Value::Null),
+                    "未解禁数量": obj.get("NON_FREE_SHARES").cloned().unwrap_or(Value::Null),
+                    "解禁股东数": obj.get("BATCH_HOLDER_NUM").cloned().unwrap_or(Value::Null),
+                })
+            })
+            .collect();
+        Ok(Value::Array(mapped))
+    })
+    .unwrap_or_else(|_| json!([]))
+    .as_array()
+    .cloned()
+    .unwrap_or_default()
+}
+
+/// `fetch_main_fund_flow(ti)` — EastMoney `push2his` fflow/daykline.
+pub fn fetch_main_fund_flow(ti: &TickerInfo) -> Vec<Value> {
+    if ti.market != "A" {
+        return Vec::new();
+    }
+    let secid = em::secid(&ti.code, &ti.full);
+    let key = format!("fflow__{}", ti.code);
+    cached::<_, anyhow::Error>(&ti.full, &key, TTL_DAILY, move || {
+        let rows = em::fund_flow_daykline(&secid, "60", 12).map_err(|e| anyhow::anyhow!(e))?;
+        Ok(Value::Array(rows))
+    })
+    .unwrap_or_else(|_| json!([]))
+    .as_array()
+    .cloned()
+    .unwrap_or_default()
+}
+
+
+// ─────────────────────────────────────────────────────────────
 // 7. Research reports
 // ─────────────────────────────────────────────────────────────
 
 /// `fetch_research_reports(ti)` — AkShare `stock_research_report_em`; `[]` on
 /// failure.
+///
+/// Upstream calls `reportapi.eastmoney.com/report/list` and renames the English
+/// payload keys to the Chinese column names the consumer (`fetch/research.rs`)
+/// reads. The Rust port hits the *same documented endpoint* and applies the
+/// same rename. A failed/empty fetch yields `[]` exactly like upstream, so the
+/// caller degrades to `fallback=true`.
 pub fn fetch_research_reports(ti: &TickerInfo) -> Value {
     if ti.market != "A" {
         return json!([]);
     }
     let key = format!("research__{}", ti.code);
-    cached::<_, anyhow::Error>(&ti.full, &key, TTL_QUARTERLY, || Ok(json!([])))
-        .unwrap_or_else(|_| json!([]))
+    cached::<_, anyhow::Error>(&ti.full, &key, TTL_QUARTERLY, || {
+        let code = &ti.code;
+        let year_now = Utc::now().year();
+        let end = format!("{}-01-01", year_now + 1);
+        let payload = http::get_json_q(
+            "https://reportapi.eastmoney.com/report/list",
+            &[
+                ("industryCode", "*"),
+                ("pageSize", "5000"),
+                ("industry", "*"),
+                ("rating", "*"),
+                ("ratingChange", "*"),
+                ("beginTime", "2000-01-01"),
+                ("endTime", &end),
+                ("pageNo", "1"),
+                ("fields", ""),
+                ("qType", "0"),
+                ("orgCode", ""),
+                ("code", code),
+                ("rcode", ""),
+                ("p", "1"),
+                ("pageNum", "1"),
+                ("pageNumber", "1"),
+            ],
+            &[],
+            25,
+        )
+        .map_err(|e| anyhow::anyhow!("reportapi research: {e}"))?;
+
+        let current_year = payload
+            .get("currentYear")
+            .and_then(|v| v.as_i64())
+            .unwrap_or(year_now as i64) as i32;
+
+        // Year-tagged forecast column titles, matching upstream's
+        // `{current_year}-盈利预测-收益` naming exactly.
+        let (y0, y1, y2) = (current_year, current_year + 1, current_year + 2);
+        let col_eps_y0 = format!("{y0}-盈利预测-收益");
+        let col_pe_y0 = format!("{y0}-盈利预测-市盈率");
+        let col_eps_y1 = format!("{y1}-盈利预测-收益");
+        let col_pe_y1 = format!("{y1}-盈利预测-市盈率");
+        let col_eps_y2 = format!("{y2}-盈利预测-收益");
+        let col_pe_y2 = format!("{y2}-盈利预测-市盈率");
+
+        let data = payload
+            .get("data")
+            .and_then(|d| d.as_array())
+            .cloned()
+            .unwrap_or_default();
+
+        let mut out: Vec<Value> = Vec::with_capacity(data.len());
+        for rec in data {
+            let get = |k: &str| rec.get(k).cloned().unwrap_or(Value::Null);
+            // Upstream only keeps rows where every forecast field is numeric,
+            // and drops rows whose current-year EPS is NaN — but the consumer
+            // already filters on `forecast_float`, so we keep the raw rows and
+            // only drop ones with an empty title (a degenerate report).
+            let title = get("title");
+            if title.as_str().map(|s| s.trim().is_empty()).unwrap_or(true) {
+                continue;
+            }
+            let info_code = get("infoCode");
+            let pdf_url = match info_code.as_str() {
+                Some(x) if !x.is_empty() => Value::String(format!("https://pdf.dfcfw.com/pdf/H3_{x}_1.pdf")),
+                _ => Value::Null,
+            };
+            let mut row = Map::new();
+            row.insert("报告名称".to_string(), title);
+            row.insert("股票简称".to_string(), get("stockName"));
+            row.insert("股票代码".to_string(), get("stockCode"));
+            row.insert("东财评级".to_string(), get("emRatingName"));
+            row.insert("机构".to_string(), get("orgSName"));
+            row.insert("机构代码".to_string(), get("orgCode"));
+            row.insert("日期".to_string(), get("publishDate"));
+            row.insert("行业".to_string(), get("indvInduName"));
+            row.insert("报告PDF链接".to_string(), pdf_url);
+            row.insert(col_eps_y0.clone(), get("predictThisYearEps"));
+            row.insert(col_pe_y0.clone(), get("predictThisYearPe"));
+            row.insert(col_eps_y1.clone(), get("predictNextYearEps"));
+            row.insert(col_pe_y1.clone(), get("predictNextYearPe"));
+            row.insert(col_eps_y2.clone(), get("predictNextTwoYearEps"));
+            row.insert(col_pe_y2.clone(), get("predictNextTwoYearPe"));
+            out.push(Value::Object(row));
+        }
+        Ok(json!(out))
+    })
+    .unwrap_or_else(|_| json!([]))
 }
 
 // ─────────────────────────────────────────────────────────────

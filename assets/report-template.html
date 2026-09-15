@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="zh-CN" data-page-node-id="PfXH8iX3rqhogBFpjma79r">
+<head data-page-node-id="bFL1A1Gza7jvYRoBaiSaTE">
+<meta charset="UTF-8" data-page-node-id="jXu8Aumu24hgbsTIH9AdGn">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="XcGNHoW5cc3luVa0Wf4yPF">
 <title>{{NAME}} · 游资 SKILLS</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Fira+Sans:wght@300;400;500;600;700;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com" data-page-node-id="OnjtoAnpFSBoxkzP73tvG4">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin data-page-node-id="XIlVy7LDEZc1B3VfC8Odmh">
+<link rel="preconnect" href="https://unpkg.com" crossorigin data-page-node-id="uziBootPreconnect01">
+<link rel="dns-prefetch" href="https://unpkg.com" data-page-node-id="uziBootDns01">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Fira+Sans:wght@300;400;500;600;700;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" data-page-node-id="vxTwfs2DMWWC2NcHGBhS7J">
 <style>
 /* ═══════════════════════════════════════════════════════════
    游资 SKILLS · FloatFu-true
@@ -818,7 +820,7 @@ body {
 }
 .fighter.bull .avatar-box { border-color: var(--bull-green); }
 .fighter.bear .avatar-box { border-color: var(--bear-red); }
-.fighter img { width: 100%; height: 100%; image-rendering: pixelated; border-radius: var(--radius-sm); }
+.fighter img { width: 100%; height: 100%; image-rendering: auto; border-radius: var(--radius-sm); }
 .fighter .fighter-name {
   font-family: 'Fira Sans', sans-serif;
   font-weight: 800;
@@ -1035,7 +1037,7 @@ body {
 .inv-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
 .inv-avatar {
   width: 44px; height: 44px;
-  image-rendering: pixelated;
+  image-rendering: auto;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   background: var(--bg-void);
@@ -1133,7 +1135,7 @@ body {
 .seat.neutral::before { background: var(--text-ghost); }
 .seat-avatar {
   width: 38px; height: 38px;
-  image-rendering: pixelated;
+  image-rendering: auto;
   border-radius: 4px;
   background: #ffffff;
 }
@@ -1237,7 +1239,7 @@ body {
 }
 .chat-msg .msg-avatar {
   width: 44px; height: 44px;
-  image-rendering: pixelated;
+  image-rendering: auto;
   border-radius: 8px;
   flex-shrink: 0;
   background: #ffffff;
@@ -1300,6 +1302,9 @@ body {
 .chat-msg .msg-reasoning {
   color: var(--text-main);
   margin-bottom: 6px;
+  /* 生成器往这里写的是 \n 分隔的 ✅/❌ 条目；没有这条规则时换行会被折叠，
+     整段挤成一行。pre-wrap 既保留换行和缩进，又允许长行自动折行。 */
+  white-space: pre-wrap;
 }
 .chat-msg .msg-verdict {
   display: inline-block;
@@ -1560,7 +1565,7 @@ body {
   width: 32px; height: 32px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
-  image-rendering: pixelated;
+  image-rendering: auto;
   background: #fff;
   flex-shrink: 0;
 }
@@ -2096,7 +2101,7 @@ section[id], div[id^="dim-"], .dim-card[id] { scroll-margin-top: 20px; }
   border-radius: var(--radius-lg);
   text-align: center;
 }
-#share-card .sc-bestcell img { width: 120px; height: 120px; image-rendering: pixelated; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+#share-card .sc-bestcell img { width: 120px; height: 120px; image-rendering: auto; border-radius: var(--radius-sm); border: 1px solid var(--border); }
 #share-card .sc-bestcell .n { font-size: 28px; margin-top: 12px; color: var(--text-bright); font-weight: 600; }
 #share-card .sc-bestcell .s { font-size: 48px; color: var(--neon-gold); font-weight: 900; }
 
@@ -2182,7 +2187,7 @@ section[id], div[id^="dim-"], .dim-card[id] { scroll-margin-top: 20px; }
 }
 #war-report .wr-fight { display: flex; gap: 24px; align-items: center; }
 #war-report .wr-fi { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-#war-report .wr-fi img { width: 96px; height: 96px; image-rendering: pixelated; border: 1px solid; border-radius: var(--radius-sm); padding: 4px; background: var(--bg-tinted); }
+#war-report .wr-fi img { width: 96px; height: 96px; image-rendering: auto; border: 1px solid; border-radius: var(--radius-sm); padding: 4px; background: var(--bg-tinted); }
 #war-report .wr-fi.bull img { border-color: var(--bull-green); }
 #war-report .wr-fi.bear img { border-color: var(--bear-red); }
 #war-report .wr-fi .fn { font-family: 'Fira Sans', sans-serif; font-weight: 700; font-size: 20px; color: var(--text-bright); }
@@ -2205,26 +2210,39 @@ section[id], div[id^="dim-"], .dim-card[id] { scroll-margin-top: 20px; }
 #war-report .wr-footer { grid-column: 1/-1; display: flex; justify-content: space-between; color: var(--text-dim); font-size: 18px; padding-top: 30px; border-top: 1px solid var(--border); }
 #war-report .wr-oo { font-family: 'Fira Sans', serif; font-size: 42px; color: var(--neon-cyan);  letter-spacing: .08em; }
 
-/* ═══════════════ BOOT SEQUENCE OVERLAY ═══════════════ */
+/* ═══════════════ BOOT SEQUENCE OVERLAY · three.js 多空对撞 ═══════════════ */
+/* --boot-clear = 内容入场动画的起始时刻 · JS 会在跳过 boot 时改写为 0ms */
+:root { --boot-clear: 1.9s; }
 .boot-overlay {
   position: fixed; inset: 0; z-index: 9999;
-  background: var(--bg-deep);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 24px;
-  transition: opacity .6s ease;
+  background: radial-gradient(circle at 50% 48%, #101a2e 0%, #070b14 58%, #04060b 100%);
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity .55s ease;
+  overflow: hidden;
 }
 .boot-overlay.done { opacity: 0; pointer-events: none; }
+.boot-canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  display: block;
+}
+.boot-stage {
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column; align-items: center; gap: 22px;
+  pointer-events: none;
+}
 .boot-logo {
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 700; font-size: 32px;
   letter-spacing: .25em;
-  color: var(--text-bright);
+  color: #e8eef7;
 }
-.boot-logo em { color: var(--neon-cyan); font-style: normal;  }
+.boot-logo em { color: #38bdf8; font-style: normal;  }
 .boot-eye {
   font-family: 'Fira Sans', serif;
   font-size: 96px;
-  color: var(--neon-cyan);
+  color: #7dd3fc;
+  text-shadow: 0 0 34px rgba(56,189,248,.5);
   animation: blink 1.4s ease-in-out infinite;
   letter-spacing: .1em;
 }
@@ -2235,24 +2253,25 @@ section[id], div[id^="dim-"], .dim-card[id] { scroll-margin-top: 20px; }
 }
 .boot-bar {
   width: 320px; height: 4px;
-  background: var(--bg-rail);
-  border: 1px solid var(--border);
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.13);
   border-radius: 2px;
   overflow: hidden;
 }
 .boot-fill {
   width: 0%;
   height: 100%;
-  background: linear-gradient(90deg, var(--neon-cyan), var(--neon-gold));
+  background: linear-gradient(90deg, #22c55e, #38bdf8 52%, #ef4444);
   animation: bootFill 1.6s cubic-bezier(.2,.7,.3,1) forwards;
 }
 @keyframes bootFill { to { width: 100%; } }
 .boot-status {
   font-family: 'Fira Code', monospace;
   font-size: 11px;
-  color: var(--text-dim);
+  color: #7c8ba1;
   letter-spacing: .15em;
   text-transform: uppercase;
+  transition: opacity .25s ease;
 }
 
 /* ═══════════════ ENTRANCE ANIMATIONS ═══════════════ */
@@ -2270,7 +2289,7 @@ section[id], div[id^="dim-"], .dim-card[id] { scroll-margin-top: 20px; }
 }
 .fighter {
   opacity: 0; animation: fadeUp .6s cubic-bezier(.2,.8,.3,1) forwards;
-  animation-delay: 1.2s;
+  animation-delay: var(--boot-clear);
 }
 .fighter.bull { transform: translateX(-30px); }
 .fighter.bear { transform: translateX(30px); }
@@ -2279,7 +2298,7 @@ section[id], div[id^="dim-"], .dim-card[id] { scroll-margin-top: 20px; }
 }
 .punchline {
   opacity: 0; animation: fadeUp .6s cubic-bezier(.2,.8,.3,1) forwards;
-  animation-delay: 1.6s;
+  animation-delay: calc(var(--boot-clear) + .35s);
 }
 .chat-msg {
   /* Start visible by default so they show even if JS animation hasn't run yet */
@@ -2294,6 +2313,8 @@ section[id], div[id^="dim-"], .dim-card[id] { scroll-margin-top: 20px; }
 
 @media (prefers-reduced-motion: reduce) {
   .seat, .fighter, .punchline, .chat-msg, .boot-fill { animation: none !important; opacity: 1 !important; transform: none !important; }
+  .boot-overlay { display: none !important; }
+  :root { --boot-clear: 0s; }
 }
 
 /* ═══════════════ RESPONSIVE · TABLET ═══════════════ */
@@ -2713,42 +2734,46 @@ section[id], div[id^="dim-"], .dim-card[id] { scroll-margin-top: 20px; }
 
 </style>
 </head>
-<body>
+<body data-page-node-id="o0XzNl6wktZfsUe6BMeZAI">
 
-<!-- ─── BOOT OVERLAY ─── -->
-<div class="boot-overlay" id="boot-overlay">
-  <div class="boot-logo">FloatFu-true <em>· 游资 SKILLS</em></div>
-  <div class="boot-eye">O.o</div>
-  <div class="boot-bar"><div class="boot-fill"></div></div>
-  <div class="boot-status">SCANNING · INITIALIZING JURY · LOADING ARENA</div>
+<!-- ─── BOOT OVERLAY · three.js 多空对撞 ─── -->
+<div class="boot-overlay" id="boot-overlay" data-page-node-id="3Wyf1fEemDO92zUyMl0MtY">
+  <canvas class="boot-canvas" id="boot-canvas" data-page-node-id="uziBootCanvas01"></canvas>
+  <div class="boot-stage" data-page-node-id="uziBootStage01">
+    <div class="boot-logo" data-page-node-id="QtMpuu3yWfCpcRMpLghHFQ">FloatFu-true <em data-page-node-id="vTkceQVdBD3PpELstnLMs9">· 游资 SKILLS</em></div>
+    <div class="boot-eye" data-page-node-id="RcFRJY1v6PnjkibxLF3id3">O.o</div>
+    <div class="boot-bar" data-page-node-id="vthPB6AbbTXhkEL6AWZH5l"><div class="boot-fill" data-page-node-id="HE1HWhSRAsM9cKCfg5RWYE"></div></div>
+    <div class="boot-status" data-page-node-id="EqNhgEbbhu7Sp2dlbT6hvS">SCANNING · INITIALIZING JURY · LOADING ARENA</div>
+  </div>
 </div>
+<noscript><style>.boot-overlay{display:none!important}</style></noscript>
 
-<div class="container">
+<div class="container" data-page-node-id="WEQFE7fo3CZwvT9nUCKDN9">
 
   <!-- ─── TOP BAR ─── -->
-  <div class="topbar">
-    <div class="left">
-      <div class="brand">FloatFu-true <span>游资 SKILLS</span></div>
+  <div class="topbar" data-page-node-id="yt2Pl1WdNKIKFMviXYvJu0">
+    <div class="left" data-page-node-id="bPlQ4yus8FI36wD2HxYX1O">
+      <div class="brand" data-page-node-id="XY47ep4MbeLyRHnRom036z">FloatFu-true <span data-page-node-id="pkFKfu4BDWQ3D4czs3nAat">游资 SKILLS</span></div>
     </div>
-    <div class="status">
-      <span class="pulse"></span>
-      <span class="market-badge {{MARKET_STATUS_CLASS}}">{{MARKET_STATUS}}</span>
-      <span>· DATA @ {{DATA_FETCHED_AT}} · UZI v{{PLUGIN_VERSION}}</span>
-      <button class="theme-toggle" id="theme-toggle" title="切换暗色 / 浅色主题" aria-label="切换主题">🌙</button>
+    <div class="status" data-page-node-id="xzgzIFXhXEMU1M8cvGKzAD">
+      <span class="pulse" data-page-node-id="fFp6TfzGNnkeoCXpGqRCJ5"></span>
+      <span class="market-badge {{MARKET_STATUS_CLASS}}" data-page-node-id="rb17HzCI7GjxVxxIYo7iEO">{{MARKET_STATUS}}</span>
+      <span data-page-node-id="eF2FwXToQ4DDNjIyhyiHMr">· DATA @ {{DATA_FETCHED_AT}} · UZI v{{PLUGIN_VERSION}}</span>
+      <button class="theme-toggle" id="theme-toggle" title="切换暗色 / 浅色主题" aria-label="切换主题" data-page-node-id="eDnUTflMM2CTsDNsTINmgi">🌙</button>
     </div>
   </div>
 
   <!-- v3.6.0 · sticky TOC rail · 左侧导航 + scroll spy -->
-  <nav class="toc-rail" id="toc-rail" aria-label="报告章节导航">
-    <button class="toc-toggle" id="toc-toggle" type="button" aria-label="折叠导航栏" aria-expanded="true" title="折叠 / 展开导航">◀</button>
-    <a href="#section-core" class="toc-item"><span class="toc-num">01</span>核心结论</a>
-    <a href="#section-clash" class="toc-item"><span class="toc-num">02</span>世纪分歧</a>
-    <a href="#section-jury" class="toc-item"><span class="toc-num">03</span>评委打分板</a>
-    <a href="#section-chat" class="toc-item"><span class="toc-num">04</span>大佬群聊</a>
-    <a href="#section-scan" class="toc-item"><span class="toc-num">05</span>22 维 Deep Scan</a>
-    <a href="#section-modeling" class="toc-item"><span class="toc-num">06</span>机构建模</a>
-    <a href="#section-risks" class="toc-item"><span class="toc-num">07</span>风险清单</a>
-    <a href="#section-zones" class="toc-item"><span class="toc-num">08</span>买入区间</a>
+  <nav class="toc-rail" id="toc-rail" aria-label="报告章节导航" data-page-node-id="QSk8hCkSpOm8EVqFJ2cKnf">
+    <button class="toc-toggle" id="toc-toggle" type="button" aria-label="折叠导航栏" aria-expanded="true" title="折叠 / 展开导航" data-page-node-id="xuQLxWkngkTJin5eBFGxwn">◀</button>
+    <a href="#section-core" class="toc-item" data-page-node-id="JhpHhecGFlmaCTyIfcemhs"><span class="toc-num" data-page-node-id="ORGCGi2wSpqrXX0Zut8UUa">01</span>核心结论</a>
+    <a href="#section-clash" class="toc-item" data-page-node-id="93v2gEl0qvPmnh4B8SJqZc"><span class="toc-num" data-page-node-id="SWk2EGMg9MwT2EThq3uIvN">02</span>世纪分歧</a>
+    <a href="#section-jury" class="toc-item" data-page-node-id="rOGqr9ECRODxCul6bIfJE9"><span class="toc-num" data-page-node-id="Fo96xm2YAvoLssnfcJfMUm">03</span>评委打分板</a>
+    <a href="#section-chat" class="toc-item" data-page-node-id="qH7Vm90HrcC24aKdSMCfHd"><span class="toc-num" data-page-node-id="4fA4oofaRjiIAOaj7IEC00">04</span>大佬群聊</a>
+    <a href="#section-scan" class="toc-item" data-page-node-id="ZwnZusF2feWxInUwTg0C7i"><span class="toc-num" data-page-node-id="MxsDCnc1fA7w5ZLAmJnSzY">05</span>22 维 Deep Scan</a>
+    <a href="#section-modeling" class="toc-item" data-page-node-id="FQY7q5HScngldph11ExILe"><span class="toc-num" data-page-node-id="qhsdcU0x45ghvggiQ3DYfL">06</span>机构建模</a>
+    <a href="#section-risks" class="toc-item" data-page-node-id="7vs9m6SEPk5k6WVCHXyPdU"><span class="toc-num" data-page-node-id="UIKrzpxlDUoAzmihurhUeL">07</span>风险清单</a>
+    <a href="#section-zones" class="toc-item" data-page-node-id="qd4t7jFXCpFQxc7lbtOStY"><span class="toc-num" data-page-node-id="kmtITgFCSBhdwh3s8jBycs">08</span>买入区间</a>
   </nav>
 
   <!-- ─── DATA QUALITY BANNER · v2.3 (only rendered when _data_gaps.json exists) ─── -->
@@ -2758,119 +2783,119 @@ section[id], div[id^="dim-"], .dim-card[id] { scroll-margin-top: 20px; }
   <!-- INJECT_STYLE_CHIP -->
 
   <!-- ─── BENTO HERO ─── -->
-  <div class="bento-hero">
+  <div class="bento-hero" data-page-node-id="OYEXEr0NHZw4Dl2l0JP9ai">
 
     <!-- name + price + one-liner -->
-    <div class="bento name-card">
-      <div class="ticker-label">// SUBJECT</div>
-      <h1 class="stock-name">{{NAME}}</h1>
-      <div class="stock-code">{{TICKER}} · {{INDUSTRY}}</div>
-      <div class="one-liner">{{ONE_LINER}}</div>
-      <div class="price-row">
-        <div class="price">{{CURRENCY}}{{PRICE}}</div>
-        <div class="change {{CHANGE_DIR}}">{{CHANGE_PCT}}</div>
+    <div class="bento name-card" data-page-node-id="DCPzDxHIRsGpD9VQFsxaCH">
+      <div class="ticker-label" data-page-node-id="LBWgSwFIp6Paq5v86kA7QB">// SUBJECT</div>
+      <h1 class="stock-name" data-page-node-id="eO3a4iwvQD6cZ9stZy8c9B">{{NAME}}</h1>
+      <div class="stock-code" data-page-node-id="yQOQWFmyu1NFDGl2uEDO4t">{{TICKER}} · {{INDUSTRY}}</div>
+      <div class="one-liner" data-page-node-id="DORFGIFuTf3Z6xsl1Bb86F">{{ONE_LINER}}</div>
+      <div class="price-row" data-page-node-id="mP3hMW63PfGFpQHoi0Eebl">
+        <div class="price" data-page-node-id="UcAJyTNZJPEtzXXWNnuV9X">{{CURRENCY}}{{PRICE}}</div>
+        <div class="change {{CHANGE_DIR}}" data-page-node-id="PQ8bygJBs0aZWvJecj4J1x">{{CHANGE_PCT}}</div>
       </div>
-      <div class="metric-chips">
-        <div class="chip"><strong>MCAP</strong>{{MCAP}}</div>
-        <div class="chip"><strong>PE</strong>{{PE}}</div>
-        <div class="chip"><strong>PB</strong>{{PB}}</div>
+      <div class="metric-chips" data-page-node-id="EYPJHuGUkQyHCeuT4p2I5l">
+        <div class="chip" data-page-node-id="tB3PY7lsACigW6YG8kFIM1"><strong data-page-node-id="XjKizuBemF4uNuVmYYxPec">MCAP</strong>{{MCAP}}</div>
+        <div class="chip" data-page-node-id="4yPHoHjLYR5ij5UJ3IDgAP"><strong data-page-node-id="VFKybjkniFqtJFNB1nAESl">PE</strong>{{PE}}</div>
+        <div class="chip" data-page-node-id="t2GUANR2gI865xcOPFXLN4"><strong data-page-node-id="GGQIbJt1RVp1vBEHyVMg1w">PB</strong>{{PB}}</div>
       </div>
     </div>
 
     <!-- BRUTALIST SCORE -->
-    <div class="bento score-card">
-      <div class="score-label">ALPHA SCORE</div>
-      <div class="score-giant">{{OVERALL_SCORE_INT}}</div>
-      <div class="score-verdict">{{VERDICT_LABEL}}</div>
+    <div class="bento score-card" data-page-node-id="M1zzNTtysBv5QbBJJ7iGbD">
+      <div class="score-label" data-page-node-id="fWtbxbj3bWXiTUd4Robuyg">ALPHA SCORE</div>
+      <div class="score-giant" data-page-node-id="tMyyNq7613W74vllG3dFMG">{{OVERALL_SCORE_INT}}</div>
+      <div class="score-verdict" data-page-node-id="hAyQmaE6ulGH9Oy7H2UbBg">{{VERDICT_LABEL}}</div>
     </div>
 
     <!-- SAFETY -->
-    <div class="bento safety-card {{TRAP_COLOR}}">
-      <div class="safety-icon">{{TRAP_EMOJI}}</div>
-      <div class="safety-text">
-        <strong>杀猪盘体检 · {{TRAP_LEVEL}}</strong>
-        <span>{{TRAP_RECOMMENDATION}}</span>
+    <div class="bento safety-card {{TRAP_COLOR}}" data-page-node-id="MJPJnhZbWSTUhGEZ3nfMW5">
+      <div class="safety-icon" data-page-node-id="CGftakx3axAX0GTsiYuGGP">{{TRAP_EMOJI}}</div>
+      <div class="safety-text" data-page-node-id="7PcBx2lhvakjnMV0qhWcyp">
+        <strong data-page-node-id="hjdAFt0uY7jp9Adb40GQND">杀猪盘体检 · {{TRAP_LEVEL}}</strong>
+        <span data-page-node-id="DI06Fxi9IHxAWDJR4Bnqws">{{TRAP_RECOMMENDATION}}</span>
       </div>
     </div>
 
   </div>
 
   <!-- ─── DASHBOARD 4-SECTION ─── -->
-  <div class="section-head" id="section-core">
-    <div class="section-tag">01 / CORE</div>
-    <h2 class="section-title">核心结论</h2>
-    <div class="section-line"></div>
+  <div class="section-head" id="section-core" data-page-node-id="rQFnKXhBSQFDx7heGFhkeJ">
+    <div class="section-tag" data-page-node-id="JdqTlFyLV2wgmV8zvOzNMk">01 / CORE</div>
+    <h2 class="section-title" data-page-node-id="tFjUueIyKe4LOKxtB13MH8">核心结论</h2>
+    <div class="section-line" data-page-node-id="JgFnvbEuJ6H0ncbkjzG2cz"></div>
   </div>
 
-  <div class="dashboard-bento">
-    <div class="core-conclusion">
-      <div class="label">// ONE-SHOT CONCLUSION</div>
-      <div class="text">{{CORE_CONCLUSION}}</div>
+  <div class="dashboard-bento" data-page-node-id="SaDvhhk88aGyE8X5Aqu05q">
+    <div class="core-conclusion" data-page-node-id="PyDIAnXH4N3ugDZwDgMm1Q">
+      <div class="label" data-page-node-id="X7oU8dXQEtXscycrqsuou4">// ONE-SHOT CONCLUSION</div>
+      <div class="text" data-page-node-id="CchMP2cd3Ck6pj3FSDQ1gM">{{CORE_CONCLUSION}}</div>
     </div>
 
-    <div class="data-cell"><div class="icon">📈</div><div class="key">趋势 TREND</div><div class="value">{{DP_TREND}}</div></div>
-    <div class="data-cell"><div class="icon">💰</div><div class="key">价位 PRICE</div><div class="value">{{DP_PRICE}}</div></div>
-    <div class="data-cell"><div class="icon">📊</div><div class="key">量能 VOLUME</div><div class="value">{{DP_VOLUME}}</div></div>
-    <div class="data-cell"><div class="icon">🎯</div><div class="key">筹码 CHIPS</div><div class="value">{{DP_CHIPS}}</div></div>
-    <div class="data-cell" style="grid-column: span 2;"><div class="icon">📰</div><div class="key">新闻 NEWS</div><div class="value">{{INTEL_NEWS}}</div></div>
-    <div class="data-cell"><div class="icon">⚠️</div><div class="key">风险 RISKS</div><div class="value">{{INTEL_RISKS}}</div></div>
-    <div class="data-cell"><div class="icon">🚀</div><div class="key">催化 CATALYSTS</div><div class="value">{{INTEL_CATALYSTS}}</div></div>
+    <div class="data-cell" data-page-node-id="aay3T81qO8VKOGN274Uwq7"><div class="icon" data-page-node-id="zZIXDG2Jk4ZRnPvJh7DdhE">📈</div><div class="key" data-page-node-id="Dt3UVrEHnIIgHOPCxKzphg">趋势 TREND</div><div class="value" data-page-node-id="oXzc62DxjojzP92TGx3WDB">{{DP_TREND}}</div></div>
+    <div class="data-cell" data-page-node-id="ZuFnLLR9xLGdytQin1AkxT"><div class="icon" data-page-node-id="vjBdWgvNUntXtps2JtTejB">💰</div><div class="key" data-page-node-id="z0qiz3oawGALt8TC5vk8EN">价位 PRICE</div><div class="value" data-page-node-id="HHJH53a1s3jHi3rHfuialR">{{DP_PRICE}}</div></div>
+    <div class="data-cell" data-page-node-id="7pJAzKGVOSAdChh4KjcODq"><div class="icon" data-page-node-id="c5YBZvreSDad2sNmzSvu6m">📊</div><div class="key" data-page-node-id="kmZMXd0edhQdGEuRvgY9cI">量能 VOLUME</div><div class="value" data-page-node-id="Rr0NEqDsoz0cZLAPjwTpmB">{{DP_VOLUME}}</div></div>
+    <div class="data-cell" data-page-node-id="CObdtpZfCv4v0YEHY1u16Y"><div class="icon" data-page-node-id="zP8g2ZGMLSfkra7axRMiDq">🎯</div><div class="key" data-page-node-id="5ZikE0EQtbUHI1XbHh1Erv">筹码 CHIPS</div><div class="value" data-page-node-id="AAspLC8Rh6LCY9bQhSHgjL">{{DP_CHIPS}}</div></div>
+    <div class="data-cell" style="grid-column: span 2;" data-page-node-id="lhmqg5alaoEDEi4EHf7M5o"><div class="icon" data-page-node-id="83Se0U1voqD7wkP2YpJnv7">📰</div><div class="key" data-page-node-id="NgLPIuppBSWO3axVPFkJWb">新闻 NEWS</div><div class="value" data-page-node-id="PsOQUpCF7Qph5RL1ToVPvs">{{INTEL_NEWS}}</div></div>
+    <div class="data-cell" data-page-node-id="JitCd72AI59I2aFn2XKFs1"><div class="icon" data-page-node-id="Aduyf6G9JhUwx8RDgHfOdW">⚠️</div><div class="key" data-page-node-id="lA7k9ASEK6GF4IatOjyAvJ">风险 RISKS</div><div class="value" data-page-node-id="Oq8nzP6ok8zmDHSzObM49A">{{INTEL_RISKS}}</div></div>
+    <div class="data-cell" data-page-node-id="hZtMLHe7xEKdlaMHYTA0wq"><div class="icon" data-page-node-id="sIKDx4tieNpFqQZvEyztAF">🚀</div><div class="key" data-page-node-id="e8nYQsqqr3QkcbhQoXbkhm">催化 CATALYSTS</div><div class="value" data-page-node-id="L3GFgm9gYryLmXHlvcR9Ox">{{INTEL_CATALYSTS}}</div></div>
 
-    <div class="battle-plan">
-      <div class="plan-label">BATTLE PLAN</div>
-      <div class="plan-field"><span class="k">Entry</span><span class="v">{{BP_ENTRY}}</span></div>
-      <div class="plan-field"><span class="k">Position</span><span class="v">{{BP_POSITION}}</span></div>
-      <div class="plan-field"><span class="k">Stop</span><span class="v">{{BP_STOP}}</span></div>
-      <div class="plan-field"><span class="k">Target</span><span class="v">{{BP_TARGET}}</span></div>
+    <div class="battle-plan" data-page-node-id="vO04k9YpelPouXeiBMqCbx">
+      <div class="plan-label" data-page-node-id="zigEskWda1cJVXofMjZ7Z6">BATTLE PLAN</div>
+      <div class="plan-field" data-page-node-id="pZdFIJ13XfhbyiUtaTA1IX"><span class="k" data-page-node-id="Slh4gQOrmeA1SSBPrqtuKa">Entry</span><span class="v" data-page-node-id="Y3TJ2x9SF59P4i0mbsFwPA">{{BP_ENTRY}}</span></div>
+      <div class="plan-field" data-page-node-id="FIMJZz7sPUOWShwEQT6OYy"><span class="k" data-page-node-id="M3qEHcfZBNhCY01C0IZkjx">Position</span><span class="v" data-page-node-id="5EsANkxrE6kcd11dP8I0sc">{{BP_POSITION}}</span></div>
+      <div class="plan-field" data-page-node-id="XmTJDIZL0PKw1xR31JLaYl"><span class="k" data-page-node-id="6uYXic413EGgwhH6BhmehV">Stop</span><span class="v" data-page-node-id="65lBd7inXAat8GtgR8M2Jv">{{BP_STOP}}</span></div>
+      <div class="plan-field" data-page-node-id="MyEfXFiX5Lqg4Ttsn2CBCO"><span class="k" data-page-node-id="OEkCbtMuTLr0kiIVuzTIQS">Target</span><span class="v" data-page-node-id="UlQVIWDVqDN3GE4oXXpIvf">{{BP_TARGET}}</span></div>
     </div>
   </div>
 
   <!-- ─── THE GREAT DIVIDE ─── -->
-  <div class="section-head" id="section-clash">
-    <div class="section-tag">02 / CLASH</div>
-    <h2 class="section-title">世纪分歧</h2>
-    <div class="section-line"></div>
+  <div class="section-head" id="section-clash" data-page-node-id="E04xWI25AbdKoIqyCg70GI">
+    <div class="section-tag" data-page-node-id="T52g7nAMHyC3WKK1iB5Ru0">02 / CLASH</div>
+    <h2 class="section-title" data-page-node-id="hGQOBDgDgybzkQnxo4FCeX">世纪分歧</h2>
+    <div class="section-line" data-page-node-id="66zAIpS0hcGKhn9GlEWcW7"></div>
   </div>
 
-  <div class="divide-section">
-    <div class="divide-header">
-      <div class="tag">THE GREAT DIVIDE</div>
-      <h2>最看多 VS 最看空</h2>
-      <div class="round-info">⚡ <strong>3 ROUNDS</strong> · 隔空辩论 · 最后由 PUNCHLINE 一锤定音</div>
+  <div class="divide-section" data-page-node-id="zAMQg7GusXMFE8BUCfq1Po">
+    <div class="divide-header" data-page-node-id="9HBILXiTkujKcAsHw2kRnR">
+      <div class="tag" data-page-node-id="BDO5lDLDVTaFGSTkoaMoHv">THE GREAT DIVIDE</div>
+      <h2 data-page-node-id="vnKOIqoEwAVwdx2tWmVQXt">最看多 VS 最看空</h2>
+      <div class="round-info" data-page-node-id="5pQjxsynUYQR3T9hK5EPIW">⚡ <strong data-page-node-id="FezlqMmhUhZfupjxHdgwjZ">3 ROUNDS</strong> · 隔空辩论 · 最后由 PUNCHLINE 一锤定音</div>
     </div>
 
-    <div class="arena">
-      <div class="fighter bull">
-        <div class="corner">▶ BULL</div>
-        <div class="hp-bar"><div class="hp-fill" data-hp="{{BULL_SCORE}}"></div></div>
-        <div class="avatar-box"><img src="avatars/{{BULL_ID}}.svg" alt=""></div>
-        <div class="fighter-name">{{BULL_NAME}}</div>
-        <div class="fighter-tag">{{BULL_TAG}} · {{BULL_SIGNAL_CN}}</div>
-        <div class="confidence">{{BULL_SCORE}}</div>
-        <div class="conf-label">SCORE</div>
+    <div class="arena" data-page-node-id="dPKrTOyBdO76RvPLb2sZnU">
+      <div class="fighter bull" data-page-node-id="5yUtbVjfEQq51l0znM0WmP">
+        <div class="corner" data-page-node-id="hhjVGSxI52bCMIsEyAAWiK">▶ BULL</div>
+        <div class="hp-bar" data-page-node-id="6bNZvTDqc8ALv014RXluJe"><div class="hp-fill" data-hp="{{BULL_SCORE}}" data-page-node-id="qbTUZqM6AbkCesRimqhs2f"></div></div>
+        <div class="avatar-box" data-page-node-id="bRr0Olax0aQh7K3YSHqHap"><img src="avatars/{{BULL_ID}}.svg" alt="" data-page-node-id="28nHPpV6OO7U1SL3BCLbbh"></div>
+        <div class="fighter-name" data-page-node-id="NIBCwvEWi8Jov3W14vrOaw">{{BULL_NAME}}</div>
+        <div class="fighter-tag" data-page-node-id="zOccJpvY4pOuVbieaHidKG">{{BULL_TAG}} · {{BULL_SIGNAL_CN}}</div>
+        <div class="confidence" data-page-node-id="wdHObg23JvgHmhwQtNYE3Q">{{BULL_SCORE}}</div>
+        <div class="conf-label" data-page-node-id="zEqZgCKhyu7NJDkoeFnxtS">SCORE</div>
       </div>
 
-      <div class="vs-bolt">
-        ⚡<div class="sub">VS</div>
+      <div class="vs-bolt" data-page-node-id="1moAlxWjkJ2eJta1w8JITA">
+        ⚡<div class="sub" data-page-node-id="MIpOef1cpEhmWF8kdA0Cu2">VS</div>
       </div>
 
-      <div class="fighter bear">
-        <div class="corner">BEAR ◀</div>
-        <div class="hp-bar"><div class="hp-fill" data-hp="{{BEAR_SCORE}}"></div></div>
-        <div class="avatar-box"><img src="avatars/{{BEAR_ID}}.svg" alt=""></div>
-        <div class="fighter-name">{{BEAR_NAME}}</div>
-        <div class="fighter-tag">{{BEAR_TAG}} · {{BEAR_SIGNAL_CN}}</div>
-        <div class="confidence">{{BEAR_SCORE}}</div>
-        <div class="conf-label">SCORE</div>
+      <div class="fighter bear" data-page-node-id="x1BFES8zNfRnVPN6fbldQb">
+        <div class="corner" data-page-node-id="PyMWKZfo5jfmzIimPlOwuM">BEAR ◀</div>
+        <div class="hp-bar" data-page-node-id="LncKDoODH68fpDHYXcIYih"><div class="hp-fill" data-hp="{{BEAR_SCORE}}" data-page-node-id="tzqXxeldnyHpswk84cUgqs"></div></div>
+        <div class="avatar-box" data-page-node-id="szcOaoTYImnVn9vpDPf8nR"><img src="avatars/{{BEAR_ID}}.svg" alt="" data-page-node-id="SJs1MVvKiXTCbSI1CdOQ5g"></div>
+        <div class="fighter-name" data-page-node-id="2Tl9xneJsFJU8EPOijitzZ">{{BEAR_NAME}}</div>
+        <div class="fighter-tag" data-page-node-id="Nbpk39ADk3sp0RKfblo0OS">{{BEAR_TAG}} · {{BEAR_SIGNAL_CN}}</div>
+        <div class="confidence" data-page-node-id="JR2sH3wsNaeBypqnEmWz5G">{{BEAR_SCORE}}</div>
+        <div class="conf-label" data-page-node-id="STTznY3QgkO1Imvgvmvavx">SCORE</div>
       </div>
     </div>
 
     <!-- 3 ROUNDS DEBATE TRANSCRIPT -->
-    <div class="debate-rounds">
+    <div class="debate-rounds" data-page-node-id="Jwnz1lgkSIdCTUV1BvUlYQ">
       <!-- INJECT_DEBATE_ROUNDS -->
     </div>
 
-    <div class="punchline">{{PUNCHLINE}}</div>
+    <div class="punchline" data-page-node-id="3SPSqDOtpmCU0tkLtSqCqh">{{PUNCHLINE}}</div>
 
     <!-- v2.9.1 · 评委汇总观点（agent 写的面板级分析，原先被静默丢弃） -->
     <!-- INJECT_PANEL_INSIGHTS -->
@@ -2880,136 +2905,136 @@ section[id], div[id^="dim-"], .dim-card[id] { scroll-margin-top: 20px; }
   </div>
 
   <!-- ─── 50 INVESTORS · JUDGE PANEL ─── -->
-  <div class="section-head" id="section-jury">
-    <div class="section-tag">03 / JURY</div>
-    <h2 class="section-title">评委打分板</h2>
-    <div class="section-line"></div>
+  <div class="section-head" id="section-jury" data-page-node-id="FO3bP6yE0odcZpTkXr0Ww0">
+    <div class="section-tag" data-page-node-id="3aYHnQ8mUIW3uF64F0ulqG">03 / JURY</div>
+    <h2 class="section-title" data-page-node-id="Z0ZmzkJeAMef08LtvEe9CD">评委打分板</h2>
+    <div class="section-line" data-page-node-id="6oWeDR9MeSBdaSZimBA6WG"></div>
   </div>
 
-  <div class="panel-section">
-    <div class="panel-stats">
-      <div class="stat-tile bull"><div class="num">{{BULL_COUNT}}</div><div class="label">Bullish · 看多</div></div>
-      <div class="stat-tile neut"><div class="num">{{NEUT_COUNT}}</div><div class="label">Neutral · 观望</div></div>
-      <div class="stat-tile bear"><div class="num">{{BEAR_COUNT}}</div><div class="label">Bearish · 看空</div></div>
-      <div class="stat-tile total"><div class="num">{{CONSENSUS_PCT}}%</div><div class="label">Consensus · 共识</div></div>
+  <div class="panel-section" data-page-node-id="3nHBESEdzcz1GE7kNGijfH">
+    <div class="panel-stats" data-page-node-id="PL7Cnfes9mj3rOtrYxuoRR">
+      <div class="stat-tile bull" data-page-node-id="RqX10QFAQE55xmxyEjA1J2"><div class="num" data-page-node-id="1dLkvXn9gyv646Ut1vIBf5">{{BULL_COUNT}}</div><div class="label" data-page-node-id="EV0hhO5stuFOPtU3Rykzun">Bullish · 看多</div></div>
+      <div class="stat-tile neut" data-page-node-id="O2dnc63hrcAupfAon6ErQi"><div class="num" data-page-node-id="gFtgGNNc8d0z5Kl4GBH7dY">{{NEUT_COUNT}}</div><div class="label" data-page-node-id="TcGhusxChwG9QaPEPTK79f">Neutral · 观望</div></div>
+      <div class="stat-tile bear" data-page-node-id="WFTj66zEEzAObRrjfEE64E"><div class="num" data-page-node-id="JYHHCLiFkyYSINIGjBHr1p">{{BEAR_COUNT}}</div><div class="label" data-page-node-id="rKu1DnLXT9Mi29Eg9nOTj2">Bearish · 看空</div></div>
+      <div class="stat-tile total" data-page-node-id="HTmEI855kCc2l1gh5ZsAZR"><div class="num" data-page-node-id="UsMAGiwMERq8bzMA4tXAzX">{{CONSENSUS_PCT}}%</div><div class="label" data-page-node-id="4xF5cEEa52F96Ba2JEthMM">Consensus · 共识</div></div>
     </div>
 
     <!-- JUDGING SEATS · 50 灯 -->
-    <div class="jury-board">
-      <div class="jury-row-label">JUDGE SEATS · {{TOTAL_COUNT}} 位评委实时投票 (亮绿 = 看多, 亮红 = 看空, 灰 = 中性)</div>
-      <div class="jury-seats" id="jury-seats">
+    <div class="jury-board" data-page-node-id="blDg6RB7eqiVc8CEAi5UN1">
+      <div class="jury-row-label" data-page-node-id="We2nvqGdVrs0sNXSxFpPkr">JUDGE SEATS · {{TOTAL_COUNT}} 位评委实时投票 (亮绿 = 看多, 亮红 = 看空, 灰 = 中性)</div>
+      <div class="jury-seats" id="jury-seats" data-page-node-id="S2YNNKdzDreXzVOYut3ci2">
         <!-- INJECT_JURY_SEATS -->
       </div>
     </div>
   </div>
 
   <!-- ─── CHAT ROOM MODE ─── -->
-  <div class="section-head" id="section-chat">
-    <div class="section-tag">04 / CHAT</div>
-    <h2 class="section-title">大佬群聊现场</h2>
-    <div class="section-line"></div>
+  <div class="section-head" id="section-chat" data-page-node-id="S9qL4AZ0dcCwjfiDJudKJT">
+    <div class="section-tag" data-page-node-id="2nUneMoHV7AEry2lDn829P">04 / CHAT</div>
+    <h2 class="section-title" data-page-node-id="tufe9WYaZuxEvmrWVOu5lO">大佬群聊现场</h2>
+    <div class="section-line" data-page-node-id="4Ru2KLZbFNExYsDoXfYitD"></div>
   </div>
 
-  <div class="chat-container">
-    <div class="chat-header">
-      <div class="chat-title">
-        <div class="chat-room-icon">💬</div>
-        <div>
-          <div class="chat-room-name">Alpha Terminal · 群贤议事厅</div>
-          <div class="chat-room-meta">{{TOTAL_COUNT}} 位成员 · {{BULL_COUNT}} 看多 · {{BEAR_COUNT}} 看空 · 正在讨论 <strong>{{NAME}}</strong></div>
+  <div class="chat-container" data-page-node-id="gcB4AZfJh9derC0s95mPvg">
+    <div class="chat-header" data-page-node-id="3FZRdMG0pi0bZSblW33uf4">
+      <div class="chat-title" data-page-node-id="ooIUoZw9qD8GLqYE6fCm7Q">
+        <div class="chat-room-icon" data-page-node-id="hfmUSTosmfZC2Zb0dWAEbq">💬</div>
+        <div data-page-node-id="nn2eXMjDExgb8TN2o0FWkF">
+          <div class="chat-room-name" data-page-node-id="XahJNYOx5aSaFsqe8oOEjm">Alpha Terminal · 群贤议事厅</div>
+          <div class="chat-room-meta" data-page-node-id="IqhiI08OVo4KSLexEjqgjc">{{TOTAL_COUNT}} 位成员 · {{BULL_COUNT}} 看多 · {{BEAR_COUNT}} 看空 · 正在讨论 <strong data-page-node-id="jouCJCU8oDLRDKf7IXz0e1">{{NAME}}</strong></div>
         </div>
       </div>
-      <div class="chat-filter-tabs">
-        <span class="chat-tab active" data-group="all">全部</span>
-        <span class="chat-tab" data-group="A">价值</span>
-        <span class="chat-tab" data-group="B">成长</span>
-        <span class="chat-tab" data-group="C">宏观</span>
-        <span class="chat-tab" data-group="D">技术</span>
-        <span class="chat-tab" data-group="E">中国</span>
-        <span class="chat-tab" data-group="F">游资</span>
-        <span class="chat-tab" data-group="G">量化</span>
+      <div class="chat-filter-tabs" data-page-node-id="xTZMF0KPfTzAkBxatproIP">
+        <span class="chat-tab active" data-group="all" data-page-node-id="p5bPcZUSehPRzip94OkplR">全部</span>
+        <span class="chat-tab" data-group="A" data-page-node-id="3VC90fabcmv4C2qqD8w10G">价值</span>
+        <span class="chat-tab" data-group="B" data-page-node-id="o5BuRHlDWxn2hzrH8woEPy">成长</span>
+        <span class="chat-tab" data-group="C" data-page-node-id="CJIAAiqyoTEY9hKZWcfmJG">宏观</span>
+        <span class="chat-tab" data-group="D" data-page-node-id="q2GlYAZG6OLj5yHHHdtzcW">技术</span>
+        <span class="chat-tab" data-group="E" data-page-node-id="b688XHQT0qrqGHxIOfKt0e">中国</span>
+        <span class="chat-tab" data-group="F" data-page-node-id="EDQn6uyB7cdta2PxBYdHyf">游资</span>
+        <span class="chat-tab" data-group="G" data-page-node-id="8dwxBQOLZr4pqmrqHsledZ">量化</span>
       </div>
     </div>
 
-    <div class="chat-actions" style="padding: 12px 24px 0;">
-      <button class="chat-action-btn" id="expand-all">▼ 展开全部结论</button>
-      <button class="chat-action-btn" id="collapse-all">▲ 收起全部</button>
-      <button class="chat-action-btn" id="scroll-bull">⬇ 跳到看多最强</button>
-      <button class="chat-action-btn" id="scroll-bear">⬇ 跳到看空最强</button>
+    <div class="chat-actions" style="padding: 12px 24px 0;" data-page-node-id="2z5z1azvn1aA1pOddg1Zy8">
+      <button class="chat-action-btn" id="expand-all" data-page-node-id="ihvZZkt5k03xzd0EaNDFuV">▼ 展开全部结论</button>
+      <button class="chat-action-btn" id="collapse-all" data-page-node-id="ghd2PZF3e28ZeUhMKUERGT">▲ 收起全部</button>
+      <button class="chat-action-btn" id="scroll-bull" data-page-node-id="FEJJHC1GIRJNAEFLUYSuYX">⬇ 跳到看多最强</button>
+      <button class="chat-action-btn" id="scroll-bear" data-page-node-id="E3igSCAa3MzdGjiAPMffFw">⬇ 跳到看空最强</button>
     </div>
-    <div class="chat-messages" id="chat-messages">
-      <div class="chat-system">— 系统通知 · {{GENERATED_AT}} · {{TOTAL_COUNT}} 位大佬已进入群聊 ·  Tab 切换流派 / 点评委席跳转个人结论 —</div>
+    <div class="chat-messages" id="chat-messages" data-page-node-id="pU5eXGDCJZqfPbdj6HDSJo">
+      <div class="chat-system" data-page-node-id="MASsJOlkhyULOPFnt0yKV0">— 系统通知 · {{GENERATED_AT}} · {{TOTAL_COUNT}} 位大佬已进入群聊 ·  Tab 切换流派 / 点评委席跳转个人结论 —</div>
       <!-- INJECT_CHAT_MESSAGES -->
     </div>
 
-    <div class="chat-footer">
-      <div class="chat-footer-avatar oo-eye">O.o</div>
-      <div class="chat-footer-text">Alpha Terminal 正在监听... 讨论基于 {{GENERATED_AT}} 数据</div>
+    <div class="chat-footer" data-page-node-id="1GBDEc1FGUeyZ2vymiairT">
+      <div class="chat-footer-avatar oo-eye" data-page-node-id="xfojCRbfCzH5LjQuHlI3Ld">O.o</div>
+      <div class="chat-footer-text" data-page-node-id="1SlR50LRGHXBeKHlwgXTK0">Alpha Terminal 正在监听... 讨论基于 {{GENERATED_AT}} 数据</div>
     </div>
   </div>
 
   <!-- ─── FRIENDLY LAYER · 一万块场景 ─── -->
-  <div class="friendly-trio">
+  <div class="friendly-trio" data-page-node-id="gcVJaKCWF8PBvnIoTufjFz">
     <!-- INJECT_FRIENDLY_LAYER -->
   </div>
 
   <!-- ─── FUND MANAGERS · 抄作业面板 ─── -->
-  <div class="section-head">
-    <div class="section-tag">04 / LEGENDS</div>
-    <h2 class="section-title">大佬抄作业</h2>
-    <div class="section-line"></div>
+  <div class="section-head" data-page-node-id="1kPk41RBL2AAneYX9byRyS">
+    <div class="section-tag" data-page-node-id="JqWQkAZmHDp3dDAfedK80J">04 / LEGENDS</div>
+    <h2 class="section-title" data-page-node-id="gmriU3pPeCX6hmcFIPyK6L">大佬抄作业</h2>
+    <div class="section-line" data-page-node-id="iL5G5TSMelFTQeEf0EgJ3k"></div>
   </div>
 
-  <div class="fund-mgr-section">
+  <div class="fund-mgr-section" data-page-node-id="J9isjF6wst6x0VHGlE5LjU">
     <!-- INJECT_FUND_MANAGERS -->
   </div>
 
   <!-- ─── 19 维 DEEP SCAN ─── -->
-  <div class="section-head" id="section-scan">
-    <div class="section-tag">05 / DEEP SCAN</div>
-    <h2 class="section-title">全维深度透视</h2>
-    <div class="section-line"></div>
+  <div class="section-head" id="section-scan" data-page-node-id="r5dQdHOlOlq4rUYF6JPcZW">
+    <div class="section-tag" data-page-node-id="8EJCcdkNMjKKRN44ulsrcS">05 / DEEP SCAN</div>
+    <h2 class="section-title" data-page-node-id="Khzx3SjVuqpzxLWVh3D3L6">全维深度透视</h2>
+    <div class="section-line" data-page-node-id="jBBXXJQSl45g1urF9Kh2mF"></div>
   </div>
 
-  <div class="deep-scan">
-    <div class="cat-label">💰 财务面 · FUNDAMENTALS</div>
-    <div class="dim-row">
+  <div class="deep-scan" data-page-node-id="KYHemfpStQl9prP1q1ii2B">
+    <div class="cat-label" data-page-node-id="W5ermU7AJJI15M8Ulf7aVo">💰 财务面 · FUNDAMENTALS</div>
+    <div class="dim-row" data-page-node-id="KQ6wvCn8g1Rc99fi1httQy">
       <!-- INJECT_DIM_FINANCIAL -->
     </div>
 
-    <div class="cat-label">📈 行情面 · MARKET ACTION</div>
-    <div class="dim-row">
+    <div class="cat-label" data-page-node-id="pFDHKgHn0GxpBEcqXjXEd3">📈 行情面 · MARKET ACTION</div>
+    <div class="dim-row" data-page-node-id="5nPaX9LZ6PWGVV1R2CaJFq">
       <!-- INJECT_DIM_MARKET -->
     </div>
 
-    <div class="cat-label">🏭 行业面 · INDUSTRY CHAIN</div>
-    <div class="dim-row">
+    <div class="cat-label" data-page-node-id="WzCj7uVs4lZxjDzGKHbxdc">🏭 行业面 · INDUSTRY CHAIN</div>
+    <div class="dim-row" data-page-node-id="9Hv8Fnyxn2bAECGjzWELuw">
       <!-- INJECT_DIM_INDUSTRY -->
     </div>
 
-    <div class="cat-label">🏢 公司面 · COMPANY</div>
-    <div class="dim-row">
+    <div class="cat-label" data-page-node-id="p6hTtSeNpmb9Omxj81mTVO">🏢 公司面 · COMPANY</div>
+    <div class="dim-row" data-page-node-id="B5Qn2iJpZMqts0JPWCeEjR">
       <!-- INJECT_DIM_COMPANY -->
     </div>
 
-    <div class="cat-label">🌍 环境面 · ENVIRONMENT</div>
-    <div class="dim-row">
+    <div class="cat-label" data-page-node-id="er9fv1UL20j5eSi63qb1nS">🌍 环境面 · ENVIRONMENT</div>
+    <div class="dim-row" data-page-node-id="wazP1cuoKtymY1n6ApAvfo">
       <!-- INJECT_DIM_ENV -->
     </div>
 
-    <div class="cat-label">🛡️ 安全面 · SAFETY & SENTIMENT</div>
-    <div class="dim-row">
+    <div class="cat-label" data-page-node-id="XYf1q2hRGnceFLNnzSZEBn">🛡️ 安全面 · SAFETY & SENTIMENT</div>
+    <div class="dim-row" data-page-node-id="casnUob0DV7lgDWUo9Vqp2">
       <!-- INJECT_DIM_SAFETY -->
     </div>
   </div>
 
   <!-- ─── INSTITUTIONAL MODELING · v2.0 ─── -->
-  <div class="section-head" id="section-modeling">
-    <div class="section-tag">06 / INSTITUTIONAL MODELING</div>
-    <h2 class="section-title">机构级估值建模</h2>
-    <div class="section-line"></div>
+  <div class="section-head" id="section-modeling" data-page-node-id="k4dmL6d8ZDDN6uAm0bF1nh">
+    <div class="section-tag" data-page-node-id="VH042fBMfCtlTIXzAppMAH">06 / INSTITUTIONAL MODELING</div>
+    <h2 class="section-title" data-page-node-id="iW11DPEu0TEOHrUq1IgN1u">机构级估值建模</h2>
+    <div class="section-line" data-page-node-id="RPqbcOABEIkL92JH0PCqV7"></div>
   </div>
-  <div class="inst-modeling-wrap" style="padding:0 4px">
+  <div class="inst-modeling-wrap" style="padding:0 4px" data-page-node-id="3v6rJFKuVH6L6jDFVuK3gD">
     <!-- INJECT_INSTITUTIONAL_MODELING -->
   </div>
 
@@ -3017,227 +3042,498 @@ section[id], div[id^="dim-"], .dim-card[id] { scroll-margin-top: 20px; }
   <!-- INJECT_SEGMENTAL -->
 
   <!-- ─── RISKS ─── -->
-  <div class="section-head" id="section-risks">
-    <div class="section-tag">07 / RISKS</div>
-    <h2 class="section-title">核心风险清单</h2>
-    <div class="section-line"></div>
+  <div class="section-head" id="section-risks" data-page-node-id="ZAh4MC00BNMLH4xnKMogdO">
+    <div class="section-tag" data-page-node-id="7VyzGSGqFYIopYcxMc4dvE">07 / RISKS</div>
+    <h2 class="section-title" data-page-node-id="CBn0syQCE2QoCaGbrO7ybt">核心风险清单</h2>
+    <div class="section-line" data-page-node-id="jWAJRXo1xhENtuDuJyN0rZ"></div>
   </div>
-  <div class="risk-box">
-    <ul>
+  <div class="risk-box" data-page-node-id="6nph00YyqCkUKuPKLB5i3q">
+    <ul data-page-node-id="dX9IVNdFxuMhOAGSkqx7Mm">
       <!-- INJECT_RISKS -->
     </ul>
   </div>
 
   <!-- ─── BUY ZONES ─── -->
-  <div class="section-head" id="section-zones">
-    <div class="section-tag">08 / ZONES</div>
-    <h2 class="section-title">四派系买入区间</h2>
-    <div class="section-line"></div>
+  <div class="section-head" id="section-zones" data-page-node-id="c5JxCpyPQlIDPx6ky6GIJe">
+    <div class="section-tag" data-page-node-id="p1ggE7ACXOTqBFBujVwMnI">08 / ZONES</div>
+    <h2 class="section-title" data-page-node-id="xAdBRp0CzBw5IbjN4KboSb">四派系买入区间</h2>
+    <div class="section-line" data-page-node-id="i9tGsjRrZQ6eZFhQMEPn4b"></div>
   </div>
-  <div class="zones-grid">
-    <div class="zone"><div class="zone-label">VALUE 价值派</div><div class="zone-price">{{CURRENCY}}{{ZONE_VALUE_PRICE}}</div><div class="zone-rationale">{{ZONE_VALUE_RATIONALE}}</div></div>
-    <div class="zone"><div class="zone-label">GROWTH 成长派</div><div class="zone-price">{{CURRENCY}}{{ZONE_GROWTH_PRICE}}</div><div class="zone-rationale">{{ZONE_GROWTH_RATIONALE}}</div></div>
-    <div class="zone"><div class="zone-label">TECH 技术派</div><div class="zone-price">{{CURRENCY}}{{ZONE_TECH_PRICE}}</div><div class="zone-rationale">{{ZONE_TECH_RATIONALE}}</div></div>
-    <div class="zone"><div class="zone-label">YOUZI 游资派</div><div class="zone-price">{{CURRENCY}}{{ZONE_YOUZI_PRICE}}</div><div class="zone-rationale">{{ZONE_YOUZI_RATIONALE}}</div></div>
+  <div class="zones-grid" data-page-node-id="9E9ZdjD1x2f4r1W6ab0yig">
+    <div class="zone" data-page-node-id="mn3V6fH0znRZkrGTPaHMZy"><div class="zone-label" data-page-node-id="HafwhSddERufPXggKRh4kB">VALUE 价值派</div><div class="zone-price" data-page-node-id="gYHfw8NzmjzR9ZTAlBUHlw">{{CURRENCY}}{{ZONE_VALUE_PRICE}}</div><div class="zone-rationale" data-page-node-id="9kY2T1nH4J97k7oggaUHSa">{{ZONE_VALUE_RATIONALE}}</div></div>
+    <div class="zone" data-page-node-id="hTlXIy2EtqenReZ3jtN2sz"><div class="zone-label" data-page-node-id="vzO6UV7EZlekUfzPT9lRGZ">GROWTH 成长派</div><div class="zone-price" data-page-node-id="05Du8kWrW54UOq4HH2zJVm">{{CURRENCY}}{{ZONE_GROWTH_PRICE}}</div><div class="zone-rationale" data-page-node-id="RIjK8JoTKb2AtLXGwzZx7B">{{ZONE_GROWTH_RATIONALE}}</div></div>
+    <div class="zone" data-page-node-id="o8JNsC8sL1Ig1sjTpTmMaj"><div class="zone-label" data-page-node-id="cG8hLB9S1IfcSs8yVmwAWE">TECH 技术派</div><div class="zone-price" data-page-node-id="D38JWho0w4z6ffGr7LHc9q">{{CURRENCY}}{{ZONE_TECH_PRICE}}</div><div class="zone-rationale" data-page-node-id="MKDzZBReUMMNHFwuflM1Ol">{{ZONE_TECH_RATIONALE}}</div></div>
+    <div class="zone" data-page-node-id="vt7JS440N1LhYVvdsJC0w1"><div class="zone-label" data-page-node-id="03hJfFSZNXePszww8S1Gkq">YOUZI 游资派</div><div class="zone-price" data-page-node-id="TUiol0UfERGrDOO0wBTXA3">{{CURRENCY}}{{ZONE_YOUZI_PRICE}}</div><div class="zone-rationale" data-page-node-id="ZvLlLor1fURws7FGSgGeCT">{{ZONE_YOUZI_RATIONALE}}</div></div>
   </div>
 
   <!-- v3.6.0 · 分享卡 + QR · 报告链接二维码 + 一句话总结 -->
-  <div class="share-qr-card">
-    <canvas class="qr-canvas" id="report-qr-canvas" width="200" height="200" aria-label="报告链接二维码"></canvas>
-    <div class="qr-text">
-      <div class="qr-title">📱 SHARE · 扫码看完整报告</div>
-      <div class="qr-desc"><strong>{{NAME}}</strong> · {{TICKER}} · 总评 <strong>{{OVERALL_SCORE_INT}}/100</strong> · {{VERDICT_LABEL}}</div>
-      <div class="qr-url" id="report-qr-url">本地路径 · 用 <code>--remote</code> 生成可扫公网链接</div>
+  <div class="share-qr-card" data-page-node-id="cW1O1u6OvQZYV2q3Ov3X53">
+    <canvas class="qr-canvas" id="report-qr-canvas" width="200" height="200" aria-label="报告链接二维码" data-page-node-id="AYH4xqOGbgCEr0OueNVTFX"></canvas>
+    <div class="qr-text" data-page-node-id="FsVitpIKfy6EiEaCiMOv25">
+      <div class="qr-title" data-page-node-id="P0V4oYPBDRGjvTd6UykdOn">📱 SHARE · 扫码看完整报告</div>
+      <div class="qr-desc" data-page-node-id="dEQLiU6Uh5rmIA0jhFxYJC"><strong data-page-node-id="fnrJdeeyhe65GnzjZjE484">{{NAME}}</strong> · {{TICKER}} · 总评 <strong data-page-node-id="IKcy1OtIspfOgZuArc4kye">{{OVERALL_SCORE_INT}}/100</strong> · {{VERDICT_LABEL}}</div>
+      <div class="qr-url" id="report-qr-url" data-page-node-id="btfpKDce9u6AghrtjQeT8A">本地路径 · 用 <code data-page-node-id="py9BdJ77WHPBeFjOngDQ8x">--remote</code> 生成可扫公网链接</div>
     </div>
   </div>
 
   <!-- ─── 一键分享 + QR Code ─── -->
-  <div style="text-align:center;padding:30px 0 20px;border-top:1px solid var(--border);margin-top:30px">
-    <button onclick="document.getElementById('share-overlay').style.display='flex'" style="background:var(--neon-cyan);color:#fff;border:none;padding:14px 36px;border-radius:var(--radius);font-size:16px;font-weight:700;cursor:pointer;box-shadow:var(--shadow-md);letter-spacing:1px;transition:transform .15s">
+  <div style="text-align:center;padding:30px 0 20px;border-top:1px solid var(--border);margin-top:30px" data-page-node-id="UB0HutHb0rnFZOKypoH4wD">
+    <button onclick="document.getElementById('share-overlay').style.display='flex'" style="background:var(--neon-cyan);color:#fff;border:none;padding:14px 36px;border-radius:var(--radius);font-size:16px;font-weight:700;cursor:pointer;box-shadow:var(--shadow-md);letter-spacing:1px;transition:transform .15s" data-page-node-id="jWcOcjQGONV8YbXHkr4biI">
       📤 一键分享报告
     </button>
-    <div style="margin-top:12px;font-size:12px;color:var(--text-ghost)">截图分享到朋友圈 / 微信群 / 社区</div>
+    <div style="margin-top:12px;font-size:12px;color:var(--text-ghost)" data-page-node-id="z3lLyBwS33fvWlIPH4sFyM">截图分享到朋友圈 / 微信群 / 社区</div>
   </div>
 
   <!-- Share overlay modal — 包含完整分析摘要 -->
-  <div id="share-overlay" onclick="if(event.target===this)this.style.display='none'" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:9999;justify-content:center;align-items:center;backdrop-filter:blur(4px)">
-    <div style="background:var(--bg-card);border-radius:16px;padding:28px 24px;max-width:380px;text-align:center;box-shadow:var(--shadow-lg);max-height:90vh;overflow-y:auto">
+  <div id="share-overlay" onclick="if(event.target===this)this.style.display='none'" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:9999;justify-content:center;align-items:center;backdrop-filter:blur(4px)" data-page-node-id="N849zPx29Z0u91vJRSDxuk">
+    <div style="background:var(--bg-card);border-radius:16px;padding:28px 24px;max-width:380px;text-align:center;box-shadow:var(--shadow-lg);max-height:90vh;overflow-y:auto" data-page-node-id="5DwN036UFXZ5yFrZuz3aZf">
       <!-- 标题 -->
-      <div style="font-size:22px;font-weight:900;color:var(--text-bright)">{{NAME}}</div>
-      <div style="font-size:14px;color:var(--text-dim);margin:4px 0 12px">{{TICKER}} · {{CURRENCY}}{{PRICE}}</div>
+      <div style="font-size:22px;font-weight:900;color:var(--text-bright)" data-page-node-id="XrdfiZr5LUI7vtAD4vfrHf">{{NAME}}</div>
+      <div style="font-size:14px;color:var(--text-dim);margin:4px 0 12px" data-page-node-id="A2VNYLKOlGNL8gAsfpjppv">{{TICKER}} · {{CURRENCY}}{{PRICE}}</div>
 
       <!-- 评分 -->
-      <div style="background:var(--gold-tint);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:16px">
-        <div style="font-size:48px;font-weight:900;color:var(--neon-gold)">{{OVERALL_SCORE_INT}}<span style="font-size:20px;color:#92400e">/100</span></div>
-        <div style="font-size:16px;font-weight:700;color:#92400e">{{VERDICT_LABEL}}</div>
+      <div style="background:var(--gold-tint);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:16px" data-page-node-id="VEDaobEpwCsR0zExO1Zhxd">
+        <div style="font-size:48px;font-weight:900;color:var(--neon-gold)" data-page-node-id="DngUAIyyRIbxAkL8mutMND">{{OVERALL_SCORE_INT}}<span style="font-size:20px;color:#92400e" data-page-node-id="ZwJAdkGLX1bGLCBAyWfU9S">/100</span></div>
+        <div style="font-size:16px;font-weight:700;color:#92400e" data-page-node-id="2JZRQyX9yBYe8e2WdslJCN">{{VERDICT_LABEL}}</div>
       </div>
 
       <!-- 投票分布 -->
-      <div style="text-align:left;margin-bottom:14px;padding:12px;background:var(--bg-tinted);border-radius:10px">
-        <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px;letter-spacing:1px">51 位大佬投票</div>
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
-          <span style="font-size:11px;color:var(--text-dim);width:40px">看多</span>
-          <div style="flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden">
-            <div style="height:100%;background:var(--bull-green);width:calc({{BULL_COUNT}} / {{TOTAL_COUNT}} * 100%)"></div>
+      <div style="text-align:left;margin-bottom:14px;padding:12px;background:var(--bg-tinted);border-radius:10px" data-page-node-id="K00eQ2KuqZEAqz6PrR110b">
+        <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px;letter-spacing:1px" data-page-node-id="mXyAu3GhiGg4J4VIYjUsva">51 位大佬投票</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px" data-page-node-id="pSWXszWyGKdPdG3MlMIbi8">
+          <span style="font-size:11px;color:var(--text-dim);width:40px" data-page-node-id="BL3Vtr9Bf42FYizfQDHcI2">看多</span>
+          <div style="flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden" data-page-node-id="Of6EzTkaViDB6G8i1LGzeY">
+            <div style="height:100%;background:var(--bull-green);width:calc({{BULL_COUNT}} / {{TOTAL_COUNT}} * 100%)" data-page-node-id="S0llPKEXxTlu8vABdLQGDq"></div>
           </div>
-          <span style="font-size:12px;font-weight:700;color:var(--bull-green);width:30px">{{BULL_COUNT}}</span>
+          <span style="font-size:12px;font-weight:700;color:var(--bull-green);width:30px" data-page-node-id="PCxLfYorhu0vTMKdCEs0Ip">{{BULL_COUNT}}</span>
         </div>
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
-          <span style="font-size:11px;color:var(--text-dim);width:40px">中性</span>
-          <div style="flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden">
-            <div style="height:100%;background:var(--text-ghost);width:calc({{NEUT_COUNT}} / {{TOTAL_COUNT}} * 100%)"></div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px" data-page-node-id="dx1B5wqJArwjRNKzDHow7O">
+          <span style="font-size:11px;color:var(--text-dim);width:40px" data-page-node-id="iHtVNUZ7hm3af9A0tRF5FA">中性</span>
+          <div style="flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden" data-page-node-id="zHE2yFDlVsJMjT6C4dS9aM">
+            <div style="height:100%;background:var(--text-ghost);width:calc({{NEUT_COUNT}} / {{TOTAL_COUNT}} * 100%)" data-page-node-id="7frtmFK3Hkr8VTbChL3Wo9"></div>
           </div>
-          <span style="font-size:12px;font-weight:700;color:var(--text-dim);width:30px">{{NEUT_COUNT}}</span>
+          <span style="font-size:12px;font-weight:700;color:var(--text-dim);width:30px" data-page-node-id="3l92rsPBqsZscPsMzjVuig">{{NEUT_COUNT}}</span>
         </div>
-        <div style="display:flex;align-items:center;gap:8px">
-          <span style="font-size:11px;color:var(--text-dim);width:40px">看空</span>
-          <div style="flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden">
-            <div style="height:100%;background:var(--bear-red);width:calc({{BEAR_COUNT}} / {{TOTAL_COUNT}} * 100%)"></div>
+        <div style="display:flex;align-items:center;gap:8px" data-page-node-id="oVfMbApvzNcwbY4uGyXkJR">
+          <span style="font-size:11px;color:var(--text-dim);width:40px" data-page-node-id="6Napjj9YCvaHT3LZEWJTCF">看空</span>
+          <div style="flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden" data-page-node-id="4jzemAZ944jwYfmWmmNOoQ">
+            <div style="height:100%;background:var(--bear-red);width:calc({{BEAR_COUNT}} / {{TOTAL_COUNT}} * 100%)" data-page-node-id="aQyuOhpkVUZOjYDJNWehHd"></div>
           </div>
-          <span style="font-size:12px;font-weight:700;color:var(--bear-red);width:30px">{{BEAR_COUNT}}</span>
+          <span style="font-size:12px;font-weight:700;color:var(--bear-red);width:30px" data-page-node-id="bLmqOTK9POx7uDdo93QBnp">{{BEAR_COUNT}}</span>
         </div>
       </div>
 
       <!-- Punchline -->
-      <div style="padding:10px;background:var(--bear-tint);border-left:3px solid var(--neon-gold);text-align:left;margin-bottom:14px;border-radius:0 8px 8px 0">
-        <div style="font-size:12px;font-weight:700;color:#92400e">💬 {{PUNCHLINE}}</div>
+      <div style="padding:10px;background:var(--bear-tint);border-left:3px solid var(--neon-gold);text-align:left;margin-bottom:14px;border-radius:0 8px 8px 0" data-page-node-id="FRNWOOPEluFuVqK7lCOMY3">
+        <div style="font-size:12px;font-weight:700;color:#92400e" data-page-node-id="qwpnZ3VMHG4FMXguWHs0sl">💬 {{PUNCHLINE}}</div>
       </div>
 
       <!-- 杀猪盘 -->
-      <div style="margin-bottom:14px;font-size:12px">
-        <span style="color:{{TRAP_COLOR}}">{{TRAP_EMOJI}} 杀猪盘检测：{{TRAP_LEVEL}}</span>
+      <div style="margin-bottom:14px;font-size:12px" data-page-node-id="a055kLfQwpmYzSikeoFfv5">
+        <span style="color:{{TRAP_COLOR}}" data-page-node-id="QAc2TkceVGe3f5QOiqh6fR">{{TRAP_EMOJI}} 杀猪盘检测：{{TRAP_LEVEL}}</span>
       </div>
 
       <!-- QR -->
-      <div style="margin-bottom:12px">
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://github.com/heheshang/uzi-skill&color=06b6d4" alt="QR" style="width:80px;height:80px;border-radius:6px" />
-        <div style="font-size:10px;color:var(--text-ghost);margin-top:4px">扫码获取分析工具</div>
+      <div style="margin-bottom:12px" data-page-node-id="eShBKLLrTrYxpABCoeQZSg">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://github.com/heheshang/uzi-skill&color=06b6d4" alt="QR" style="width:80px;height:80px;border-radius:6px" data-page-node-id="2JVFObZ8OVNXOZTmcDfSUF" />
+        <div style="font-size:10px;color:var(--text-ghost);margin-top:4px" data-page-node-id="xvZPwcZNKockZBHNOjd1lI">扫码获取分析工具</div>
       </div>
 
-      <a href="https://github.com/heheshang/uzi-skill" target="_blank" style="font-size:12px;color:var(--neon-cyan);text-decoration:none;font-weight:600">github.com/heheshang/uzi-skill</a>
-      <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border)">
-        <div style="font-size:9px;color:var(--border-hot);letter-spacing:2px">POWERED BY FloatFu-true · 不构成投资建议</div>
+      <a href="https://github.com/heheshang/uzi-skill" target="_blank" style="font-size:12px;color:var(--neon-cyan);text-decoration:none;font-weight:600" data-page-node-id="4MiwGIxL0dtKwtjQdAFzL9">github.com/heheshang/uzi-skill</a>
+      <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border)" data-page-node-id="3UoF2AuZw0lLxF7ynz1eaF">
+        <div style="font-size:9px;color:var(--border-hot);letter-spacing:2px" data-page-node-id="vRW7eqKCtt5BGRDm5KNG1B">POWERED BY FloatFu-true · 不构成投资建议</div>
       </div>
-      <button onclick="this.parentElement.parentElement.style.display='none'" style="margin-top:10px;background:var(--bg-tinted);border:none;padding:8px 20px;border-radius:8px;color:var(--text-dim);cursor:pointer;font-size:12px">关闭</button>
+      <button onclick="this.parentElement.parentElement.style.display='none'" style="margin-top:10px;background:var(--bg-tinted);border:none;padding:8px 20px;border-radius:8px;color:var(--text-dim);cursor:pointer;font-size:12px" data-page-node-id="gJczpWg0A3Dv6CEeyOX09L">关闭</button>
     </div>
   </div>
 
-  <footer>
-    <strong>⚠️ DISCLAIMER · 免责声明</strong><br>
+  <footer data-page-node-id="t6YEC5RYdqmuUDxJrL16bh">
+    <strong data-page-node-id="Lvuc86CvSAiUqRHCiL9ga1">⚠️ DISCLAIMER · 免责声明</strong><br data-page-node-id="pOB80BLpDK5D5TSproSZb3">
     本报告由 AI 模型基于公开信息生成，所有数据通过 akshare / yfinance / 公开数据接口获取，可能存在滞后或误差。
     报告中的评分和建议均为模拟，不代表任何真实投资者的实际观点。
-    本报告不构成任何投资建议，投资者应独立判断并承担投资风险。<br><br>
-    Generated by <strong>FloatFu-true · UZI-Skill {{PLUGIN_VERSION}}</strong> · {{GENERATED_AT}} · <span class="oo-eye">O.o</span><br>
-    <a href="https://github.com/heheshang/uzi-skill" target="_blank" style="color:var(--neon-cyan);text-decoration:none;font-size:13px;margin-top:6px;display:inline-block">⭐ GitHub · 点击查看最新版本 → github.com/heheshang/uzi-skill</a><br>
-    <span style="font-size:10px;color:var(--border-hot);letter-spacing:2px">POWERED BY FloatFu-true</span>
+    本报告不构成任何投资建议，投资者应独立判断并承担投资风险。<br data-page-node-id="JzUyv6Uelj2wgQCeUIJWC6"><br data-page-node-id="VgD4JkTqDicQaHXN3zKUUD">
+    Generated by <strong data-page-node-id="qwwMCL7HjH92KL8gt5fG6x">FloatFu-true · UZI-Skill {{PLUGIN_VERSION}}</strong> · {{GENERATED_AT}} · <span class="oo-eye" data-page-node-id="6prSxKRibEBS9UImbL5Ptz">O.o</span><br data-page-node-id="GeXkOBpaf9hn1bS7NZfKaP">
+    <a href="https://github.com/heheshang/uzi-skill" target="_blank" style="color:var(--neon-cyan);text-decoration:none;font-size:13px;margin-top:6px;display:inline-block" data-page-node-id="ECzGUwpCcPQALXHevBKZPp">⭐ GitHub · 点击查看最新版本 → github.com/heheshang/uzi-skill</a><br data-page-node-id="bCM7y9Zemj0r2FvVZMFMym">
+    <span style="font-size:10px;color:var(--border-hot);letter-spacing:2px" data-page-node-id="LHzSLtZqHP5ckSGStLyXCZ">POWERED BY FloatFu-true</span>
   </footer>
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════ -->
 <!-- HIDDEN SHARE-CARD · 1080×1920 · 朋友圈竖图                   -->
 <!-- ═══════════════════════════════════════════════════════════ -->
-<div id="share-card">
-  <div class="sc-topbar">
-    <div class="sc-brand">FloatFu-true <em>· 游资 SKILLS</em></div>
-    <div class="sc-badge">DEEP SCAN</div>
+<div id="share-card" data-page-node-id="ECQ7TSqdugn3Y8Z3ar3RmI">
+  <div class="sc-topbar" data-page-node-id="WWXNUhE8v1yi2v2w2R95X7">
+    <div class="sc-brand" data-page-node-id="EOibGnFT7mkPnM4ra1aCOM">FloatFu-true <em data-page-node-id="WOJ851egOcyevGBC9LqwER">· 游资 SKILLS</em></div>
+    <div class="sc-badge" data-page-node-id="cS1KREbvZQTYxrwHVATHzn">DEEP SCAN</div>
   </div>
 
-  <h1 class="sc-name">{{NAME}}</h1>
-  <div class="sc-code-row">
-    <div class="sc-code">{{TICKER}}</div>
-    <div class="sc-price">{{CURRENCY}}{{PRICE}}</div>
-    <div class="sc-change {{CHANGE_DIR}}">{{CHANGE_PCT}}</div>
+  <h1 class="sc-name" data-page-node-id="7plkVfTOI2Ii0GxBGYMAZB">{{NAME}}</h1>
+  <div class="sc-code-row" data-page-node-id="o3NM9dj7bSASzKwnXQR1Ce">
+    <div class="sc-code" data-page-node-id="nZFtkgrxGrgIAJdYBx3l3W">{{TICKER}}</div>
+    <div class="sc-price" data-page-node-id="EPqNw38rSTNtyQCElo1JLl">{{CURRENCY}}{{PRICE}}</div>
+    <div class="sc-change {{CHANGE_DIR}}" data-page-node-id="WITh0jSBwPoR5NPkvYUYqW">{{CHANGE_PCT}}</div>
   </div>
 
-  <div class="sc-score-box">
-    <div>
-      <span class="sc-score-giant">{{OVERALL_SCORE_INT}}</span><span class="sc-score-unit">/100</span>
+  <div class="sc-score-box" data-page-node-id="2cY6KXsuGMOouq6kid8fiF">
+    <div data-page-node-id="OLo5rFNV5nvUX0W52Gp0BH">
+      <span class="sc-score-giant" data-page-node-id="qINbk63vfQ1AG3ITdi38mw">{{OVERALL_SCORE_INT}}</span><span class="sc-score-unit" data-page-node-id="ZngZu5d2UaDtemIEA665gs">/100</span>
     </div>
-    <div class="sc-verdict">{{VERDICT_LABEL}}</div>
+    <div class="sc-verdict" data-page-node-id="Y0KAmCJLvEHzJWBFt9HRvF">{{VERDICT_LABEL}}</div>
   </div>
 
-  <div class="sc-section-title">// 50 位大佬投票</div>
-  <div class="sc-votes">
+  <div class="sc-section-title" data-page-node-id="DMuL7u0FBdVrrkwcTnKiQu">// 50 位大佬投票</div>
+  <div class="sc-votes" data-page-node-id="1aFODCnqHv0TeqtYfuS2RQ">
     <!-- INJECT_VOTE_BARS -->
   </div>
 
-  <div class="sc-section-title">// 谁最看好你</div>
-  <div class="sc-best">
+  <div class="sc-section-title" data-page-node-id="UoGsqqaCa3YiWQfFF0GC6Q">// 谁最看好你</div>
+  <div class="sc-best" data-page-node-id="uhLbvBB3r4ahhkawceHh8G">
     <!-- INJECT_TOP3_BULLS -->
   </div>
 
   <!-- v2.9.1 · 对称补 Top 3 看空 -->
-  <div class="sc-section-title">// 谁最看空你</div>
-  <div class="sc-best">
+  <div class="sc-section-title" data-page-node-id="EYFZGZQDflvZD2zDbDc9Hq">// 谁最看空你</div>
+  <div class="sc-best" data-page-node-id="71GHiA3Q34wIS1AXMgBy91">
     <!-- INJECT_TOP3_BEARS -->
   </div>
 
-  <div class="sc-punchline-box">
-    <div class="lbl">PUNCHLINE</div>
-    <div class="txt">{{PUNCHLINE}}</div>
+  <div class="sc-punchline-box" data-page-node-id="ylfWlCEsWjUs8i2TwONWCC">
+    <div class="lbl" data-page-node-id="bIj5goJSV0XC2evTjZ4W9l">PUNCHLINE</div>
+    <div class="txt" data-page-node-id="nqpUQpu1EvDdbcFnBAFHFu">{{PUNCHLINE}}</div>
   </div>
 
-  <div class="sc-trap {{TRAP_COLOR}}">
-    <span style="font-size:40px">{{TRAP_EMOJI}}</span>
-    <span>杀猪盘体检：{{TRAP_LEVEL}}</span>
+  <div class="sc-trap {{TRAP_COLOR}}" data-page-node-id="zyXhTSSueEyDN1fVsvDDNj">
+    <span style="font-size:40px" data-page-node-id="jTABh91XD8DVQNMh1PvbpA">{{TRAP_EMOJI}}</span>
+    <span data-page-node-id="qSHc2Nm2h7zOtlBjZTmRhb">杀猪盘体检：{{TRAP_LEVEL}}</span>
   </div>
 
-  <div style="text-align:center;margin:20px 0 10px">
-    <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https://github.com/heheshang/uzi-skill&color=06b6d4" alt="QR" style="width:100px;height:100px;border-radius:6px" />
-    <div style="font-size:18px;color:#999;margin-top:6px">扫码获取分析工具</div>
+  <div style="text-align:center;margin:20px 0 10px" data-page-node-id="SJjgjLn7DiZ1jU2TgVnbqF">
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https://github.com/heheshang/uzi-skill&color=06b6d4" alt="QR" style="width:100px;height:100px;border-radius:6px" data-page-node-id="GY8qyeH7PRwEf0RWmJszWW" />
+    <div style="font-size:18px;color:#999;margin-top:6px" data-page-node-id="7V0oHpRzg77tVXXvpbD5Oi">扫码获取分析工具</div>
   </div>
 
-  <div class="sc-footer">
-    <span>{{GENERATED_AT}} · POWERED BY FloatFu-true · 不构成投资建议</span>
-    <span class="oo-big">O.o</span>
+  <div class="sc-footer" data-page-node-id="A7emdNXC5Or7R1vkhNxZgM">
+    <span data-page-node-id="tcI0tsRwZ35U4adS0SJ9Ml">{{GENERATED_AT}} · POWERED BY FloatFu-true · 不构成投资建议</span>
+    <span class="oo-big" data-page-node-id="xznswfzoFIgTErvhUgEHeE">O.o</span>
   </div>
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════ -->
 <!-- HIDDEN WAR REPORT · 1920×1080 · 微信群横图                    -->
 <!-- ═══════════════════════════════════════════════════════════ -->
-<div id="war-report">
-  <div class="wr-top">
-    <div class="wr-brand">FloatFu-true <em>· 游资 SKILLS</em></div>
-    <div class="wr-date">{{GENERATED_AT}}</div>
+<div id="war-report" data-page-node-id="jTZx5YMqZuMYLcDy8gMaDr">
+  <div class="wr-top" data-page-node-id="nFxc2135dmKzJ6WligiAse">
+    <div class="wr-brand" data-page-node-id="RBH8xW0jmqJq3pjeNbpql0">FloatFu-true <em data-page-node-id="PFUSm3JhL7TGC8BVvWFUML">· 游资 SKILLS</em></div>
+    <div class="wr-date" data-page-node-id="GSChvwKECc121CXKN6dJs9">{{GENERATED_AT}}</div>
   </div>
-  <div class="wr-body">
-    <div class="wr-left">
-      <div>
-        <div class="wr-name">{{NAME}}</div>
-        <div class="wr-code">{{TICKER}} · {{INDUSTRY}}</div>
-        <div class="wr-one">{{ONE_LINER}}</div>
+  <div class="wr-body" data-page-node-id="bNEijU9nWGizqBxIEmjySh">
+    <div class="wr-left" data-page-node-id="9uTguQT40VhkMvJLseVAMO">
+      <div data-page-node-id="0t9cYhaf2SDrYGjzpPMLma">
+        <div class="wr-name" data-page-node-id="4IxDdhbJWEBVZVBjDKb7fv">{{NAME}}</div>
+        <div class="wr-code" data-page-node-id="fGLdCXlnOKFm35XMGosW3F">{{TICKER}} · {{INDUSTRY}}</div>
+        <div class="wr-one" data-page-node-id="bNd5SDbyLDkVaM5dvfO1lz">{{ONE_LINER}}</div>
       </div>
-      <div class="wr-punch">💥 {{PUNCHLINE}}</div>
-      <div class="wr-fight">
-        <div class="wr-fi bull"><img src="avatars/{{BULL_ID}}.svg"><div class="fn">{{BULL_NAME}}</div><div class="fs">{{BULL_SCORE}}</div></div>
-        <div class="wr-vs">⚡VS</div>
-        <div class="wr-fi bear"><img src="avatars/{{BEAR_ID}}.svg"><div class="fn">{{BEAR_NAME}}</div><div class="fs">{{BEAR_SCORE}}</div></div>
+      <div class="wr-punch" data-page-node-id="WLVPtTkLToXhRryTBsrCsC">💥 {{PUNCHLINE}}</div>
+      <div class="wr-fight" data-page-node-id="bDhzKyROs3W5FY3XH0URhE">
+        <div class="wr-fi bull" data-page-node-id="HtUR6KRj2ETRYs9MngJUHR"><img src="avatars/{{BULL_ID}}.svg" data-page-node-id="ZAQp8RsIU6azh9M9TpDFrl"><div class="fn" data-page-node-id="inmVTjzyWAkRLEnIIaDdwy">{{BULL_NAME}}</div><div class="fs" data-page-node-id="gf29S6HJK9CHkcRnAAq8m8">{{BULL_SCORE}}</div></div>
+        <div class="wr-vs" data-page-node-id="x2R5ToyfEi10nkiAFpfv8Y">⚡VS</div>
+        <div class="wr-fi bear" data-page-node-id="b8QFNQDsOeswh1NnX6hqfl"><img src="avatars/{{BEAR_ID}}.svg" data-page-node-id="c7u7uoUVLxRHxIUKTunpXB"><div class="fn" data-page-node-id="aOYYuIk3rTAa3nNYH1s8O9">{{BEAR_NAME}}</div><div class="fs" data-page-node-id="tz0SHrcNky7bxtNqNziNLA">{{BEAR_SCORE}}</div></div>
       </div>
     </div>
-    <div class="wr-right">
-      <div class="wr-score-label">ALPHA SCORE</div>
-      <div class="wr-score">{{OVERALL_SCORE_INT}}</div>
-      <div class="wr-verdict">{{VERDICT_LABEL}}</div>
-      <div class="wr-trap">{{TRAP_EMOJI}} {{TRAP_LEVEL}}</div>
+    <div class="wr-right" data-page-node-id="pXkr7XPCEtZsVFbBoAMRHl">
+      <div class="wr-score-label" data-page-node-id="IRLgE5phBcwzhdKlFvpmYn">ALPHA SCORE</div>
+      <div class="wr-score" data-page-node-id="mw1ME7IUWHQ0HH9vA8c056">{{OVERALL_SCORE_INT}}</div>
+      <div class="wr-verdict" data-page-node-id="UvL5CFpUxsU3ZsTcnfmJTQ">{{VERDICT_LABEL}}</div>
+      <div class="wr-trap" data-page-node-id="QVYn9FygplXVuZLfM7HGDg">{{TRAP_EMOJI}} {{TRAP_LEVEL}}</div>
     </div>
   </div>
-  <div class="wr-footer">
-    <span>Stock Deep Analyzer · 不构成投资建议 · 数据仅供参考</span>
-    <span class="wr-oo">O.o</span>
+  <div class="wr-footer" data-page-node-id="lRsm2h3J8ZqiV0DigWXp78">
+    <span data-page-node-id="P7UMCLeycOKtpbyJhmU8x7">Stock Deep Analyzer · 不构成投资建议 · 数据仅供参考</span>
+    <span class="wr-oo" data-page-node-id="FGJOhfDZP2cHJw8Rm3eyl3">O.o</span>
   </div>
 </div>
 
+<script src="../tools/template_preview_layer.js"></script>
 <script>
+/* ═══════════════════════════════════════════════════════════════════
+   BOOT INTRO · three.js 多空对撞
+   两团粒子（多=绿 / 空=红）自两侧冲入 → 中心对撞（闪光 + 冲击波环）
+   → 粒子炸散 → overlay 淡出，露出报告。
+   任一步失败（无 WebGL / three.js 拉取失败 / 超时）都立刻降级跳过。
+   ═══════════════════════════════════════════════════════════════════ */
 (function() {
+  const overlay = document.getElementById('boot-overlay');
+  const canvas  = document.getElementById('boot-canvas');
+  const root    = document.documentElement;
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // ─── Boot overlay dismiss ───
-  setTimeout(() => {
-    const o = document.getElementById('boot-overlay');
-    if (o) o.classList.add('done');
-    setTimeout(() => o && o.remove(), 700);
-  }, reduced ? 0 : 1700);
+  // 内容入场动画的起点 · CSS 通过 var(--boot-clear) 读取。
+  // 先写名义值占位；真正撤场时改写成「实际耗时」，内容入场以那一刻为准 ——
+  // 否则 CDN 慢的时候，内容动画会在 overlay 背后白白播完。
+  const NOMINAL_MS = 1900;
+  const bootT0 = performance.now();
+  const setClear = (ms) => root.style.setProperty('--boot-clear', Math.max(0, Math.round(ms)) + 'ms');
+  const signal = (ms) => document.dispatchEvent(new CustomEvent('uzi:boot-clear', { detail: { ms } }));
+
+  if (!overlay) { window.__uziBootCleared = true; setClear(0); signal(0); return; }
+
+  // 状态文案轮播
+  const statusEl = overlay.querySelector('.boot-status');
+  const STEPS = ['SCANNING 22 DIMENSIONS', 'AGGREGATING 66 JUDGES',
+                 'BULL VS BEAR · COLLISION', 'SYNTHESIZING VERDICT'];
+  let step = 0;
+  const statusTimer = setInterval(() => {
+    if (!statusEl) return;
+    statusEl.style.opacity = '0';
+    setTimeout(() => {
+      step = (step + 1) % STEPS.length;
+      statusEl.textContent = STEPS[step];
+      statusEl.style.opacity = '1';
+    }, 220);
+  }, 620);
+
+  let netTimer = null, sceneTimer = null, finished = false;
+
+  // 撤场 = 内容入场的起点 · 把「实际经过的时间」广播给内容脚本
+  function finish() {
+    if (finished) return;
+    finished = true;
+    clearInterval(statusTimer);
+    clearTimeout(netTimer); clearTimeout(sceneTimer);
+    const elapsed = performance.now() - bootT0;
+    setClear(elapsed);
+    window.__uziBootCleared = true;   // 内容脚本可能晚于信号注册监听，用它兜住
+    signal(elapsed);
+    overlay.classList.add('done');
+    setTimeout(() => overlay.remove(), 700);
+  }
+  const bail = finish;
+
+  if (reduced) { finish(); return; }   // 无障碍：直接跳过
+  setClear(NOMINAL_MS);
+
+  // 兜底 1 · CDN 预算：three.min.js 约 670KB，冷启动 1~2s 很常见，
+  // 所以这个预算必须覆盖下载，不能把场景时间也算进去。
+  netTimer = setTimeout(() => { console.warn('[boot] three.js load timeout'); finish(); }, 7000);
+
+  // 动态加载 three.js（CDN · UMD 构建）
+  const s = document.createElement('script');
+  s.src = 'https://unpkg.com/three@0.160.0/build/three.min.js';
+  s.async = true;
+  s.onload  = () => {
+    clearTimeout(netTimer);
+    // 兜底 2a · 启动预算：只该覆盖 WebGL 上下文创建 / 着色器编译这类同步初始化。
+    // 帧循环一旦跑起来就换成 2b —— 否则软件渲染下这段初始化能吃掉 1s+，
+    // 把本该留给动画的预算耗光，动画就会被腰斩。
+    sceneTimer = setTimeout(() => { console.warn('[boot] init timeout'); finish(); }, 4000);
+    try { runScene(); } catch (err) { console.warn('[boot] scene failed:', err); bail(); }
+  };
+  s.onerror = () => { console.warn('[boot] three.js failed to load'); bail(); };
+  document.head.appendChild(s);
+
+  function runScene() {
+    const THREE = window.THREE;
+    if (!THREE || !canvas) return bail();
+
+    let renderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
+    } catch (err) { return bail(); }
+
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight, false);
+    renderer.setClearColor(0x000000, 0);
+
+    const scene  = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(48, window.innerWidth / window.innerHeight, 0.1, 200);
+    camera.position.set(0, 0, 20);
+
+    const COUNT = 1500, CLOUD_R = 2.3, SPAWN_X = 15;
+
+    // 圆形粒子贴图 · PointsMaterial 默认画方块，放大后像马赛克；
+    // 换成径向渐变点精灵，配合 AdditiveBlending 就是柔和的发光点。
+    const dotTex = (() => {
+      const c = document.createElement('canvas');
+      c.width = c.height = 64;
+      const g = c.getContext('2d');
+      const grd = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+      grd.addColorStop(0,    'rgba(255,255,255,1)');
+      grd.addColorStop(0.42, 'rgba(255,255,255,0.72)');
+      grd.addColorStop(1,    'rgba(255,255,255,0)');
+      g.fillStyle = grd;
+      g.fillRect(0, 0, 64, 64);
+      const t = new THREE.CanvasTexture(c);
+      if ('colorSpace' in t && THREE.SRGBColorSpace) t.colorSpace = THREE.SRGBColorSpace;
+      return t;
+    })();
+
+    function buildCloud(hex, side) {
+      const positions = new Float32Array(COUNT * 3);
+      const dirs      = new Float32Array(COUNT * 3);
+      const radii     = new Float32Array(COUNT);
+      const phase     = new Float32Array(COUNT);
+      for (let i = 0; i < COUNT; i++) {
+        const u  = Math.random() * 2 - 1;
+        const th = Math.random() * Math.PI * 2;
+        const sq = Math.sqrt(1 - u * u);
+        dirs[i * 3]     = sq * Math.cos(th);
+        dirs[i * 3 + 1] = sq * Math.sin(th);
+        dirs[i * 3 + 2] = u;
+        radii[i] = Math.cbrt(Math.random());
+        phase[i] = Math.random() * Math.PI * 2;
+      }
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      const mat = new THREE.PointsMaterial({
+        color: new THREE.Color(hex), size: 0.16, sizeAttenuation: true,
+        map: dotTex, transparent: true, opacity: 0, depthWrite: false,
+        blending: THREE.AdditiveBlending
+      });
+      // 位置每帧手改 · 包围球会过期 → 必须关掉视锥剔除，否则云团飞到中心后整团消失
+      const points = new THREE.Points(geo, mat);
+      points.frustumCulled = false;
+      scene.add(points);
+      return { geo, mat, positions, dirs, radii, phase, side };
+    }
+
+    const bull = buildCloud(0x22c55e, -1);
+    const bear = buildCloud(0xef4444, +1);
+
+    // 冲击波环
+    const ringGeo = new THREE.RingGeometry(0.55, 0.68, 96);
+    const ringMat = new THREE.MeshBasicMaterial({
+      color: 0x9ecbff, transparent: true, opacity: 0,
+      side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending
+    });
+    const ring = new THREE.Mesh(ringGeo, ringMat);
+    ring.frustumCulled = false;
+    scene.add(ring);
+
+    // 中心闪光 · 径向渐变贴图（硬边圆盘会显得廉价）
+    const flashTex = (() => {
+      const c = document.createElement('canvas');
+      c.width = c.height = 128;
+      const g = c.getContext('2d');
+      const grd = g.createRadialGradient(64, 64, 0, 64, 64, 64);
+      grd.addColorStop(0,    'rgba(255,255,255,1)');
+      grd.addColorStop(0.30, 'rgba(226,240,255,0.62)');
+      grd.addColorStop(0.62, 'rgba(150,196,255,0.20)');
+      grd.addColorStop(1,    'rgba(120,170,255,0)');
+      g.fillStyle = grd;
+      g.fillRect(0, 0, 128, 128);
+      const t = new THREE.CanvasTexture(c);
+      if ('colorSpace' in t && THREE.SRGBColorSpace) t.colorSpace = THREE.SRGBColorSpace;
+      return t;
+    })();
+    const flashGeo = new THREE.PlaneGeometry(3.4, 3.4);
+    const flashMat = new THREE.MeshBasicMaterial({
+      map: flashTex, transparent: true, opacity: 0,
+      depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending
+    });
+    const flash = new THREE.Mesh(flashGeo, flashMat);
+    flash.frustumCulled = false;
+    scene.add(flash);
+
+    const T_IN = 1.0, T_OUT = 0.85;
+    const T_COLLIDE = T_IN;
+    const T_END = T_COLLIDE + T_OUT;
+
+    const clamp01  = t => (t < 0 ? 0 : t > 1 ? 1 : t);
+    const easeIn3  = t => t * t * t;
+    const easeOut2 = t => 1 - (1 - t) * (1 - t);
+
+    function onResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight, false);
+    }
+    window.addEventListener('resize', onResize);
+
+    const t0 = performance.now();
+
+    // 兜底 2b · 动画预算：从「真正开始跑帧」起算（动画本体 1.85s + 余量）
+    clearTimeout(sceneTimer);
+    sceneTimer = setTimeout(() => { console.warn('[boot] scene timeout'); finish(); }, (T_END + 1.5) * 1000);
+
+    function frame(now) {
+      const el = (now - t0) / 1000;
+
+      const eIn      = easeIn3(clamp01(el / T_IN));
+      const collided = el >= T_COLLIDE;
+      const tOut     = clamp01((el - T_COLLIDE) / T_OUT);
+      const eOut     = easeOut2(tOut);
+
+      // 镜头推进 → 对撞后回拉
+      camera.position.z = 20 - eIn * 4.5 + eOut * 3.2;
+      camera.position.y = Math.sin(el * 0.7) * 0.35;
+
+      for (const cloud of [bull, bear]) {
+        const { geo, mat, positions, dirs, radii, phase, side } = cloud;
+        const cx = side * (1 - eIn) * SPAWN_X;
+        for (let i = 0; i < COUNT; i++) {
+          const br = radii[i] * CLOUD_R;
+          let x, y, z;
+          if (!collided) {
+            x = cx + dirs[i * 3]     * br;
+            y = dirs[i * 3 + 1] * br + Math.sin(el * 2.2 + phase[i]) * 0.07;
+            z = dirs[i * 3 + 2] * br;
+          } else {
+            const expand = br + eOut * (2.5 + radii[i] * 9);
+            x = dirs[i * 3]     * expand;
+            y = dirs[i * 3 + 1] * expand;
+            z = dirs[i * 3 + 2] * expand;
+          }
+          positions[i * 3] = x; positions[i * 3 + 1] = y; positions[i * 3 + 2] = z;
+        }
+        geo.attributes.position.needsUpdate = true;
+
+        const fadeIn  = clamp01(el / 0.35);
+        const fadeOut = collided ? 1 - clamp01(tOut / 0.8) : 1;
+        mat.opacity = 0.95 * fadeIn * fadeOut;
+        mat.size = 0.16 + (collided ? eOut * 0.12 : 0);
+      }
+
+      // 冲击波环
+      if (collided) {
+        const rp = clamp01((el - T_COLLIDE) / 0.7);
+        const sc = 0.4 + easeOut2(rp) * 9;
+        ring.scale.set(sc, sc, 1);
+        ringMat.opacity = (1 - rp) * 0.9;
+      } else {
+        ringMat.opacity = 0;
+      }
+
+      // 中心闪光
+      const fp = clamp01((el - T_COLLIDE) / 0.32);
+      if (collided && fp < 1) {
+        flashMat.opacity = (1 - fp) * 0.8;
+        const fs = 1 + fp * 3.2;
+        flash.scale.set(fs, fs, 1);
+      } else {
+        flashMat.opacity = 0;
+      }
+
+      renderer.render(scene, camera);
+
+      if (el < T_END + 0.1) {
+        requestAnimationFrame(frame);
+      } else {
+        window.removeEventListener('resize', onResize);
+        for (const c of [bull, bear]) { c.geo.dispose(); c.mat.dispose(); }
+        ringGeo.dispose(); ringMat.dispose();
+        flashGeo.dispose(); flashMat.dispose(); flashTex.dispose();
+        dotTex.dispose();
+        renderer.dispose();
+        finish();
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+})();
+
+// ─── 内容入场 · 等 boot 真正撤场（uzi:boot-clear）后开始 ──────────
+(function() {
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // ─── Score counter animation: count up from 0 ───
   function animateCount(el, target, duration = 1400) {
@@ -3252,31 +3548,56 @@ section[id], div[id^="dim-"], .dim-card[id] { scroll-margin-top: 20px; }
     }
     requestAnimationFrame(tick);
   }
-  setTimeout(() => {
+
+  const seats    = document.querySelectorAll('.seat');
+  const msgs     = document.querySelectorAll('.chat-msg');
+  const fighters = document.querySelectorAll('.fighter');
+  const punch    = document.querySelector('.punchline');
+
+  // 入场前先把 CSS 动画冻住：它们在页面加载时就会起跑，
+  // 若 boot 还在台上，就会在 overlay 背后白白跑完。
+  if (!reduced) {
+    [...seats, ...fighters, punch].forEach(el => { if (el) el.style.animation = 'none'; });
+  }
+
+  let started = false;
+  function start() {
+    if (started) return;
+    started = true;
+
+    // 计分器 / HP 条
     document.querySelectorAll('.score-giant, .fighter .confidence').forEach(el => {
       const target = parseInt(el.textContent.trim(), 10);
       if (!isNaN(target)) animateCount(el, target);
     });
-    // animate HP bars
     document.querySelectorAll('.hp-fill').forEach(el => {
       const hp = parseInt(el.dataset.hp || '0', 10);
       el.style.width = Math.max(0, Math.min(100, hp)) + '%';
     });
-  }, reduced ? 0 : 1700);
 
-  // ─── Jury seats: stagger light-up like a stadium ───
-  const seats = document.querySelectorAll('.seat');
-  seats.forEach((seat, i) => {
-    seat.style.animationDelay = (1700 + i * 35) + 'ms';
-  });
+    // 评委席：像球场一样依次点亮
+    seats.forEach((seat, i) => {
+      seat.style.animation = '';
+      seat.style.animationDelay = (i * 35) + 'ms';
+    });
 
-  // ─── Chat messages: cascade in (shorter + capped) ───
-  const msgs = document.querySelectorAll('.chat-msg');
-  msgs.forEach((m, i) => {
-    // Cap the cascade at 1.8 seconds total so later messages don't hide forever
-    const delay = Math.min(1800, 1000 + i * 15);
-    m.style.animationDelay = delay + 'ms';
-  });
+    // 多空选手撞进擂台 + punchline 跟进
+    fighters.forEach(f => { f.style.animation = ''; f.style.animationDelay = '0ms'; });
+    if (punch) { punch.style.animation = ''; punch.style.animationDelay = '350ms'; }
+
+    // 聊天消息：短促级联（封顶 0.9s，免得后面的消息永远不出现）
+    msgs.forEach((m, i) => {
+      m.style.animation = '';
+      m.style.animationDelay = Math.min(900, i * 15) + 'ms';
+    });
+  }
+
+  if (reduced) { start(); return; }
+  if (window.__uziBootCleared) { start(); return; }   // boot 在监听注册前就已撤场
+
+  document.addEventListener('uzi:boot-clear', start, { once: true });
+  // 兜底：必须晚于 boot 脚本自己的最坏预算（CDN 7s），否则会抢在撤场之前入场
+  setTimeout(start, 8000);
 
   // ─── Chat room filter tabs ───
   document.querySelectorAll('.chat-tab').forEach(t => {

@@ -513,3 +513,30 @@ pub fn main(ticker: &str) -> Result<Value, String> {
         "fallback": false,
     }))
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn fetch_holding_funds_live() {
+        let rows = fetch_holding_funds("002273");
+        assert!(!rows.is_empty(), "expected non-empty fund holders for 002273");
+    }
+
+    #[test]
+    fn main_produces_managers() {
+        let result = main("002273.SZ").expect("main should succeed");
+        let arr = result["data"]["fund_managers"]
+            .as_array()
+            .expect("fund_managers should be array");
+        assert!(!arr.is_empty(), "expected non-empty fund_managers");
+    }
+
+    #[test]
+    fn collect_includes_fund_holders() {
+        let raw = crate::collect::collect("002273.SZ", None, 4, None);
+        let fm = raw["fund_managers"].as_array().expect("fund_managers should be array");
+        assert!(!fm.is_empty(), "expected non-empty top-level fund_managers");
+    }
+}

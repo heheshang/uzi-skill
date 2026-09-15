@@ -20,30 +20,6 @@ fn universe_margin_detail(_exchange: &str) -> Vec<Value> {
     Vec::new()
 }
 
-/// `ak.stock_zh_a_gdhs(symbol)` — AkShare-only.
-fn fetch_holder_counts(_code: &str) -> Vec<Value> {
-    Vec::new()
-}
-
-/// `ak.stock_individual_fund_flow(stock, market)` — AkShare-only.
-fn fetch_main_fund_flow(_code: &str, _market: &str) -> Vec<Value> {
-    Vec::new()
-}
-
-/// `_universe_dzjy(year)` — AkShare `stock_dzjy_mrtj`.
-fn universe_dzjy(_year: i32) -> Vec<Value> {
-    Vec::new()
-}
-
-/// `_universe_release_summary()` — AkShare `stock_restricted_release_summary_em`.
-fn universe_release_summary() -> Vec<Value> {
-    Vec::new()
-}
-
-/// `_universe_release_detail(year)` — AkShare `stock_restricted_release_detail_em`.
-fn universe_release_detail(_year: i32) -> Vec<Value> {
-    Vec::new()
-}
 
 // ─────────────────────────────────────────────────────────────
 // Summary helpers
@@ -73,12 +49,12 @@ fn north_sum_20d(hist: &Value) -> String {
     format!("{:+.1}亿", total / 1e8)
 }
 
-/// `_main_sum_20d(flow_list)`.
-fn main_sum_20d(flow_list: &[Value]) -> String {
+/// `_main_sum_n(flow_list, n)`.
+fn main_sum_n(flow_list: &[Value], n: usize) -> String {
     if flow_list.is_empty() {
         return "—".to_string();
     }
-    let start = flow_list.len().saturating_sub(20);
+    let start = flow_list.len().saturating_sub(n);
     let mut total = 0.0f64;
     for r in &flow_list[start..] {
         total += f_fin(r.get("主力净流入").unwrap_or(&Value::Null), 0.0);
@@ -88,6 +64,16 @@ fn main_sum_20d(flow_list: &[Value]) -> String {
     } else {
         format!("{:+.1}亿", total / 1e8)
     }
+}
+
+/// `_main_sum_20d(flow_list)`.
+fn main_sum_20d(flow_list: &[Value]) -> String {
+    main_sum_n(flow_list, 20)
+}
+
+/// `_main_sum_5d(flow_list)`.
+fn main_sum_5d(flow_list: &[Value]) -> String {
+    main_sum_n(flow_list, 5)
 }
 
 /// `_holders_trend(h)`.
@@ -176,28 +162,20 @@ pub fn main(ticker: &str) -> Result<Value, String> {
     // head(5) 保留原行为（展示市场层 top 5 · 非本股过滤）
     let margin: Vec<Value> = universe_margin.iter().take(5).cloned().collect();
 
-    let holders = fetch_holder_counts(&ti.code);
-    let main_flow = fetch_main_fund_flow(&ti.code, &ti.full[ti.full.len().saturating_sub(2)..].to_lowercase());
+    let holders = sources::fetch_holder_counts(&ti);
+    let main_flow = sources::fetch_main_fund_flow(&ti);
 
     // 大宗交易 · 只 filter 本股
-    let block_trades: Vec<Value> = universe_dzjy(2026)
+    let block_trades: Vec<Value> = sources::fetch_block_trades(&ti)
         .into_iter()
         .filter(|r| r.get("证券代码").and_then(|v| v.as_str()) == Some(ti.code.as_str()))
         .take(20)
         .collect();
 
-    // 限售股解禁 (近一年)
-    let unlock: Vec<Value> = universe_release_summary()
-        .into_iter()
-        .filter(|r| r.get("代码").and_then(|v| v.as_str()) == Some(ti.code.as_str()))
-        .collect();
-
-    // 解禁日历前瞻 12 个月
-    let unlock_future: Vec<Value> = universe_release_detail(2026)
-        .into_iter()
-        .filter(|r| r.get("代码").and_then(|v| v.as_str()) == Some(ti.code.as_str()))
-        .take(20)
-        .collect();
+    // 限售股解禁 (近一年 + 前瞻)
+    let unlock_all = sources::fetch_restricted_release(&ti);
+    let unlock: Vec<Value> = unlock_all.clone();
+    let unlock_future: Vec<Value> = unlock_all.into_iter().take(20).collect();
 
     // Normalize unlock_schedule for viz
     let mut unlock_schedule: Vec<Value> = Vec::new();
@@ -259,6 +237,7 @@ pub fn main(ticker: &str) -> Result<Value, String> {
     }
     let northbound_20d = north_sum_20d(&north);
     let main_20d = main_sum_20d(&main_flow);
+    let main_5d = main_sum_5d(&main_flow);
     let margin_trend = if margin.is_empty() {
         "—".to_string()
     } else {
@@ -277,13 +256,13 @@ pub fn main(ticker: &str) -> Result<Value, String> {
             "holders_trend": holders_trend,
             "main_fund_flow_20d": main_flow,
             "main_20d": main_20d,
-            "main_5d": "—",
+            "main_5d": main_5d,
             "block_trades_recent": block_trades,
             "unlock_recent": unlock,
             "unlock_schedule": unlock_schedule,
             "institutional_history": Value::Object(inst_history),
         },
-        "source": "akshare:multi (north + margin + gdhs + fund_flow + dzjy + restricted_release + fund_hold_detail)",
+        "source": "em_datacenter:multi (north + gdhs + fund_flow + dzjy + restricted_release) + akshare:margin (stub)",
         "fallback": false,
     }))
 }

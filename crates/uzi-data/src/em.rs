@@ -150,7 +150,7 @@ pub fn kline(
         let Some(s) = line.as_str() else { continue };
         let parts: Vec<&str> = s.split(',').collect();
         if parts.len() >= 7 {
-            rows.push(json!({
+            let mut row = json!({
                 "日期": parts[0],
                 "开盘": parts[1].parse::<f64>().unwrap_or(0.0),
                 "收盘": parts[2].parse::<f64>().unwrap_or(0.0),
@@ -158,7 +158,11 @@ pub fn kline(
                 "最低": parts[4].parse::<f64>().unwrap_or(0.0),
                 "成交量": parts[5].parse::<f64>().unwrap_or(0.0),
                 "成交额": parts[6].parse::<f64>().unwrap_or(0.0),
-            }));
+            });
+            if parts.len() >= 11 {
+                row["换手率"] = json!(parts[10].parse::<f64>().unwrap_or(0.0));
+            }
+            rows.push(row);
         }
     }
     if rows.is_empty() {
@@ -233,6 +237,279 @@ pub fn hsgt_hold(code6: &str, timeout: u64) -> Result<Vec<Value>, String> {
         .cloned()
         .unwrap_or_default())
 }
+
+/// AkShare's cash-flow column map, restricted to the keys the pipeline reads.
+/// AkShare renames these English columns to Chinese; consumers such as
+/// `fetch::financials::apply_operating_cash_flow` key off the Chinese name.
+const CASH_FLOW_COLUMN_MAP: &[(&str, &str)] = &[
+    ("NETCASH_OPERATE", "经营活动产生的现金流量净额"),
+    ("NETCASH_INVEST", "投资活动产生的现金流量净额"),
+    ("NETCASH_FINANCE", "筹资活动产生的现金流量净额"),
+    ("TOTAL_OPERATE_INFLOW", "经营活动现金流入小计"),
+    ("TOTAL_OPERATE_OUTFLOW", "经营活动现金流出小计"),
+    ("END_CASH", "期末现金及现金等价物余额"),
+];
+
+/// Rename one cash-flow row's English columns to the Chinese names AkShare
+/// exposes, leaving every other column untouched.
+fn rename_cash_flow_columns(row: Value) -> Value {
+    let Value::Object(mut obj) = row else {
+        return row;
+    };
+    for (english, chinese) in CASH_FLOW_COLUMN_MAP {
+        if let Some(value) = obj.get(*english).cloned() {
+            obj.insert((*chinese).to_string(), value);
+        }
+    }
+    Value::Object(obj)
+}
+
+/// 现金流量表 — the endpoint behind `ak.stock_cash_flow_sheet_by_report_em`.
+///
+/// `dates` is a comma-separated list of report periods (`2025-12-31,2024-12-31`);
+/// the endpoint answers with an error page when `dates` is empty. Rows come back
+/// newest-first, which is the order [`crate::fetch::financials`] consumes.
+///
+/// `companyType` varies by issuer (general 4, bank 3, broker 1, insurance 2), so
+/// the documented values are probed in turn and the first one that answers with
+/// rows wins. Nothing is invented when all of them come back empty.
+pub fn cash_flow_report(
+    code6: &str,
+    full: &str,
+    dates: &str,
+    timeout: u64,
+) -> Result<Vec<Value>, String> {
+    if dates.is_empty() {
+        return Err("no report dates".to_string());
+    }
+    let prefix = if full.ends_with("SH") { "SH" } else { "SZ" };
+    let symbol = format!("{prefix}{code6}");
+    let url = "https://emweb.securities.eastmoney.com/PC_HSF10/NewFinanceAnalysis/xjllbAjaxNew";
+    let referer = "https://emweb.securities.eastmoney.com/";
+
+    for company_type in ["4", "3", "1", "2"] {
+        let Ok(payload) = http::get_json_q(
+            url,
+            &[
+                ("companyType", company_type),
+                ("reportDateType", "0"),
+                ("reportType", "1"),
+                ("dates", dates),
+                ("code", &symbol),
+            ],
+            &[("Referer", referer)],
+            timeout,
+        ) else {
+            continue;
+        };
+        let rows = payload
+            .get("data")
+            .and_then(|d| d.as_array())
+            .cloned()
+            .unwrap_or_default();
+        if rows.is_empty() {
+            continue;
+        }
+        return Ok(rows.into_iter().map(rename_cash_flow_columns).collect());
+    }
+    Err("empty cash flow report".to_string())
+}
+
+/// 分红送配 — the endpoint behind `ak.stock_history_dividend_detail`.
+///
+/// One row per distribution plan; a fiscal year can carry both an interim and a
+/// final plan. Sorted newest-first by report period.
+pub fn dividend_history(code6: &str, timeout: u64) -> Result<Vec<Value>, String> {
+    if code6.len() != 6 || !code6.chars().all(|c| c.is_ascii_digit()) {
+        return Err("invalid code".to_string());
+    }
+    let url = "https://datacenter-web.eastmoney.com/api/data/v1/get";
+    let filter = format!("(SECURITY_CODE=\"{code6}\")");
+    let payload = http::get_json_q(
+        url,
+        &[
+            ("sortColumns", "REPORT_DATE"),
+            ("sortTypes", "-1"),
+            ("pageSize", "200"),
+            ("pageNumber", "1"),
+            ("reportName", "RPT_SHAREBONUS_DET"),
+            ("columns", "ALL"),
+            ("source", "WEB"),
+            ("client", "WEB"),
+            ("filter", &filter),
+        ],
+        &[],
+        timeout,
+    )?;
+    let rows = payload
+        .get("result")
+        .and_then(|r| r.get("data"))
+        .and_then(|d| d.as_array())
+        .cloned()
+        .unwrap_or_default();
+    if rows.is_empty() {
+        return Err("empty dividend history".to_string());
+    }
+    Ok(rows)
+}
+
+/// Block-trade daily stats — `RPT_BLOCKTRADE_STA`.
+pub fn block_trade_sta(
+    code6: &str,
+    start_date: &str,
+    end_date: &str,
+    timeout: u64,
+) -> Result<Vec<Value>, String> {
+    if code6.len() != 6 || !code6.chars().all(|c| c.is_ascii_digit()) {
+        return Err("invalid code".to_string());
+    }
+    let url = "https://datacenter-web.eastmoney.com/api/data/v1/get";
+    let filter = format!(
+        r#"(SECURITY_CODE="{code6}")(TRADE_DATE>='{start_date}')(TRADE_DATE<='{end_date}')"#
+    );
+    let payload = http::get_json_q(
+        url,
+        &[
+            ("sortColumns", "TRADE_DATE"),
+            ("sortTypes", "-1"),
+            ("pageSize", "500"),
+            ("pageNumber", "1"),
+            ("reportName", "RPT_BLOCKTRADE_STA"),
+            ("columns", "ALL"),
+            ("source", "WEB"),
+            ("client", "WEB"),
+            ("filter", &filter),
+        ],
+        &[],
+        timeout,
+    )?;
+    let rows = payload
+        .get("result")
+        .and_then(|r| r.get("data"))
+        .and_then(|d| d.as_array())
+        .cloned()
+        .unwrap_or_default();
+    Ok(rows)
+}
+
+/// Shareholder count detail — `RPT_HOLDERNUM_DET` (individual stock).
+pub fn holder_num_det(code6: &str, timeout: u64) -> Result<Vec<Value>, String> {
+    if code6.len() != 6 || !code6.chars().all(|c| c.is_ascii_digit()) {
+        return Err("invalid code".to_string());
+    }
+    let url = "https://datacenter-web.eastmoney.com/api/data/v1/get";
+    let filter = format!(r#"(SECURITY_CODE="{code6}")"#);
+    let payload = http::get_json_q(
+        url,
+        &[
+            ("sortColumns", "END_DATE"),
+            ("sortTypes", "-1"),
+            ("pageSize", "500"),
+            ("pageNumber", "1"),
+            ("reportName", "RPT_HOLDERNUM_DET"),
+            ("columns", "ALL"),
+            ("source", "WEB"),
+            ("client", "WEB"),
+            ("filter", &filter),
+        ],
+        &[],
+        timeout,
+    )?;
+    let rows = payload
+        .get("result")
+        .and_then(|r| r.get("data"))
+        .and_then(|d| d.as_array())
+        .cloned()
+        .unwrap_or_default();
+    Ok(rows)
+}
+
+/// Restricted release queue — `RPT_LIFT_STAGE` (individual stock).
+pub fn lift_stage(code6: &str, timeout: u64) -> Result<Vec<Value>, String> {
+    if code6.len() != 6 || !code6.chars().all(|c| c.is_ascii_digit()) {
+        return Err("invalid code".to_string());
+    }
+    let url = "https://datacenter-web.eastmoney.com/api/data/v1/get";
+    let filter = format!(r#"(SECURITY_CODE="{code6}")"#);
+    let payload = http::get_json_q(
+        url,
+        &[
+            ("sortColumns", "FREE_DATE"),
+            ("sortTypes", "-1"),
+            ("pageSize", "500"),
+            ("pageNumber", "1"),
+            ("reportName", "RPT_LIFT_STAGE"),
+            ("columns", "ALL"),
+            ("source", "WEB"),
+            ("client", "WEB"),
+            ("filter", &filter),
+        ],
+        &[],
+        timeout,
+    )?;
+    let rows = payload
+        .get("result")
+        .and_then(|r| r.get("data"))
+        .and_then(|d| d.as_array())
+        .cloned()
+        .unwrap_or_default();
+    Ok(rows)
+}
+
+/// Individual stock fund-flow day K-line — `push2his.eastmoney.com` fflow endpoint.
+pub fn fund_flow_daykline(secid: &str, lmt: &str, timeout: u64) -> Result<Vec<Value>, String> {
+    let url = "https://push2his.eastmoney.com/api/qt/stock/fflow/daykline/get";
+    let payload = http::get_json_q(
+        url,
+        &[
+            ("lmt", lmt),
+            ("klt", "101"),
+            ("secid", secid),
+            (
+                "fields1",
+                "f1,f2,f3,f7",
+            ),
+            (
+                "fields2",
+                "f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61,f62,f63,f64,f65",
+            ),
+            ("ut", "b2884a393a59ad64002292a3e90d46a5"),
+        ],
+        &[],
+        timeout,
+    )?;
+    let klines = payload
+        .get("data")
+        .and_then(|d| d.get("klines"))
+        .and_then(|k| k.as_array())
+        .cloned()
+        .unwrap_or_default();
+    let mut rows = Vec::new();
+    for line in klines {
+        let Some(s) = line.as_str() else { continue };
+        let parts: Vec<&str> = s.split(',').collect();
+        if parts.len() < 11 {
+            continue;
+        }
+        rows.push(json!({
+            "日期": parts[0],
+            "主力净流入": parts[1].parse::<f64>().unwrap_or(0.0),
+            "小单净流入": parts[2].parse::<f64>().unwrap_or(0.0),
+            "中单净流入": parts[3].parse::<f64>().unwrap_or(0.0),
+            "大单净流入": parts[4].parse::<f64>().unwrap_or(0.0),
+            "超大单净流入": parts[5].parse::<f64>().unwrap_or(0.0),
+            "主力净流入占比": parts[6].parse::<f64>().unwrap_or(0.0),
+            "小单净流入占比": parts[7].parse::<f64>().unwrap_or(0.0),
+            "中单净流入占比": parts[8].parse::<f64>().unwrap_or(0.0),
+            "大单净流入占比": parts[9].parse::<f64>().unwrap_or(0.0),
+            "超大单净流入占比": parts[10].parse::<f64>().unwrap_or(0.0),
+            "收盘价": parts.get(11).and_then(|v| v.parse::<f64>().ok()),
+            "涨跌幅": parts.get(12).and_then(|v| v.parse::<f64>().ok()),
+        }));
+    }
+    Ok(rows)
+}
+
 
 /// Sina daily K-line JSON (`money.finance.sina.com.cn/.../getKLineData`).
 pub fn sina_kline(symbol: &str, datalen: &str, timeout: u64) -> Result<Vec<Value>, String> {
@@ -458,6 +735,7 @@ mod tests {
         let out = parse_em_direct_payload(&payload);
         assert_eq!(out["change_pct"], json!(10.0));
     }
+
 
     #[test]
     fn empty_payload_is_empty_object() {
