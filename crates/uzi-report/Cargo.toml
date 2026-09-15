@@ -8,7 +8,6 @@ anyhow.workspace = true
 chrono.workspace = true
 md-5.workspace = true
 regex.workspace = true
-serde.workspace = true
 serde_json.workspace = true
 uzi-core = { path = "../uzi-core" }
 uzi-review = { path = "../uzi-review" }

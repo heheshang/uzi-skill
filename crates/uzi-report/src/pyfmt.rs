@@ -63,10 +63,7 @@ pub(crate) fn repr(v: &Value) -> String {
                 pyf(n.as_f64().unwrap_or(0.0))
             }
         }
-        Value::Array(a) => format!(
-            "[{}]",
-            a.iter().map(repr).collect::<Vec<_>>().join(", ")
-        ),
+        Value::Array(a) => format!("[{}]", a.iter().map(repr).collect::<Vec<_>>().join(", ")),
         Value::Object(o) => format!(
             "{{{}}}",
             o.iter()
@@ -132,12 +129,6 @@ pub(crate) fn group_f(v: f64, decimals: usize) -> String {
     format!("{}{}{}", sign, group_digits(int_part), frac)
 }
 
-/// Python `f"{v:.Nf}"`.
-#[allow(dead_code)]
-pub(crate) fn fixed(v: f64, decimals: usize) -> String {
-    format!("{:.*}", decimals, v)
-}
-
 /// Python `f"{v:+.Nf}"`.
 pub(crate) fn signed(v: f64, decimals: usize) -> String {
     format!("{:+.1$}", v, decimals)
@@ -158,7 +149,5 @@ mod tests {
         assert_eq!(pyf(23.45), "23.45");
         assert_eq!(disp(&json!(6)), "6");
         assert_eq!(disp(&json!(6.0)), "6.0");
-        assert_eq!(fixed(65.5, 0), "66");
-        assert_eq!(fixed(-0.0, 0), "-0");
     }
 }

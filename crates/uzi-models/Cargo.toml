@@ -6,6 +6,5 @@ edition.workspace = true
 [dependencies]
 chrono.workspace = true
 regex.workspace = true
-serde.workspace = true
 serde_json.workspace = true
 uzi-core = { path = "../uzi-core" }

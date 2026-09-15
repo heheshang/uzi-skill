@@ -4,14 +4,6 @@
 use crate::pyfmt;
 use serde_json::{json, Map, Value};
 
-#[allow(dead_code)]
-const VALID_SIGNALS: &[&str] = &["bullish", "bearish", "neutral", "skip"];
-#[allow(dead_code)]
-const REQUIRED_DIM_KEYS: &[&str] = &[
-    "0_basic", "1_financials", "2_kline", "3_macro", "4_peers", "5_chain", "6_research", "7_industry",
-    "8_materials", "9_futures", "10_valuation", "11_governance", "12_capital_flow", "13_policy",
-    "14_moat", "15_events", "16_lhb", "17_sentiment", "18_trap", "19_contests",
-];
 const REQUIRED_BUY_ZONE_KEYS: &[&str] = &["value", "growth", "technical", "youzi"];
 
 /// Python `type(v).__name__` for JSON values.
@@ -229,7 +221,10 @@ pub fn validate_agent_analysis(agent_analysis: &Value) -> Value {
                                 &mut issues,
                                 "warning",
                                 "narrative_override.risks",
-                                format!("建议至少 3 条风险，实际 {}", risks.as_array().unwrap().len()),
+                                format!(
+                                    "建议至少 3 条风险，实际 {}",
+                                    risks.as_array().unwrap().len()
+                                ),
                                 "补齐 Top 3 风险",
                             );
                         }
@@ -274,17 +269,24 @@ pub fn validate_agent_analysis(agent_analysis: &Value) -> Value {
                                             add(
                                                 &mut issues,
                                                 "warning",
-                                                &format!("narrative_override.buy_zones.{}.price", k),
+                                                &format!(
+                                                    "narrative_override.buy_zones.{}.price",
+                                                    k
+                                                ),
                                                 "缺 price 字段".to_string(),
                                                 "加 \"price\": <数值>",
                                             );
                                         }
-                                        let rationale = zone.get("rationale").cloned().unwrap_or(json!(""));
+                                        let rationale =
+                                            zone.get("rationale").cloned().unwrap_or(json!(""));
                                         if !is_str(&rationale, 5) {
                                             add(
                                                 &mut issues,
                                                 "warning",
-                                                &format!("narrative_override.buy_zones.{}.rationale", k),
+                                                &format!(
+                                                    "narrative_override.buy_zones.{}.rationale",
+                                                    k
+                                                ),
                                                 "缺 rationale 解释".to_string(),
                                                 "加 \"rationale\": \"...\"",
                                             );
@@ -306,7 +308,10 @@ pub fn validate_agent_analysis(agent_analysis: &Value) -> Value {
                 &mut issues,
                 "error",
                 "data_gap_acknowledged",
-                format!("必须是 dict（key 是 dim 或 dim.field），实际 {}", type_name(dga)),
+                format!(
+                    "必须是 dict（key 是 dim 或 dim.field），实际 {}",
+                    type_name(dga)
+                ),
                 "改为 {\"4_peers\": \"已尝试 X 但失败\", ...}",
             );
         }
