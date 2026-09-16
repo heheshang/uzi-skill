@@ -3,7 +3,7 @@
 
 use serde_json::{json, Map, Value};
 use uzi_core::py::{f0, round, truthy};
-use uzi_investors::{evaluate_investor, investors, persona_comment};
+use uzi_investors::{crypto_persona_comment, evaluate_investor, investors, persona_comment};
 
 const NEUTRAL_WEIGHT: f64 = 0.6;
 const SCORE_WEIGHT: f64 = 0.65;
@@ -188,7 +188,24 @@ pub fn generate_panel(_dims_scored: &Value, raw: &Value) -> Value {
                 score_to_verdict(score, &sig).to_string()
             };
             let persona_line = if is_crypto {
-                String::new()
+                let null = json!(null);
+                let ctx = json!({
+                    "market_cap_rank": get_or(&features, "market_cap_rank", &null),
+                    "nvt_ratio": get_or(&features, "nvt_ratio", &null),
+                    "circulating_ratio_pct": get_or(&features, "circulating_ratio_pct", &null),
+                    "market_share_pct": get_or(&features, "market_share_pct", &null),
+                    "mcap_to_tvl_ratio": get_or(&features, "mcap_to_tvl_ratio", &null),
+                    "change_30d_pct": get_or(&features, "change_30d_pct", &null),
+                    "fear_greed": get_or(&features, "fear_greed", &null),
+                    "funding_rate_pct": get_or(&features, "funding_rate_pct", &null),
+                    "ma_align": get_or(&features, "ma_align", &null),
+                    "rsi": get_or(&features, "rsi", &null),
+                    "volatility_1y": get_or(&features, "volatility_1y", &null),
+                    "volume_24h": get_or(&features, "volume_24h", &null),
+                    "mcap_to_fdv": get_or(&features, "mcap_to_fdv", &null),
+                    "ai_chain_hit": features.get("ai_chain_hit").cloned().unwrap_or(json!(false)),
+                });
+                crypto_persona_comment(inv_id, &sig, &ctx)
             } else {
                 let roe_hist = fin_ctx
                     .get("roe_history")

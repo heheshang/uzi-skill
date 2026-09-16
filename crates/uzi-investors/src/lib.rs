@@ -19,7 +19,7 @@ pub(crate) mod pyhelp;
 
 pub use db::{investor_by_id, investors};
 pub use evaluator::evaluate_investor;
-pub use personas::{persona_comment, persona_comment_seeded};
+pub use personas::{crypto_persona_comment, persona_comment, persona_comment_seeded};
 
 pub fn version() -> &'static str {
     "3.9.4"

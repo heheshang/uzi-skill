@@ -76,6 +76,23 @@
     ZONE_TECH_PRICE: '¥1,540', ZONE_TECH_RATIONALE: 'MA60 支撑 · 前高回踩确认区',
     ZONE_YOUZI_PRICE: '¥1,700', ZONE_YOUZI_RATIONALE: '放量突破前高后的情绪加速位'
   };
+  D.ASSET_CLASS_LABEL = 'EQUITY';
+  D.METRIC_1_LABEL = 'PE';
+  D.METRIC_1 = '22.4';
+  D.METRIC_2_LABEL = 'PB';
+  D.METRIC_2 = '7.8';
+  D.CORE_LABEL = '核心结论';
+  D.FIN_CATEGORY = '💰 财务面 · FUNDAMENTALS';
+  D.IND_CATEGORY = '🏭 行业面 · INDUSTRY CHAIN';
+  D.CO_CATEGORY = '🏢 公司面 · COMPANY';
+  D.ENV_CATEGORY = '🌍 环境面 · ENVIRONMENT';
+  D.SAFETY_CATEGORY = '🛡️ 安全面 · SAFETY & SENTIMENT';
+  D.MODEL_SECTION_LABEL = '机构级估值建模';
+  D.ZONES_TITLE = '四派系买入区间';
+  D.ZONE_VALUE_LABEL = 'VALUE 价值派';
+  D.ZONE_GROWTH_LABEL = 'GROWTH 成长派';
+  D.ZONE_TECH_LABEL = 'TECH 技术派';
+  D.ZONE_YOUZI_LABEL = 'YOUZI 游资派';
 
   /* ── 2 · 占位符替换（文本节点 + 属性） ─────────────────── */
   function sub(s) {

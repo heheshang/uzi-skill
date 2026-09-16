@@ -119,6 +119,49 @@ fn ctx_seed(ctx: &Value) -> u64 {
     hash
 }
 
+/// Deterministic crypto-native voice for the panel. Crypto must not reuse the
+/// stock persona pools: no PE, ROE, EPS, dividends, or company language.
+pub fn crypto_persona_comment(investor_id: &str, signal: &str, ctx: &Value) -> String {
+    let group = crate::db::investor_by_id(investor_id)
+        .and_then(|i| i.get("group"))
+        .and_then(Value::as_str)
+        .unwrap_or("");
+    let name = match group {
+        "A" => "链上价值研究员",
+        "B" => "协议成长研究员",
+        "C" => "加密宏观周期研究员",
+        "D" => "加密市场结构交易员",
+        "E" => "网络质量研究员",
+        "G" => "加密系统量化研究员",
+        "H" => "开放网络建设者",
+        "I" => "AI 加密卡位研究员",
+        _ => "加密资产观察员",
+    };
+    let value = |key: &str| {
+        ctx.get(key)
+            .filter(|v| !v.is_null())
+            .map(uzi_core::py::num_str)
+            .unwrap_or_else(|| "—".to_string())
+    };
+    let line = match group {
+        "A" => format!("{name}：NVT {}、流通率 {}% 和市值排名 #{} 决定网络价值；不看股票估值。", value("nvt_ratio"), value("circulating_ratio_pct"), value("market_cap_rank")),
+        "B" => format!("{name}：协议份额 {}%、市值/TVL {} 与 30 日涨跌 {}% 一起验证采用曲线。", value("market_share_pct"), value("mcap_to_tvl_ratio"), value("change_30d_pct")),
+        "C" => format!("{name}：恐慌贪婪 {}、资金费率 {}% 与 30 日涨跌 {}% 描绘流动性周期。", value("fear_greed"), value("funding_rate_pct"), value("change_30d_pct")),
+        "D" => format!("{name}：MA 结构为{}，RSI {}；只在趋势和成交确认后行动。", value("ma_align"), value("rsi")),
+        "E" => format!("{name}：网络份额 {}%、流通率 {}% 和 NVT {} 是长期复利的可验证底座。", value("market_share_pct"), value("circulating_ratio_pct"), value("nvt_ratio")),
+        "G" => format!("{name}：年化波动 {}%、24 小时成交额 {}、资金费率 {}%，先做风险定价再做方向。", value("volatility_1y"), value("volume_24h"), value("funding_rate_pct")),
+        "H" => format!("{name}：AI/基础设施卡位{}，网络份额 {}%；开放协议必须有真实扩散。", if ctx.get("ai_chain_hit").and_then(Value::as_bool).unwrap_or(false) { "已命中" } else { "未命中" }, value("market_share_pct")),
+        "I" => format!("{name}：卡位{}，市值/FDV {}；替代方案出现就退出。", if ctx.get("ai_chain_hit").and_then(Value::as_bool).unwrap_or(false) { "成立" } else { "不足" }, value("mcap_to_fdv")),
+        _ => "加密数据不足，先观察。".to_string(),
+    };
+    format!("{} {}", line, match signal {
+        "bullish" => "数据支持参与，但仍按波动管理仓位。",
+        "bearish" => "风险收益不对称，暂不参与。",
+        _ => "证据尚未形成优势，保持观察。",
+    })
+}
+
+
 #[cfg(test)]
 mod tests {
     use super::*;

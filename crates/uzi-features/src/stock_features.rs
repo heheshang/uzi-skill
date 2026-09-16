@@ -1101,29 +1101,31 @@ pub fn extract_features(raw: &Value, dims: &Value) -> Value {
         }),
     );
     // ── CRYPTO FEATURES ──
-    // Crypto panels must never inherit stock valuation/accounting defaults.
+    // Preserve missing crypto metrics as JSON null. Converting null to zero
+    // makes the panel print fabricated ranks/NVT values and can trigger the
+    // wrong scoring branch.
     if parsed_market == uzi_core::ticker::CRYPTO_MARKET {
-        f.insert("market_cap_rank".into(), ji(fv(mget(basic, "market_cap_rank")) as i64));
-        f.insert("change_30d_pct".into(), jf(fv(mget(basic, "change_30d_pct"))));
-        f.insert("nvt_ratio".into(), jf(fv(mget(valuation, "nvt_ratio"))));
-        f.insert("turnover_ratio".into(), jf(fv(mget(valuation, "turnover_ratio"))));
-        f.insert("mcap_to_fdv".into(), jf(fv(mget(valuation, "mcap_to_fdv"))));
-        f.insert("max_drawdown_1y".into(), jf(py_or_f64(
-            fv(mget(valuation, "max_drawdown_1y")),
-            fv(mget(mobj(kline, "kline_stats"), "max_drawdown")),
-        )));
-        f.insert("volatility_1y".into(), jf(py_or_f64(
-            fv(mget(valuation, "volatility_1y_pct")),
-            fv(mget(mobj(kline, "kline_stats"), "volatility")),
-        )));
-        f.insert("fear_greed".into(), jf(fv(mget(macro_, "fear_greed"))));
-        f.insert("funding_rate_pct".into(), jf(fv(mget(dd(raw, "9_futures"), "funding_rate_pct"))));
-        f.insert("circulating_ratio_pct".into(), jf(fv(mget(fin, "circulating_ratio_pct"))));
-        f.insert("mcap_to_tvl_ratio".into(), jf(fv(mget(valuation, "mcap_to_tvl_ratio"))));
-        f.insert("market_share_pct".into(), jf(fv(mget(moat, "market_share_pct"))));
-        f.insert("btc_dominance_pct".into(), jf(fv(mget(macro_, "btc_dominance_pct"))));
-        f.insert("eth_dominance_pct".into(), jf(fv(mget(macro_, "eth_dominance_pct"))));
-        f.insert("volume_24h".into(), jf(fv(mget(basic, "volume_24h"))));
+        f.insert("market_cap_rank".into(), fin_opt(mget(basic, "market_cap_rank")).map(|v| ji(v as i64)).unwrap_or(Value::Null));
+        f.insert("change_30d_pct".into(), optv(fin_opt(mget(basic, "change_30d_pct"))));
+        f.insert("nvt_ratio".into(), optv(fin_opt(mget(valuation, "nvt_ratio"))));
+        f.insert("turnover_ratio".into(), optv(fin_opt(mget(valuation, "turnover_ratio"))));
+        f.insert("mcap_to_fdv".into(), optv(fin_opt(mget(valuation, "mcap_to_fdv"))));
+        f.insert("max_drawdown_1y".into(), optv(fin_opt(py_or(
+            mget(valuation, "max_drawdown_1y"),
+            mget(mobj(kline, "kline_stats"), "max_drawdown"),
+        ))));
+        f.insert("volatility_1y".into(), optv(fin_opt(py_or(
+            mget(valuation, "volatility_1y_pct"),
+            mget(mobj(kline, "kline_stats"), "volatility"),
+        ))));
+        f.insert("fear_greed".into(), optv(fin_opt(mget(macro_, "fear_greed"))));
+        f.insert("funding_rate_pct".into(), optv(fin_opt(mget(dd(raw, "9_futures"), "funding_rate_pct"))));
+        f.insert("circulating_ratio_pct".into(), optv(fin_opt(mget(fin, "circulating_ratio_pct"))));
+        f.insert("mcap_to_tvl_ratio".into(), optv(fin_opt(mget(valuation, "mcap_to_tvl_ratio"))));
+        f.insert("market_share_pct".into(), optv(fin_opt(mget(moat, "market_share_pct"))));
+        f.insert("btc_dominance_pct".into(), optv(fin_opt(mget(macro_, "btc_dominance_pct"))));
+        f.insert("eth_dominance_pct".into(), optv(fin_opt(mget(macro_, "eth_dominance_pct"))));
+        f.insert("volume_24h".into(), optv(fin_opt(mget(basic, "volume_24h"))));
     }
 
     // ── AI 卡位 / 瓶颈点 (Serenity · H 组) ──

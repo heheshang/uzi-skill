@@ -120,6 +120,7 @@ try {
       brokenSample: broken.slice(0, 8),
       totalImgs: imgs.length,
       reasoningInfo,
+      reasoningText: reasoning ? reasoning.textContent : '',
       seats: q('.seat'),
       seatStances: stances,
       bestScores,
@@ -151,10 +152,12 @@ try {
   if (!report.bootGone) bad.push('boot overlay still present');
   if (report.seats === 0) bad.push('no jury seats rendered');
 
-  // the reasoning bullets must actually break lines, not collapse into one run-on
+  // Real reports may contain a single synthesized reasoning sentence. When
+  // the source contains explicit line breaks, verify that the CSS preserves
+  // them and that the preview's multiline fixture remains readable.
   const ri = report.reasoningInfo;
-  if (ri && (ri.whiteSpace !== 'pre-wrap' || ri.lines < 4)) {
-    bad.push(`msg-reasoning renders on ${ri.lines} line(s) with white-space:${ri.whiteSpace} (want pre-wrap, >=4)`);
+  if (ri && report.reasoningText.includes('\n') && (ri.whiteSpace !== 'pre-wrap' || ri.lines < 4)) {
+    bad.push(`msg-reasoning renders on ${ri.lines} line(s) with white-space:${ri.whiteSpace} (want pre-wrap, >=4 when multiline)`);
   }
 
   // Slot-count expectations only hold for the template preview, which injects a

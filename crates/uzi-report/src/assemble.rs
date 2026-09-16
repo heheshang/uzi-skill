@@ -744,12 +744,21 @@ pub fn assemble(ticker: &str) -> anyhow::Result<String> {
     let market_state = uzi_core::cache::market_status(&mkt, None);
 
     let change_pct = basic.get("change_pct").cloned().unwrap_or(Value::Null);
-    let change_pct_str = if change_pct.is_null() {
-        "—".to_string()
+    let (change_pct_str, change_dir) = if change_pct.is_null() {
+        ("—".to_string(), "flat".to_string())
     } else {
-        format!("{:+.2}%", num(&change_pct))
+        let value = num(&change_pct);
+        (
+            format!("{value:+.2}%"),
+            if value > 0.0 {
+                "up".to_string()
+            } else if value < 0.0 {
+                "down".to_string()
+            } else {
+                "flat".to_string()
+            },
+        )
     };
-    let change_dir = if num(&change_pct) >= 0.0 { "up" } else { "down" };
     let intel_risks: Vec<String> = intel
         .get("risks")
         .and_then(|v| v.as_array())
@@ -837,6 +846,37 @@ pub fn assemble(ticker: &str) -> anyhow::Result<String> {
             get_or(fallback, key, &NULL).clone()
         }
     };
+    let crypto = mkt == "C";
+    let crypto_financials = raw
+        .get("dimensions")
+        .and_then(|v| v.get("1_financials"))
+        .and_then(|v| v.get("data"))
+        .unwrap_or(&NULL);
+    let metric_1_label = if crypto { "FDV" } else { "PE" };
+    let metric_2_label = if crypto { "NVT" } else { "PB" };
+    let metric_1 = if crypto {
+        safe(
+            get_or(
+                crypto_financials,
+                "fdv",
+                get_or(&basic, "fdv", &NULL),
+            ),
+            "—",
+        )
+    } else {
+        safe(get_or(&basic, "pe_ttm", &NULL), "—")
+    };
+    let metric_2 = if crypto {
+        let valuation = raw
+            .get("dimensions")
+            .and_then(|v| v.get("10_valuation"))
+            .and_then(|v| v.get("data"))
+            .unwrap_or(&NULL);
+        safe(get_or(valuation, "nvt_ratio", &NULL), "—")
+    } else {
+        safe(get_or(&basic, "pb", &NULL), "—")
+    };
+    let market_label = |equity: &str, asset: &str| if crypto { asset.to_string() } else { equity.to_string() };
     let replacements: Vec<(&str, String)> = vec![
         ("{{NAME}}", safe(&two_level(get_or(&syn, "name", &NULL), &basic, "name"), "—")),
         ("{{TICKER}}", safe(&two_level(get_or(&syn, "ticker", &NULL), &basic, "code"), "—")),
@@ -855,11 +895,26 @@ pub fn assemble(ticker: &str) -> anyhow::Result<String> {
         ),
         ("{{PRICE}}", safe(get_or(&basic, "price", &NULL), "—")),
         ("{{CHANGE_PCT}}", change_pct_str),
-        ("{{CHANGE_DIR}}", change_dir.to_string()),
+        ("{{CHANGE_DIR}}", change_dir),
         ("{{MCAP}}", safe(get_or(&basic, "market_cap", &NULL), "—")),
-        ("{{PE}}", safe(get_or(&basic, "pe_ttm", &NULL), "—")),
-        ("{{PB}}", safe(get_or(&basic, "pb", &NULL), "—")),
+        ("{{METRIC_1_LABEL}}", metric_1_label.to_string()),
+        ("{{METRIC_1}}", metric_1),
+        ("{{METRIC_2_LABEL}}", metric_2_label.to_string()),
+        ("{{METRIC_2}}", metric_2),
         ("{{INDUSTRY}}", safe(get_or(&basic, "industry", &NULL), "—")),
+        ("{{ASSET_CLASS_LABEL}}", market_label("EQUITY", "CRYPTO ASSET")),
+        ("{{CORE_LABEL}}", market_label("核心结论", "链上结论")),
+        ("{{FIN_CATEGORY}}", market_label("💰 财务面 · FUNDAMENTALS", "🪙 代币经济 · TOKENOMICS")),
+        ("{{IND_CATEGORY}}", market_label("🏭 行业面 · INDUSTRY CHAIN", "🌐 生态面 · ECOSYSTEM")),
+        ("{{CO_CATEGORY}}", market_label("🏢 公司面 · COMPANY", "🧩 协议面 · PROTOCOL")),
+        ("{{ENV_CATEGORY}}", market_label("🌍 环境面 · ENVIRONMENT", "🌍 宏观面 · MACRO & REGULATION")),
+        ("{{SAFETY_CATEGORY}}", market_label("🛡️ 安全面 · SAFETY & SENTIMENT", "🛡️ 市场完整性 · MARKET INTEGRITY")),
+        ("{{MODEL_SECTION_LABEL}}", market_label("机构级估值建模", "网络价值与情景建模")),
+        ("{{ZONES_TITLE}}", market_label("四派系买入区间", "四类链上入场区间")),
+        ("{{ZONE_VALUE_LABEL}}", market_label("VALUE 价值派", "NVT 价值锚")),
+        ("{{ZONE_GROWTH_LABEL}}", market_label("GROWTH 成长派", "CYCLE 周期派")),
+        ("{{ZONE_TECH_LABEL}}", "TECH 技术派".to_string()),
+        ("{{ZONE_YOUZI_LABEL}}", market_label("YOUZI 游资派", "ON-CHAIN 链上派")),
         ("{{OVERALL_SCORE}}", disp(get_or(&syn, "overall_score", &Value::Number(0.into())))),
         (
             "{{OVERALL_SCORE_INT}}",
