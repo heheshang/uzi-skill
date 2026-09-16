@@ -1100,6 +1100,33 @@ pub fn extract_features(raw: &Value, dims: &Value) -> Value {
             "US"
         }),
     );
+    // ── CRYPTO FEATURES ──
+    // Crypto panels must never inherit stock valuation/accounting defaults.
+    if parsed_market == uzi_core::ticker::CRYPTO_MARKET {
+        f.insert("market_cap_rank".into(), ji(fv(mget(basic, "market_cap_rank")) as i64));
+        f.insert("change_30d_pct".into(), jf(fv(mget(basic, "change_30d_pct"))));
+        f.insert("nvt_ratio".into(), jf(fv(mget(valuation, "nvt_ratio"))));
+        f.insert("turnover_ratio".into(), jf(fv(mget(valuation, "turnover_ratio"))));
+        f.insert("mcap_to_fdv".into(), jf(fv(mget(valuation, "mcap_to_fdv"))));
+        f.insert("max_drawdown_1y".into(), jf(py_or_f64(
+            fv(mget(valuation, "max_drawdown_1y")),
+            fv(mget(mobj(kline, "kline_stats"), "max_drawdown")),
+        )));
+        f.insert("volatility_1y".into(), jf(py_or_f64(
+            fv(mget(valuation, "volatility_1y_pct")),
+            fv(mget(mobj(kline, "kline_stats"), "volatility")),
+        )));
+        f.insert("fear_greed".into(), jf(fv(mget(macro_, "fear_greed"))));
+        f.insert("funding_rate_pct".into(), jf(fv(mget(dd(raw, "9_futures"), "funding_rate_pct"))));
+        f.insert("circulating_ratio_pct".into(), jf(fv(mget(fin, "circulating_ratio_pct"))));
+        f.insert("mcap_to_tvl_ratio".into(), jf(fv(mget(valuation, "mcap_to_tvl_ratio"))));
+        f.insert("market_share_pct".into(), jf(fv(mget(moat, "market_share_pct"))));
+        f.insert("btc_dominance_pct".into(), jf(fv(mget(macro_, "btc_dominance_pct"))));
+        f.insert("eth_dominance_pct".into(), jf(fv(mget(macro_, "eth_dominance_pct"))));
+        f.insert("volume_24h".into(), jf(fv(mget(basic, "volume_24h"))));
+    }
+
+    // ── AI 卡位 / 瓶颈点 (Serenity · H 组) ──
 
     // ── AI 卡位 / 瓶颈点 (Serenity · H 组) ──
     let chain_txt = if chain.is_empty() {

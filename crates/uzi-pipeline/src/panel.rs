@@ -91,6 +91,17 @@ const GROUP_META: &[(&str, &str, &str)] = &[
     ("H", "科技领袖派", "黄仁勋 / 马斯克 / Altman / Saylor 一脉"),
     ("I", "AI 卡位/瓶颈猎手", "Serenity · AI 供应链卡脖子/瓶颈点"),
 ];
+const CRYPTO_GROUP_META: &[(&str, &str, &str)] = &[
+    ("A", "加密价值派", "货币属性 / 链上价值 / 网络安全边际"),
+    ("B", "协议成长派", "代币增长 / 协议垄断 / 开放网络创新"),
+    ("C", "加密宏观派", "反身性 / 流动性 / 周期与风险"),
+    ("D", "链上技术派", "趋势 / 突破 / 市场结构"),
+    ("E", "网络长期派", "协议质量 / 代币价值 / 网络复利"),
+    ("F", "加密资金派", "仅保留具备加密市场能力圈的资金席位"),
+    ("G", "加密量化派", "统计套利 / 风险定价 / 系统交易"),
+    ("H", "加密科技派", "算力生态 / 开放协议 / 应用扩散"),
+    ("I", "AI 加密卡位派", "AI 与加密基础设施的关键位置"),
+];
 
 /// Rule-engine panel: every investor's verdict cites the specific criteria that
 /// were hit or missed, then consensus is aggregated continuously + discretely.
@@ -130,13 +141,18 @@ pub fn generate_panel(_dims_scored: &Value, raw: &Value) -> Value {
         .map(|k| (k.to_string(), json!(0)))
         .collect();
 
+    let is_crypto = features.get("market").and_then(Value::as_str) == Some("C");
     for inv in investors() {
         let inv_id = inv.get("id").and_then(|v| v.as_str()).unwrap_or("");
         let mandate = inv.get("mandate").and_then(|v| v.as_str()).unwrap_or("long");
-        let name = inv.get("name").cloned().unwrap_or(Value::Null);
         let group = inv.get("group").cloned().unwrap_or(Value::Null);
 
         let verdict_obj = evaluate_investor(inv_id, &features);
+        let display_name = if is_crypto && verdict_obj.get("signal").and_then(Value::as_str) != Some("skip") {
+            verdict_obj.get("name").cloned().unwrap_or_else(|| inv.get("name").cloned().unwrap_or(Value::Null))
+        } else {
+            inv.get("name").cloned().unwrap_or(Value::Null)
+        };
         let sig = verdict_obj
             .get("signal")
             .and_then(|v| v.as_str())
@@ -159,6 +175,7 @@ pub fn generate_panel(_dims_scored: &Value, raw: &Value) -> Value {
             comment = format!("不在能力圈范围内，不做评价。\n{}", headline);
             reasoning = verdict_obj
                 .get("rationale")
+                .or_else(|| verdict_obj.get("reasoning"))
                 .and_then(|v| v.as_str())
                 .unwrap_or("")
                 .to_string();
@@ -170,34 +187,42 @@ pub fn generate_panel(_dims_scored: &Value, raw: &Value) -> Value {
             } else {
                 score_to_verdict(score, &sig).to_string()
             };
-
-            let roe_hist = fin_ctx
-                .get("roe_history")
-                .and_then(|v| v.as_array())
-                .cloned()
-                .unwrap_or_default();
-            let roe = match roe_hist.last() {
-                Some(v) => uzi_core::py::num_str(v),
-                None => "—".to_string(),
+            let persona_line = if is_crypto {
+                String::new()
+            } else {
+                let roe_hist = fin_ctx
+                    .get("roe_history")
+                    .and_then(|v| v.as_array())
+                    .cloned()
+                    .unwrap_or_default();
+                let roe = match roe_hist.last() {
+                    Some(v) => uzi_core::py::num_str(v),
+                    None => "—".to_string(),
+                };
+                let ctx = json!({
+                    "name": get_or(basic_ctx, "name", &json!("这只票")),
+                    "industry": get_or(basic_ctx, "industry", &json!("该行业")),
+                    "price": get_or(basic_ctx, "price", &json!("—")),
+                    "pe": get_or(basic_ctx, "pe_ttm", &json!("—")),
+                    "roe": roe,
+                    "stage": get_or(kline_ctx, "stage", &json!("—")),
+                    "growth": get_or(fin_ctx, "revenue_growth", &json!("—")),
+                });
+                persona_comment(inv_id, &sig, &ctx)
             };
-            let ctx = json!({
-                "name": get_or(basic_ctx, "name", &json!("这只票")),
-                "industry": get_or(basic_ctx, "industry", &json!("该行业")),
-                "price": get_or(basic_ctx, "price", &json!("—")),
-                "pe": get_or(basic_ctx, "pe_ttm", &json!("—")),
-                "roe": roe,
-                "stage": get_or(kline_ctx, "stage", &json!("—")),
-                "growth": get_or(fin_ctx, "revenue_growth", &json!("—")),
-            });
-            let persona_line = persona_comment(inv_id, &sig, &ctx);
             headline = verdict_obj
                 .get("headline")
                 .and_then(|v| v.as_str())
                 .unwrap_or("")
                 .to_string();
-            comment = format!("{}\n{}", persona_line, headline);
+            comment = if persona_line.is_empty() {
+                headline.clone()
+            } else {
+                format!("{}\n{}", persona_line, headline)
+            };
             reasoning = verdict_obj
                 .get("rationale")
+                .or_else(|| verdict_obj.get("reasoning"))
                 .and_then(|v| v.as_str())
                 .unwrap_or("")
                 .to_string();
@@ -242,7 +267,7 @@ pub fn generate_panel(_dims_scored: &Value, raw: &Value) -> Value {
         let group_str = group.as_str().unwrap_or("");
         investors_out.push(json!({
             "investor_id": inv_id,
-            "name": name,
+            "name": display_name,
             "group": group,
             "mandate": mandate,
             "avatar": format!("avatars/{}.svg", inv_id),
@@ -384,7 +409,8 @@ pub fn generate_panel(_dims_scored: &Value, raw: &Value) -> Value {
             "skip"
         };
 
-        let meta = GROUP_META
+        let meta_table = if is_crypto { CRYPTO_GROUP_META } else { GROUP_META };
+        let meta = meta_table
             .iter()
             .find(|(key, _, _)| key == g)
             .map(|(_, label, desc)| (*label, *desc))

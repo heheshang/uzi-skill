@@ -125,13 +125,15 @@ uzi ETH --depth deep   # 深度档照常：--stage1 → role-play → --stage2
   2. **估值模型换成 NVT 网络价值折现**：dim 20–22 仍存在（首次覆盖 / IC Memo / Porter+BCG），
      但目标价来自 `24h 成交额 × 目标 NVT ÷ 流通量`，不是 DCF/LBO。稳定币等不适用资产直接标注，
      不编造目标价。
-  3. **评委按市场过滤**：A 股游资（F 组 24 人）自动 skip（理由「不看加密市场」），
-     其余 40+ 位照常出分；共识公式不变。
-- **来源**：CoinGecko（行情/市值/供应/开发者/情绪）+ OKX（日线 OHLCV / 合约费率）+
-  alternative.me（恐慌贪婪）。全部免 key；完整 dim→源映射见
-  [`references/data-sources.md`](references/data-sources.md) 的「C · 加密货币」。
-- **深度档照常介入**：读 `panel.json` / `dimensions.json` 后写 `agent_analysis.json`
-  （`dim_commentary` 引用 NVT / 流通率 / 费率 / 情绪等真实数字），再 `--stage2`。
+  3. **评委使用加密原生角色与指标**：`panel.json` 的 `investor_id` 保持稳定以便复用配置，
+     但展示名和判断风格改为货币派、协议基本面派、链上趋势派、统计套利派等；评语只引用
+     流通率、FDV/市值、NVT、市值排名、网络份额、波动率、回撤、费率和情绪等加密指标。
+     A 股游资（F 组 24 人）仍按市场范围自动 skip，不把股票席位伪装成加密评委。
+  4. **来源**：CoinGecko（行情/市值/供应/开发者/情绪）+ OKX（日线 OHLCV / 合约费率）+
+     alternative.me（恐慌贪婪）。全部免 key；完整 dim→源映射见
+     [`references/data-sources.md`](references/data-sources.md) 的「C · 加密货币」。
+  5. **深度档照常介入**：读 `panel.json` / `dimensions.json` 后写 `agent_analysis.json`
+     （`dim_commentary` 引用 NVT / 流通率 / 费率 / 情绪等真实数字），再 `--stage2`。
 
 
 ## ⛔ 硬性门控规则（违反即停止）

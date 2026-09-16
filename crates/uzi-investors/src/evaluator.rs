@@ -267,6 +267,116 @@ fn unknown_result(investor_id: &str) -> Value {
 
 /// `investor_evaluator.evaluate`.
 pub fn evaluate_investor(investor_id: &str, features: &Value) -> Value {
+    if features.get("market").and_then(Value::as_str).is_some_and(|m| m.eq_ignore_ascii_case("C")) && group_of(investor_id) != "F" {
+        let persona = match investor_id {
+            "buffett" => ("比特币货币派", "Crypto Monetary", "A"),
+            "graham" => ("链上价值派", "On-chain Value", "A"),
+            "fisher" => ("协议基本面派", "Protocol Fundamentals", "A"),
+            "munger" => ("加密质量派", "Crypto Quality", "A"),
+            "templeton" => ("逆向周期派", "Contrarian Cycle", "A"),
+            "klarman" => ("网络安全边际派", "Network Margin of Safety", "A"),
+            "lynch" => ("代币成长派", "Token Growth", "B"),
+            "oneill" => ("加密动量派", "Crypto Momentum", "B"),
+            "thiel" => ("协议垄断派", "Protocol Monopoly", "B"),
+            "wood" => ("开放网络创新派", "Open Network Innovation", "B"),
+            "andreessen" => ("a16z 加密投资派", "a16z Crypto", "B"),
+            "gurley" => ("加密风险资本派", "Crypto Venture", "B"),
+            "naval" => ("无许可网络派", "Permissionless Network", "B"),
+            "gerstner" => ("机构加密配置派", "Institutional Crypto", "B"),
+            "chamath" => ("加密流动性派", "Crypto Liquidity", "B"),
+            "soros" => ("加密反身性派", "Crypto Reflexivity", "C"),
+            "dalio" => ("加密宏观风险派", "Crypto Macro Risk", "C"),
+            "marks" => ("加密周期估值派", "Crypto Cycle Value", "C"),
+            "druck" => ("加密流动性趋势派", "Crypto Liquidity Trend", "C"),
+            "robertson" => ("链上相对强弱派", "On-chain Relative Strength", "C"),
+            "burry" => ("加密泡沫空头派", "Crypto Bubble Short", "C"),
+            "chanos" => ("代币经济空头派", "Tokenomics Short", "C"),
+            "livermore" => ("链上趋势交易派", "On-chain Tape Trader", "D"),
+            "minervini" => ("加密趋势模板派", "Crypto Trend Template", "D"),
+            "darvas" => ("加密箱体突破派", "Crypto Breakout", "D"),
+            "gann" => ("加密周期结构派", "Crypto Market Structure", "D"),
+            "duan" => ("加密长期复利派", "Crypto Compounder", "E"),
+            "zhangkun" => ("链上质量配置派", "On-chain Quality", "E"),
+            "zhushaoxing" => ("代币成长价值派", "Token GARP", "E"),
+            "xiezhiyu" => ("协议估值派", "Protocol Valuation", "E"),
+            "fengliu" => ("加密逆向派", "Crypto Contrarian", "E"),
+            "dengxiaofeng" => ("链上产业周期派", "On-chain Industry Cycle", "E"),
+            "zhang_lei" => ("全球网络长期派", "Global Network Compounder", "E"),
+            "simons" => ("加密统计套利派", "Crypto Statistical Arbitrage", "G"),
+            "thorp" => ("加密风险定价派", "Crypto Risk Pricing", "G"),
+            "shaw" => ("加密系统交易派", "Crypto Systematic Trading", "G"),
+            "asness" => ("加密因子派", "Crypto Factors", "G"),
+            "jensen_huang" => ("链上算力生态派", "Compute Ecosystem", "H"),
+            "musk" => ("加密开放协议派", "Open Protocol Builder", "H"),
+            "altman" => ("加密应用扩散派", "Crypto Application Diffusion", "H"),
+            "saylor" => ("比特币财库派", "Bitcoin Treasury", "H"),
+            "serenity" => ("AI 加密卡位派", "AI-Crypto Positioning", "I"),
+            "zhang_mz" => ("链上大额资金派", "On-chain Whale Flow", "F"),
+            "sun_ge" => ("加密趋势资金派", "Crypto Trend Capital", "F"),
+            "zhao_lg" => ("加密热点轮动派", "Crypto Hot Rotation", "F"),
+            "fs_wyj" => ("加密短周期流动性派", "Crypto Short-term Liquidity", "F"),
+            "yangjia" => ("加密情绪周期派", "Crypto Sentiment Cycle", "F"),
+            "chen_xq" => ("加密龙头分歧派", "Crypto Leader Divergence", "F"),
+            "hu_jl" => ("链上事件驱动派", "On-chain Event Driven", "F"),
+            "fang_xx" => ("加密强势突破派", "Crypto Strength Breakout", "F"),
+            "zuoshou" => ("加密低吸反转派", "Crypto Reversal Trader", "F"),
+            "xiao_ey" => ("加密小盘弹性派", "Crypto Small-cap Beta", "F"),
+            "jiao_yy" => ("加密合约节奏派", "Crypto Derivatives Tempo", "F"),
+            "mao_lb" => ("加密超跌修复派", "Crypto Oversold Recovery", "F"),
+            "xiao_xian" => ("加密事件套利派", "Crypto Event Arbitrage", "F"),
+            "lasa" => ("加密区域流动性派", "Crypto Regional Liquidity", "F"),
+            "chengdu" => ("加密波段交易派", "Crypto Swing Trader", "F"),
+            "sunan" => ("加密资金轮动派", "Crypto Capital Rotation", "F"),
+            "ningbo_st" => ("加密趋势加速派", "Crypto Trend Acceleration", "F"),
+            "liuyi_zl" => ("加密新叙事派", "Crypto New Narrative", "F"),
+            "liu_sh" => ("加密反身性短线派", "Crypto Reflexive Scalper", "F"),
+            "gu_bl" => ("加密大单博弈派", "Crypto Block Trade", "F"),
+            "bj_cj" => ("加密突破跟随派", "Crypto Breakout Follower", "F"),
+            "wang_zr" => ("加密波动率派", "Crypto Volatility Trader", "F"),
+            "xin_dd" => ("加密分散流动性派", "Crypto Fragmented Liquidity", "F"),
+            "ghzw" => ("链上情绪短线派", "On-chain Sentiment Trading", "F"),
+            _ => ("加密资产观察员", "Crypto Observer", ""),
+        };
+        let num = |key: &str| -> Option<f64> {
+            features.get(key).and_then(|v| v.as_f64()).or_else(|| features.get(key).and_then(|v| v.as_str()).and_then(|s| s.trim_end_matches('%').parse().ok()))
+        };
+        let ratio = |key: &str, default: f64| num(key).unwrap_or(default);
+        let rank = ratio("market_cap_rank", 999.0);
+        let nvt = ratio("nvt_ratio", 100.0);
+        let turnover = ratio("turnover_ratio", 0.0) * 100.0;
+        let drawdown = ratio("max_drawdown_1y", -100.0).abs();
+        let fear_greed = ratio("fear_greed", ratio("sentiment_heat", 50.0));
+        let change_30d = ratio("change_30d_pct", 0.0);
+        let funding = ratio("funding_rate", ratio("funding_rate_pct", 0.0));
+        let circulation = ratio("circulating_ratio_pct", 0.0);
+        let mcap_fdv = ratio("mcap_to_fdv", 0.0);
+        let network = ratio("market_share_pct", ratio("moat_network", 0.0));
+        let mut score: f64 = 50.0;
+        score += if circulation >= 90.0 { 12.0 } else if circulation >= 60.0 { 5.0 } else { -8.0 };
+        score += if mcap_fdv >= 0.9 { 8.0 } else if mcap_fdv > 0.0 && mcap_fdv < 0.5 { -8.0 } else { 0.0 };
+        score += if rank <= 10.0 { 10.0 } else if rank <= 50.0 { 4.0 } else { -4.0 };
+        score += if nvt > 0.0 && nvt <= 30.0 { 8.0 } else if nvt >= 80.0 { -10.0 } else { 0.0 };
+        score += if change_30d >= 15.0 { 8.0 } else if change_30d <= -15.0 { -8.0 } else { 0.0 };
+        score += if drawdown >= 50.0 { 5.0 } else if drawdown >= 30.0 { -3.0 } else { 0.0 };
+        score += if fear_greed >= 80.0 { -8.0 } else if fear_greed <= 25.0 { 5.0 } else { 0.0 };
+        score += if funding.abs() > 0.05 { -5.0 } else { 2.0 };
+        score += if network >= 30.0 { 5.0 } else { 0.0 };
+        score = score.clamp(0.0, 100.0);
+        let signal = if score >= 65.0 { "bullish" } else if score <= 35.0 { "bearish" } else { "neutral" };
+        let verdict = match signal { "bullish" => "买入", "bearish" => "回避", _ => "观望" };
+        let headline = format!("{}：评分 {:.0}/100；市值排名 #{:.0}，NVT {:.1}，30日涨跌 {:.1}%", if signal == "bullish" { "看多" } else if signal == "bearish" { "看空" } else { "中性" }, score, rank, nvt, change_30d);
+        let rationale = format!("流通率 {:.1}% · FDV/市值倒数 {:.2} · 换手 {:.2}% · 最大回撤 {:.1}% · 恐慌贪婪 {:.0}", circulation, mcap_fdv, turnover, drawdown, fear_greed);
+        return serde_json::json!({
+            "investor_id": investor_id, "name": persona.0, "en": persona.1, "group": persona.2,
+            "mandate": if investor_id == "burry" || investor_id == "chanos" { "short" } else { "long" },
+            "signal": signal, "confidence": (score - 50.0).abs().mul_add(1.5, 55.0).clamp(0.0, 100.0),
+            "score": score.round() as i64, "verdict": verdict, "reasoning": rationale,
+            "comment": headline.clone(), "headline": headline, "pass": [], "fail": [],
+            "weight_pass": 0, "weight_total": 0, "ideal_price": null, "period": "中长线",
+            "time_horizon": "按网络采用、流动性和周期验证", "position_sizing": "按波动率和最大回撤控制仓位",
+            "what_would_change_my_mind": "代币经济恶化、网络活跃度下降、流动性枯竭或监管发生结构性变化", "skip_reason": null
+        });
+    }
     // v3.5.0 · 用户锁定单一流派视角
     let locked = get_locked_school();
     if !locked.is_empty() {
